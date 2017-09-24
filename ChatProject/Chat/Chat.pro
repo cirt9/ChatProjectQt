@@ -16,3 +16,8 @@ SOURCES += main.cpp\
         mainwindow.cpp
 
 HEADERS  += mainwindow.h
+
+DISTFILES +=
+
+RESOURCES += \
+    rsc.qrc
