@@ -1,18 +1,10 @@
-#-------------------------------------------------
-#
-# Project created by QtCreator 2017-09-22T19:48:44
-#
-#-------------------------------------------------
+TEMPLATE = subdirs
+CONFIG+=ordered
+SUBDIRS = \
+    Chat
 
-QT       += core gui
+app.depends = src
+tests.depends = src
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
-
-TARGET = ChatProject
-TEMPLATE = app
-
-
-SOURCES += main.cpp\
-        mainwindow.cpp
-
-HEADERS  += mainwindow.h
+OTHER_FILES += \
+    defaults.pri
