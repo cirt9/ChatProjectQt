@@ -2,6 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QDesktopWidget>
+#include <chatwidget.h>
 
 class MainWindow : public QMainWindow
 {
@@ -9,7 +11,7 @@ class MainWindow : public QMainWindow
 
 public:
     MainWindow(QWidget * parent = 0);
-    ~MainWindow();
+    ~MainWindow() {;}
 };
 
 #endif // MAINWINDOW_H

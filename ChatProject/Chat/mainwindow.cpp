@@ -2,10 +2,9 @@
 
 MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent)
 {
+    MainWindow::setWindowTitle(QString("Chat"));
+    resize(QDesktopWidget().availableGeometry(this).size() * 0.7);
 
-}
-
-MainWindow::~MainWindow()
-{
-
+    ChatWidget * chat = new ChatWidget(350, 50);
+    setCentralWidget(chat);
 }
