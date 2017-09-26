@@ -1,1 +1,22 @@
+#ChatWidgetUpperBar
+{
+background: rgb(50, 50, 55);
+border-top-left-radius: 5px;
+border-top-right-radius: 5px;
+border: 2px solid rgb(30, 30, 35);
+}
 
+#ChatWidgetLowerBar
+{
+background: rgb(50, 50, 55);
+border-bottom-left-radius: 5px;
+border-bottom-right-radius: 5px;
+border: 2px solid rgb(30, 30, 35);
+}
+
+#ChatWidgetTextArea
+{
+background: rgb(150, 150, 150);
+border-left: 2px solid rgb(30, 30, 35);
+border-right: 2px solid rgb(30, 30, 35);
+}

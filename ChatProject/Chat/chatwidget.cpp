@@ -8,22 +8,32 @@ ChatWidget::ChatWidget(int chatMaxWidth, int barsHeight, QWidget * parent) : QWi
 
     setMaximumWidth(chatMaxWidth);
 
-    QWidget * upperBar = createBar(barsHeight);
+    QWidget * upperBar = createBar(barsHeight, "ChatWidgetUpperBar");
     chatLayout->addWidget(upperBar);
 
-    QWidget * textArea = new QWidget();
-    textArea->setStyleSheet("background: grey");
+    QWidget * textArea = createTextArea();
     chatLayout->addWidget(textArea);
 
-    QWidget * lowerBar = createBar(barsHeight);
+    QWidget * lowerBar = createBar(barsHeight, "ChatWidgetLowerBar");
     chatLayout->addWidget(lowerBar);
 }
 
-QWidget * ChatWidget::createBar(int height)
+QWidget * ChatWidget::createBar(int height, QString objectName)
 {
     QWidget * bar = new QWidget();
-    bar->setStyleSheet("background: black");
+    bar->setObjectName(objectName);
     bar->setMaximumHeight(height);
 
     return bar;
+}
+
+QWidget * ChatWidget::createTextArea()
+{
+    QWidget * textArea = new QWidget();
+    textArea->setObjectName("ChatWidgetTextArea");
+
+    textAreaLayout = new QVBoxLayout();
+    textArea->setLayout(textAreaLayout);
+
+    return textArea;
 }
