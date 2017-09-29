@@ -4,7 +4,6 @@ ChatWidget::ChatWidget(int maxWidth, int maxHeight, int barsHeight, QWidget * pa
 {
     setFixedWidth(maxWidth);     //change to maximum in final version
     setFixedHeight(maxHeight);   // change to maximum in final version
-    setObjectName("ChatWidget");
 
     chatLayout = new QVBoxLayout();
     chatLayout->setSpacing(0);
@@ -17,6 +16,16 @@ ChatWidget::ChatWidget(int maxWidth, int maxHeight, int barsHeight, QWidget * pa
     chatLayout->addWidget(textArea);
 
     createFooter(barsHeight);
+
+    //
+
+    QTextEdit * testMsg = new QTextEdit();
+    testMsg->setReadOnly(true);
+    testMsg->setTextInteractionFlags(Qt::TextSelectableByKeyboard | Qt::TextSelectableByMouse);
+    testMsg->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    testMsg->setStyleSheet("background: black; border: none; color:white; font-size: 16px;");
+    testMsg->setText("Long testing text that is supposed to pass this test");
+    textAreaLayout->addWidget(testMsg);
 }
 
 void ChatWidget::createHeader(int height)

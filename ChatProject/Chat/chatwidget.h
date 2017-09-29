@@ -5,6 +5,7 @@
 #include <QVBoxLayout>
 #include <QGroupBox>
 #include <QLineEdit>
+#include <QTextEdit>
 
 class ChatWidget : public QGroupBox
 {
