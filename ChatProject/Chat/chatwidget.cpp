@@ -4,6 +4,7 @@ ChatWidget::ChatWidget(int maxWidth, int maxHeight, int barsHeight, QWidget * pa
 {
     setFixedWidth(maxWidth);     //change to maximum in final version
     setFixedHeight(maxHeight);   // change to maximum in final version
+    maxMsgWidth = maxWidth;
 
     chatLayout = new QVBoxLayout();
     chatLayout->setSpacing(0);
@@ -11,21 +12,12 @@ ChatWidget::ChatWidget(int maxWidth, int maxHeight, int barsHeight, QWidget * pa
     setLayout(chatLayout);
 
     createHeader(barsHeight);
-
-    QWidget * textArea = createTextArea();
-    chatLayout->addWidget(textArea);
-
+    createMessagesLayout();
     createFooter(barsHeight);
 
     //
-
-    QTextEdit * testMsg = new QTextEdit();
-    testMsg->setReadOnly(true);
-    testMsg->setTextInteractionFlags(Qt::TextSelectableByKeyboard | Qt::TextSelectableByMouse);
-    testMsg->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    testMsg->setStyleSheet("background: black; border: none; color:white; font-size: 16px;");
-    testMsg->setText("Long testing text that is supposed to pass this test");
-    textAreaLayout->addWidget(testMsg);
+    addMsg(QString("Nickname1"), QString("Hello"));
+    addMsg(QString("Nickname2"), QString("blablabla blJQWJEJJQWJIJMPQWJEQW RJ J QRWJQWJ RJQW R"));
 }
 
 void ChatWidget::createHeader(int height)
@@ -36,23 +28,46 @@ void ChatWidget::createHeader(int height)
     chatLayout->addWidget(headerBar);
 }
 
+void ChatWidget::createMessagesLayout()
+{
+    messagesLayout = new QVBoxLayout();
+    messagesLayout->setContentsMargins(0, 5, 0, 5);
+    chatLayout->addLayout(messagesLayout);
+    chatLayout->setAlignment(messagesLayout, Qt::AlignTop);
+}
+
 void ChatWidget::createFooter(int height)
 {
     QLineEdit * textInputBar = new QLineEdit();
     textInputBar->setObjectName("ChatWidgetTextInputBar");
     textInputBar->setFixedHeight(height);
-    chatLayout->addWidget(textInputBar);
     textInputBar->setPlaceholderText("Send message");
+    chatLayout->addWidget(textInputBar);
+    chatLayout->setAlignment(textInputBar, Qt::AlignBottom);
 }
 
-QWidget * ChatWidget::createTextArea()
+void ChatWidget::addMsg(QString nickname, QString message)
 {
-    QWidget * textArea = new QWidget();
-    textArea->setObjectName("ChatWidgetTextArea");
+    QString msgText = "<b>" + nickname + "</b>: " + message;
 
-    textAreaLayout = new QVBoxLayout();
-    textAreaLayout->setContentsMargins(0, 11, 0, 11);
-    textArea->setLayout(textAreaLayout);
+    QTextEdit * msg = new QTextEdit();
+    msg->setReadOnly(true);
+    msg->setTextInteractionFlags(Qt::TextSelectableByKeyboard | Qt::TextSelectableByMouse);
+    msg->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    msg->setObjectName("ChatWidgetMessage");
+    msg->setText(msgText);
+    msg->ensurePolished();
 
-    return textArea;
+    QFont msgFont = msg->document()->defaultFont();
+    msg->setMaximumHeight(computeMessageHeight(msgFont, msgText));
+
+    messagesLayout->addWidget(msg);
+}
+
+size_t ChatWidget::computeMessageHeight(QFont & messageFont, QString message)
+{
+    QFontMetrics fontMetrics = QFontMetrics(messageFont);
+    size_t height = fontMetrics.boundingRect(QRect(0, 0, maxMsgWidth, 100), Qt::TextWordWrap, message).height() + 12;
+
+    return height;
 }

@@ -13,15 +13,4 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent)
     //setCentralWidget(chat);
 
     chat->move(10, 10);
-
-    /*QTextEdit * t = new QTextEdit();
-    t->setStyleSheet("background: black; color: white; font-size: 25px;");
-    t->setMaximumSize(300, 300);
-    t->setReadOnly(true);
-    t->setText("Hello guys i will be testing this text wrapping widget HELLOWHYARENTYOUWRAPPINGTHISTEXT HELLOGUYSIMCURIOUSWHEREITWILLWRAPTHETEXT"
-               "SADQWEQWRQWEQWRQWEQWRQWTQWRQWUEIWHUQWHRWIUOQWUHROWIHF");
-    t->setTextInteractionFlags(Qt::TextSelectableByMouse | Qt::TextSelectableByKeyboard);
-    t->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-
-    setCentralWidget(t);*/
 }
