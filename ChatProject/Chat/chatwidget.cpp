@@ -1,4 +1,5 @@
 #include "chatwidget.h"
+#include <QScrollArea>
 
 ChatWidget::ChatWidget(int maxWidth, int maxHeight, int barsHeight, QWidget * parent) : QGroupBox(parent)
 {
@@ -18,6 +19,12 @@ ChatWidget::ChatWidget(int maxWidth, int maxHeight, int barsHeight, QWidget * pa
     //
     addMsg(QString("Nickname1"), QString("Hello"));
     addMsg(QString("Nickname2"), QString("blablabla blJQWJEJJQWJIJMPQWJEQW RJ J QRWJQWJ RJQW R"));
+    addMsg(QString("Nickname2"), QString("blablabla blJQWJEJJQWJIJMPQWJEQW RJ J QRWJQWJ RJQW R"));
+    addMsg(QString("Nickname2"), QString("blablabla blJQWJEJJQWJIJMPQWJEQW RJ J QRWJQWJ RJQW R"));
+    addMsg(QString("Nickname2"), QString("blablabla blJQWJEJJQWJIJMPQWJEQW RJ J QRWJQWJ RJQW R"));
+    addMsg(QString("Nickname2"), QString("blablabla blJQWJEJJQWJIJMPQWJEQW RJ J QRWJQWJ RJQW R"));
+
+    addMsg(QString("Nickname2"), QString("blablabla blJQWJEJJQWJIJMPQWJEQW RJ J QRWJQWJ RJQW R"));
 }
 
 void ChatWidget::createHeader(int height)
@@ -31,9 +38,28 @@ void ChatWidget::createHeader(int height)
 void ChatWidget::createMessagesLayout()
 {
     messagesLayout = new QVBoxLayout();
+    messagesLayout->setSpacing(0);
     messagesLayout->setContentsMargins(0, 5, 0, 5);
-    chatLayout->addLayout(messagesLayout);
-    chatLayout->setAlignment(messagesLayout, Qt::AlignTop);
+    messagesLayout->setAlignment(Qt::AlignTop);
+
+    createScrollArea();
+}
+
+void ChatWidget::createScrollArea()
+{
+    QScrollArea * scroll = new QScrollArea();
+    scroll->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    scroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    scroll->setWidgetResizable(true);
+    scroll->setObjectName("ChatWidgetScroll");
+
+    QWidget * scrollArea = new QWidget();
+    scrollArea->setObjectName("ChatWidgetScrollArea");
+    scrollArea->setLayout(messagesLayout);
+    scroll->setWidget(scrollArea);
+
+    chatLayout->addWidget(scroll);
+    chatLayout->setAlignment(scrollArea, Qt::AlignTop);
 }
 
 void ChatWidget::createFooter(int height)

@@ -18,6 +18,7 @@ private:
     void createHeader(int height);
     void createMessagesLayout();
     void createFooter(int height);
+    void createScrollArea();
 
     size_t computeMessageHeight(QFont & messageFont, QString message);
 
