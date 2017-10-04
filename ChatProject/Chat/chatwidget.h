@@ -5,27 +5,29 @@
 #include <QGroupBox>
 #include <QLineEdit>
 #include <QTextEdit>
-#include <QFont>
+#include <QScrollBar>
 
 class ChatWidget : public QGroupBox
 {
     Q_OBJECT
 private:
     QVBoxLayout * chatLayout;
-    QVBoxLayout * messagesLayout;
-    size_t maxMsgWidth;
+    QTextEdit * messagesArea;
+    QLineEdit * textInputBar;
 
     void createHeader(int height);
-    void createMessagesLayout();
+    void createMessagesArea();
     void createFooter(int height);
-    void createScrollArea();
 
-    size_t computeMessageHeight(QFont & messageFont, QString message);
+    void scrollMaxToBottom();
 
 public:
     explicit ChatWidget(int maxWidth, int maxHeight, int barsHeight, QWidget * parent = 0);
 
     void addMsg(QString nickname, QString message);
+
+public slots:
+    void messageSent();
 };
 
 #endif // CHATWIDGET_H

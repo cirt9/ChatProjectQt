@@ -31,28 +31,15 @@ border-left: 2px solid rgb(13, 13, 13);
 border-right: 2px solid rgb(13, 13, 13);
 }
 
-#ChatWidgetMessage
+#ChatWidgetMessagesArea
 {
-font-family: Arial;
 background: transparent;
 border: none;
-color:white;
+color: rgb(214, 213, 213);
 font-size: 16px;
 }
 
-#ChatWidgetScroll
-{
-background: transparent;
-border: none;
-}
-
-#ChatWidgetScrollArea
-{
-background: transparent;
-border: none;
-}
-
-QScrollBar:vertical
+#ChatWidgetMessagesAreaScrollBar:vertical
 {
 background-color: rgb(25, 25, 25);
 width: 12px;
@@ -61,14 +48,14 @@ border: 1px transparent #2A2929;
 border-radius: 4px;
 }
 
-QScrollBar::handle:vertical
+#ChatWidgetMessagesAreaScrollBar::handle:vertical
 {
 background-color: rgb(80, 80, 78);
 min-height: 5px;
 border-radius: 4px;
 }
 
-QScrollBar::sub-line:vertical
+#ChatWidgetMessagesAreaScrollBar::sub-line:vertical
 {
 margin: 3px 0px 3px 0px;
 border-image: url(:/qss_icons/rc/up_arrow_disabled.png);
@@ -78,7 +65,7 @@ subcontrol-position: top;
 subcontrol-origin: margin;
 }
 
-QScrollBar::add-line:vertical
+#ChatWidgetMessagesAreaScrollBar::add-line:vertical
 {
 margin: 3px 0px 3px 0px;
 border-image: url(:/qss_icons/rc/down_arrow_disabled.png);
@@ -88,12 +75,12 @@ subcontrol-position: bottom;
 subcontrol-origin: margin;
 }
 
-QScrollBar::up-arrow:vertical, QScrollBar::down-arrow:vertical
+#ChatWidgetMessagesAreaScrollBar::up-arrow:vertical, QScrollBar::down-arrow:vertical
 {
-    background: none;
+background: none;
 }
 
-QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical
+#ChatWidgetMessagesAreaScrollBar::add-page:vertical, QScrollBar::sub-page:vertical
 {
-    background: none;
+background: none;
 }
