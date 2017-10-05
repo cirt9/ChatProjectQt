@@ -75,3 +75,16 @@ void ChatWidget::scrollMaxToBottom()
     QScrollBar * scrollBar = messagesArea->verticalScrollBar();
     scrollBar->setValue(scrollBar->maximum());
 }
+
+void ChatWidget::mousePressEvent(QMouseEvent * event)
+{
+    offset = event->pos();
+    QGroupBox::mousePressEvent(event);
+}
+
+void ChatWidget::mouseMoveEvent(QMouseEvent * event)
+{
+    move(parentWidget()->mapFromGlobal(QCursor::pos() - offset));
+
+    QGroupBox::mouseMoveEvent(event);
+}

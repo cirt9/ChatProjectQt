@@ -6,6 +6,9 @@
 #include <QLineEdit>
 #include <QTextEdit>
 #include <QScrollBar>
+#include <QMouseEvent>
+#include <QCursor>
+#include <QPointF>
 
 class ChatWidget : public QGroupBox
 {
@@ -14,12 +17,16 @@ private:
     QVBoxLayout * chatLayout;
     QTextEdit * messagesArea;
     QLineEdit * textInputBar;
+    QPoint offset;
 
     void createHeader(int height);
     void createMessagesArea();
     void createFooter(int height);
 
     void scrollMaxToBottom();
+
+    void mousePressEvent(QMouseEvent * event);
+    void mouseMoveEvent(QMouseEvent * event);
 
 public:
     explicit ChatWidget(int maxWidth, int maxHeight, int barsHeight, QWidget * parent = 0);
