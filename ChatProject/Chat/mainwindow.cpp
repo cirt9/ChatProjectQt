@@ -10,6 +10,8 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent)
     ChatWidget * chat = new ChatWidget(550, 350, 40, this);
     chat->setObjectName("ChatWidget");
     chat->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    chat->enableMoving();
+    chat->disableOffTheScreenMoving();
     //setCentralWidget(chat);
 
     chat->move(10, 10);

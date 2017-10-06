@@ -8,7 +8,6 @@
 #include <QScrollBar>
 #include <QMouseEvent>
 #include <QCursor>
-#include <QPointF>
 
 class ChatWidget : public QGroupBox
 {
@@ -17,7 +16,10 @@ private:
     QVBoxLayout * chatLayout;
     QTextEdit * messagesArea;
     QLineEdit * textInputBar;
+
     QPoint offset;
+    bool movingEnabled;
+    bool offTheScreenMovingDisabled;
 
     void createHeader(int height);
     void createMessagesArea();
@@ -32,6 +34,9 @@ public:
     explicit ChatWidget(int maxWidth, int maxHeight, int barsHeight, QWidget * parent = 0);
 
     void addMsg(QString nickname, QString message);
+
+    void enableMoving(bool enable = true);
+    void disableOffTheScreenMoving(bool disable = true);
 
 public slots:
     void messageSent();

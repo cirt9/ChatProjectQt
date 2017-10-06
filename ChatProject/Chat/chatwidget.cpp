@@ -4,6 +4,8 @@ ChatWidget::ChatWidget(int maxWidth, int maxHeight, int barsHeight, QWidget * pa
 {
     setFixedWidth(maxWidth);     //change to maximum in final version
     setFixedHeight(maxHeight);   // change to maximum in final version
+    movingEnabled = false;
+    offTheScreenMovingDisabled = false;
 
     chatLayout = new QVBoxLayout();
     chatLayout->setSpacing(0);
@@ -79,12 +81,35 @@ void ChatWidget::scrollMaxToBottom()
 void ChatWidget::mousePressEvent(QMouseEvent * event)
 {
     offset = event->pos();
+
     QGroupBox::mousePressEvent(event);
 }
 
 void ChatWidget::mouseMoveEvent(QMouseEvent * event)
 {
-    move(parentWidget()->mapFromGlobal(QCursor::pos() - offset));
+    if(movingEnabled)
+    {
+        QPoint toMove = parentWidget()->mapFromGlobal(QCursor::pos() - offset);
+
+        if(offTheScreenMovingDisabled)
+        {
+            if(toMove.x() < -20) return;
+            if(toMove.y() < -20) return;
+            if (toMove.x() > parentWidget()->width() - this->width() + 20) return;
+            if (toMove.y() > parentWidget()->height() - this->height() + 20) return;
+        }
+        move(toMove);
+    }
 
     QGroupBox::mouseMoveEvent(event);
+}
+
+void ChatWidget::enableMoving(bool enable)
+{
+    movingEnabled = enable;
+}
+
+void ChatWidget::disableOffTheScreenMoving(bool disable)
+{
+    offTheScreenMovingDisabled = disable;
 }
