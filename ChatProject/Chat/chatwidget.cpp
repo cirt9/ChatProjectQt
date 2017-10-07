@@ -1,9 +1,7 @@
 #include "chatwidget.h"
 
-ChatWidget::ChatWidget(int maxWidth, int maxHeight, int barsHeight, QWidget * parent) : QGroupBox(parent)
+ChatWidget::ChatWidget(int barsHeight, QWidget * parent) : QGroupBox(parent)
 {
-    setFixedWidth(maxWidth);     //change to maximum in final version
-    setFixedHeight(maxHeight);   // change to maximum in final version
     movingEnabled = false;
     offTheScreenMovingDisabled = false;
 
@@ -51,7 +49,7 @@ void ChatWidget::createFooter(int height)
     chatLayout->setAlignment(textInputBar, Qt::AlignBottom);
     textInputBar->setFocus();
 
-    connect(textInputBar, SIGNAL(returnPressed()), this, SLOT(messageSent()));
+    connect(textInputBar, SIGNAL(returnPressed()), this, SLOT(sendMessage()));
 }
 
 void ChatWidget::addMsg(QString nickname, QString message)
@@ -61,7 +59,7 @@ void ChatWidget::addMsg(QString nickname, QString message)
     messagesArea->append(msgText);
 }
 
-void ChatWidget::messageSent()
+void ChatWidget::sendMessage()
 {
     if(textInputBar->text().size() > 0)
     {
@@ -93,10 +91,12 @@ void ChatWidget::mouseMoveEvent(QMouseEvent * event)
 
         if(offTheScreenMovingDisabled)
         {
-            if(toMove.x() < -20) return;
-            if(toMove.y() < -20) return;
-            if (toMove.x() > parentWidget()->width() - this->width() + 20) return;
-            if (toMove.y() > parentWidget()->height() - this->height() + 20) return;
+            int boundary = 20;
+
+            if(toMove.x() < - boundary) return;
+            if(toMove.y() < - boundary) return;
+            if (toMove.x() > parentWidget()->width() - this->width() + boundary) return;
+            if (toMove.y() > parentWidget()->height() - this->height() + boundary) return;
         }
         move(toMove);
     }
