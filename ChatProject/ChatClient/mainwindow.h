@@ -3,7 +3,10 @@
 
 #include <QMainWindow>
 #include <QDesktopWidget>
-#include <chatwidget.h>
+#include <QLabel>
+#include <QLineEdit>
+#include <QGridLayout>
+#include <QPushButton>
 
 class MainWindow : public QMainWindow
 {

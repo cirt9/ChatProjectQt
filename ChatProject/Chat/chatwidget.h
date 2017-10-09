@@ -35,6 +35,7 @@ private slots:
 
 public:
     explicit ChatWidget(int barsHeight, QWidget * parent = 0);
+    ~ChatWidget() {}
 
     void addMsg(QString nickname, QString message);
 

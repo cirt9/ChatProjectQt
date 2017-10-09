@@ -1,7 +1,8 @@
 TEMPLATE = subdirs
 CONFIG+=ordered
 SUBDIRS = \
-    Chat
+    Chat \
+    ChatClient
 
 app.depends = src
 tests.depends = src

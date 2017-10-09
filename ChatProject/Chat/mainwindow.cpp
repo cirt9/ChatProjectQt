@@ -1,6 +1,4 @@
 #include "mainwindow.h"
-#include <QLabel>
-#include <QTextEdit>
 
 MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent)
 {
