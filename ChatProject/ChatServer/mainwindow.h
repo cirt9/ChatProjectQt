@@ -3,18 +3,10 @@
 
 #include <QMainWindow>
 #include <QDesktopWidget>
-#include <QLabel>
-#include <QLineEdit>
-#include <QGridLayout>
-#include <QPushButton>
-#include <chatclient.h>
 
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
-
-private:
-    ChatClient * chatClient;
 
 public:
     MainWindow(QWidget * parent = nullptr);

@@ -4,19 +4,22 @@
 #include <QObject>
 #include <QTcpSocket>
 
-class ChatClient : QObject
+class ChatClient : public QObject
 {
     Q_OBJECT
 
 private:
     QTcpSocket * clientSocket;
 
+private slots:
+    void displayError(QAbstractSocket::SocketError socketError);
+
 public:
     explicit ChatClient(QObject * parent = nullptr);
     ~ChatClient() {}
 
 public slots:
-    void connect(QString ip, int portNumber);
+    void connectToHost(QString ip, int portNumber);
 };
 
 #endif // CHATCLIENT_H

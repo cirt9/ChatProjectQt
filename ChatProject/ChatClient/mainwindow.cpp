@@ -36,4 +36,8 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent)
 
     QPushButton * sendButton = new QPushButton("Send message");
     layout->addWidget(sendButton, 4, 2);
+
+    chatClient = new ChatClient(this);
+    connect(connectButton, &QPushButton::clicked, chatClient,
+            [=]{chatClient->connectToHost(addressLine->text(), portLine->text().toInt()); } );
 }
