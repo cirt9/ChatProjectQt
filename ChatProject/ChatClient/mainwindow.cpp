@@ -31,13 +31,20 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent)
     QLabel * message = new QLabel("Message: ");
     layout->addWidget(message, 4, 0);
 
-    QLineEdit * messageLine = new QLineEdit();
+    messageLine = new QLineEdit();
     layout->addWidget(messageLine, 4, 1);
 
     QPushButton * sendButton = new QPushButton("Send message");
     layout->addWidget(sendButton, 4, 2);
+    connect(sendButton, SIGNAL(clicked()), this, SLOT(sendClicked()));
 
     chatClient = new ChatClient(this);
     connect(connectButton, &QPushButton::clicked, chatClient,
             [=]{chatClient->connectToHost(addressLine->text(), portLine->text().toInt()); } );
+}
+
+void MainWindow::sendClicked()
+{
+    QString message = messageLine->text().trimmed();
+    //chatClient->write(QString(message + " ").toUtf8());
 }

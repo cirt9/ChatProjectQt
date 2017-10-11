@@ -15,6 +15,10 @@ class MainWindow : public QMainWindow
 
 private:
     ChatClient * chatClient;
+    QLineEdit * messageLine;
+
+private slots:
+    void sendClicked();
 
 public:
     MainWindow(QWidget * parent = nullptr);
