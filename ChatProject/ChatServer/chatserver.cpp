@@ -22,8 +22,6 @@ void ChatServer::readyRead()
 {
     QTcpSocket * client = (QTcpSocket *)sender();
 
-    qDebug() << "reading";
-
     while(client->canReadLine())
     {
         QString line = QString::fromUtf8(client->readLine()).trimmed();

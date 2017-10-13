@@ -13,6 +13,12 @@ void ChatClient::connectToHost(QString ip, int portNumber)
     clientSocket->connectToHost(ip, quint16(portNumber));
 }
 
+void ChatClient::send(QString message)
+{
+    message = message.trimmed();
+    clientSocket->write(QString(message + "\n").toUtf8());
+}
+
 void ChatClient::displayError(QAbstractSocket::SocketError socketError)
 {
     if(socketError == QAbstractSocket::RemoteHostClosedError)

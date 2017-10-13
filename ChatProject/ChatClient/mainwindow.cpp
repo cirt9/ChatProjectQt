@@ -45,6 +45,8 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent)
 
 void MainWindow::sendClicked()
 {
-    QString message = messageLine->text().trimmed();
+    //QString message = messageLine->text().trimmed();
+    QString message = messageLine->text();
     //chatClient->write(QString(message + " ").toUtf8());
+    chatClient->send(message);
 }

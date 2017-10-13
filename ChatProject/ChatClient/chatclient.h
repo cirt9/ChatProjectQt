@@ -20,6 +20,7 @@ public:
 
 public slots:
     void connectToHost(QString ip, int portNumber);
+    void send(QString message);
 };
 
 #endif // CHATCLIENT_H
