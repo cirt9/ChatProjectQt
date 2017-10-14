@@ -21,7 +21,7 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent)
     layout->addWidget(startButton, 1, 0, 1, 2);
     connect(startButton, SIGNAL(clicked()), this, SLOT(startServer()));
 
-    QTextEdit * messagesArea = new QTextEdit();
+    messagesArea = new QTextEdit();
     layout->addWidget(messagesArea, 2, 0, 1, 2);
 }
 
@@ -32,7 +32,15 @@ void MainWindow::startServer()
     bool success = chatServer->listen(QHostAddress::Any, quint16(portLine->text().toInt()));
 
     if(success)
+    {
         qDebug() << "Server started";
+        connect(chatServer, SIGNAL(messageReceived(QString)), this, SLOT(writeMsgToMsgArea(QString)));
+    }
     else
         qDebug() << "Server failed to start";
+}
+
+void MainWindow::writeMsgToMsgArea(QString message)
+{
+    messagesArea->append(message);
 }

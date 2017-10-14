@@ -14,6 +14,8 @@ private:
 private slots:
     void displayError(QAbstractSocket::SocketError socketError);
 
+    void readyRead();
+
 public:
     explicit ChatClient(QObject * parent = nullptr);
     ~ChatClient() {}

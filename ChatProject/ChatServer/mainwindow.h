@@ -17,9 +17,11 @@ class MainWindow : public QMainWindow
 private:
     ChatServer * chatServer;
     QLineEdit * portLine;
+    QTextEdit * messagesArea;
 
 private slots:
     void startServer();
+    void writeMsgToMsgArea(QString message);
 
 public:
     MainWindow(QWidget * parent = nullptr);

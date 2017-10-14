@@ -25,8 +25,15 @@ void ChatServer::readyRead()
     while(client->canReadLine())
     {
         QString line = QString::fromUtf8(client->readLine()).trimmed();
+        emit messageReceived(line);
         qDebug() << line;
         //transfer message to chat widget
+
+        //message sending Server -> client test
+        client->write(QString("Test message").toUtf8());
+        client->flush();
+        client->waitForBytesWritten(30000);
+        //
     }
 }
 

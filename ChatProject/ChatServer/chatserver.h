@@ -21,6 +21,9 @@ protected:
 public:
     ChatServer(QObject * parent = nullptr);
     ~ChatServer() {}
+
+signals:
+    void messageReceived(QString message);
 };
 
 #endif // CHATSERVER_H

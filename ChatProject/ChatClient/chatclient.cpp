@@ -5,12 +5,19 @@ ChatClient::ChatClient(QObject * parent) : QObject(parent)
 {
     clientSocket = new QTcpSocket(this);
 
-    connect(clientSocket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(displayError(QAbstractSocket::SocketError)));
+    connect(clientSocket, SIGNAL(error(QAbstractSocket::SocketError)), this,
+            SLOT(displayError(QAbstractSocket::SocketError)));
+    connect(clientSocket, SIGNAL(readyRead()), this, SLOT(readyRead()));
 }
 
 void ChatClient::connectToHost(QString ip, int portNumber)
 {
     clientSocket->connectToHost(ip, quint16(portNumber));
+
+    if(clientSocket->waitForConnected())
+        qDebug() << "Connected";
+    else
+        qDebug() << "Couldn't connect";
 }
 
 void ChatClient::send(QString message)
@@ -32,4 +39,12 @@ void ChatClient::displayError(QAbstractSocket::SocketError socketError)
 
     else
         qDebug() << "The following error ocurred: " + clientSocket->errorString();
+}
+
+void ChatClient::readyRead()
+{
+    QByteArray data = clientSocket->readAll();
+    QString dataString(data);
+
+    qDebug() << dataString;
 }
