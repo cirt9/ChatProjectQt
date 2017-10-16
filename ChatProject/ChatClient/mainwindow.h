@@ -8,6 +8,7 @@
 #include <QGridLayout>
 #include <QPushButton>
 #include <chatclient.h>
+#include <QTextEdit>
 
 class MainWindow : public QMainWindow
 {
@@ -16,6 +17,7 @@ class MainWindow : public QMainWindow
 private:
     ChatClient * chatClient;
     QLineEdit * messageLine;
+    QTextEdit * messagesArea;
 
 private slots:
     void sendClicked();

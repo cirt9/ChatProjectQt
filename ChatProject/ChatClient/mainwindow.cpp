@@ -26,7 +26,8 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent)
     QPushButton * connectButton = new QPushButton("Connect");
     layout->addWidget(connectButton, 2, 0, 1, 3);
 
-    layout->setRowStretch(3, 100);
+    messagesArea = new QTextEdit();
+    layout->addWidget(messagesArea, 3, 0, 1, 3);
 
     QLabel * message = new QLabel("Message: ");
     layout->addWidget(message, 4, 0);
@@ -45,8 +46,7 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent)
 
 void MainWindow::sendClicked()
 {
-    //QString message = messageLine->text().trimmed();
     QString message = messageLine->text();
-    //chatClient->write(QString(message + " ").toUtf8());
     chatClient->send(message);
+    messagesArea->append(message);
 }

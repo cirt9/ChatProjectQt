@@ -27,7 +27,7 @@ void ChatWidget::createMessagesArea()
 {
     messagesArea = new QTextEdit();
     messagesArea->setReadOnly(true);
-    messagesArea->setTextInteractionFlags(Qt::TextSelectableByKeyboard | Qt::TextSelectableByMouse);
+    messagesArea->setTextInteractionFlags(Qt::TextSelectableByMouse);
     messagesArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     messagesArea->setObjectName("ChatWidgetMessagesArea");
     messagesArea->setText("<b>[Server]</b>: Have a nice day!");

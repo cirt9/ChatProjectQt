@@ -22,6 +22,8 @@ public:
     ChatServer(QObject * parent = nullptr);
     ~ChatServer() {}
 
+    void send(QString message, QTcpSocket * except = nullptr);
+
 signals:
     void messageReceived(QString message);
 };

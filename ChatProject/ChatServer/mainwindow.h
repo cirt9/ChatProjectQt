@@ -18,10 +18,12 @@ private:
     ChatServer * chatServer;
     QLineEdit * portLine;
     QTextEdit * messagesArea;
+    QLineEdit * messageLine;
 
 private slots:
     void startServer();
-    void writeMsgToMsgArea(QString message);
+    void writeReceivedMsgToTextEdit(QString msg);
+    void sendClicked();
 
 public:
     MainWindow(QWidget * parent = nullptr);

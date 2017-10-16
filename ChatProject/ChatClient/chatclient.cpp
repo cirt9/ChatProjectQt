@@ -7,7 +7,7 @@ ChatClient::ChatClient(QObject * parent) : QObject(parent)
 
     connect(clientSocket, SIGNAL(error(QAbstractSocket::SocketError)), this,
             SLOT(displayError(QAbstractSocket::SocketError)));
-    connect(clientSocket, SIGNAL(readyRead()), this, SLOT(readyRead()));
+    connect(clientSocket, SIGNAL(readyRead()), this, SLOT(readyRead()));    
 }
 
 void ChatClient::connectToHost(QString ip, int portNumber)

@@ -27,12 +27,12 @@ void ChatServer::readyRead()
         QString line = QString::fromUtf8(client->readLine()).trimmed();
         emit messageReceived(line);
         qDebug() << line;
-        //transfer message to chat widget
 
         //message sending Server -> client test
-        client->write(QString("Test message").toUtf8());
+        send(line, client);
+        /*client->write(QString("Test message").toUtf8());
         client->flush();
-        client->waitForBytesWritten(30000);
+        client->waitForBytesWritten(30000);*/
         //
     }
 }
@@ -43,4 +43,19 @@ void ChatServer::disconnected()
     qDebug() << "Client disconnected: " << client->peerAddress().toString();
 
     clients.remove(client);
+}
+
+void ChatServer::send(QString message, QTcpSocket * except)
+{
+    qDebug() << clients.size();
+    QSetIterator<QTcpSocket *> i(clients);
+    while(i.hasNext())
+    {
+        if(i.next() != except)
+        {
+            i.next()->write(message.trimmed().toUtf8());
+            i.next()->flush();
+            i.next()->waitForBytesWritten(30000);
+        }
+    }
 }
