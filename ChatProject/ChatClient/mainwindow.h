@@ -21,6 +21,7 @@ private:
 
 private slots:
     void sendClicked();
+    void writeReceivedMsgToTextEdit(QString msg);
 
 public:
     MainWindow(QWidget * parent = nullptr);

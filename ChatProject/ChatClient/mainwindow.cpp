@@ -40,6 +40,7 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent)
     connect(sendButton, SIGNAL(clicked()), this, SLOT(sendClicked()));
 
     chatClient = new ChatClient(this);
+    connect(chatClient, SIGNAL(messageReceived(QString)), this, SLOT(writeReceivedMsgToTextEdit(QString)));
     connect(connectButton, &QPushButton::clicked, chatClient,
             [=]{chatClient->connectToHost(addressLine->text(), portLine->text().toInt()); } );
 }
@@ -49,4 +50,9 @@ void MainWindow::sendClicked()
     QString message = messageLine->text();
     chatClient->send(message);
     messagesArea->append(message);
+}
+
+void MainWindow::writeReceivedMsgToTextEdit(QString msg)
+{
+    messagesArea->append(msg);
 }

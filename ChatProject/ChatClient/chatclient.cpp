@@ -46,5 +46,6 @@ void ChatClient::readyRead()
     QByteArray data = clientSocket->readAll();
     QString dataString(data);
 
+    emit messageReceived(dataString);
     qDebug() << dataString;
 }

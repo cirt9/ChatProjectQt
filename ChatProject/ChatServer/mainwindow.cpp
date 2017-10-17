@@ -58,6 +58,6 @@ void MainWindow::writeReceivedMsgToTextEdit(QString msg)
 void MainWindow::sendClicked()
 {
     QString message = messageLine->text();
-    //server->sendToAllPeers
+    chatServer->send(message);
     messagesArea->append(message);
 }

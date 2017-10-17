@@ -28,12 +28,7 @@ void ChatServer::readyRead()
         emit messageReceived(line);
         qDebug() << line;
 
-        //message sending Server -> client test
         send(line, client);
-        /*client->write(QString("Test message").toUtf8());
-        client->flush();
-        client->waitForBytesWritten(30000);*/
-        //
     }
 }
 
@@ -47,15 +42,13 @@ void ChatServer::disconnected()
 
 void ChatServer::send(QString message, QTcpSocket * except)
 {
-    qDebug() << clients.size();
-    QSetIterator<QTcpSocket *> i(clients);
-    while(i.hasNext())
+    for(auto client : clients)
     {
-        if(i.next() != except)
+        if(client != except)
         {
-            i.next()->write(message.trimmed().toUtf8());
-            i.next()->flush();
-            i.next()->waitForBytesWritten(30000);
+            client->write(message.trimmed().toUtf8());
+            client->flush();
+            client->waitForBytesWritten(30000);
         }
     }
 }
