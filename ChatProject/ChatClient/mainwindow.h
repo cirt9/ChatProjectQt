@@ -16,12 +16,12 @@ class MainWindow : public QMainWindow
 
 private:
     ChatClient * chatClient;
-    QLineEdit * messageLine;
+    QLineEdit * inputLine;
     QTextEdit * messagesArea;
 
 private slots:
-    void sendClicked();
-    void writeReceivedMsgToTextEdit(QString msg);
+    void sendMessage();
+    void writeReceivedMsg(QString msg);
 
 public:
     MainWindow(QWidget * parent = nullptr);

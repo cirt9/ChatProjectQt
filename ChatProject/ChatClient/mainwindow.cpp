@@ -4,6 +4,9 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent)
 {
     resize(QDesktopWidget().availableGeometry(this).size() * 0.7);
 
+    chatClient = new ChatClient(this);
+    connect(chatClient, SIGNAL(messageReceived(QString)), this, SLOT(writeReceivedMsg(QString)));
+
     QWidget * container = new QWidget();
     setCentralWidget(container);
 
@@ -25,6 +28,8 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent)
 
     QPushButton * connectButton = new QPushButton("Connect");
     layout->addWidget(connectButton, 2, 0, 1, 3);
+    connect(connectButton, &QPushButton::clicked, chatClient,
+            [=]{chatClient->connectToHost(addressLine->text(), portLine->text().toInt()); } );
 
     messagesArea = new QTextEdit();
     layout->addWidget(messagesArea, 3, 0, 1, 3);
@@ -32,27 +37,22 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent)
     QLabel * message = new QLabel("Message: ");
     layout->addWidget(message, 4, 0);
 
-    messageLine = new QLineEdit();
-    layout->addWidget(messageLine, 4, 1);
+    inputLine = new QLineEdit();
+    layout->addWidget(inputLine, 4, 1);
 
     QPushButton * sendButton = new QPushButton("Send message");
     layout->addWidget(sendButton, 4, 2);
-    connect(sendButton, SIGNAL(clicked()), this, SLOT(sendClicked()));
-
-    chatClient = new ChatClient(this);
-    connect(chatClient, SIGNAL(messageReceived(QString)), this, SLOT(writeReceivedMsgToTextEdit(QString)));
-    connect(connectButton, &QPushButton::clicked, chatClient,
-            [=]{chatClient->connectToHost(addressLine->text(), portLine->text().toInt()); } );
+    connect(sendButton, SIGNAL(clicked()), this, SLOT(sendMessage()));
 }
 
-void MainWindow::sendClicked()
+void MainWindow::sendMessage()
 {
-    QString message = messageLine->text();
+    QString message = inputLine->text();
     chatClient->send(message);
     messagesArea->append(message);
 }
 
-void MainWindow::writeReceivedMsgToTextEdit(QString msg)
+void MainWindow::writeReceivedMsg(QString msg)
 {
     messagesArea->append(msg);
 }

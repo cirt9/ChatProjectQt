@@ -12,9 +12,8 @@ private:
     QTcpSocket * clientSocket;
 
 private slots:
-    void displayError(QAbstractSocket::SocketError socketError);
-
-    void readyRead();
+    void lookForErrors(QAbstractSocket::SocketError socketError);
+    void read();
 
 public:
     explicit ChatClient(QObject * parent = nullptr);
@@ -26,6 +25,8 @@ public slots:
 
 signals:
     void messageReceived(QString message);
+    void errorOccurred(QString error);
+    void infoOccurred(QString info);
 };
 
 #endif // CHATCLIENT_H

@@ -12,7 +12,7 @@ private:
     QSet<QTcpSocket *> clients;
 
 private slots:
-    void readyRead();
+    void read();
     void disconnected();
 
 protected:
@@ -22,10 +22,12 @@ public:
     ChatServer(QObject * parent = nullptr);
     ~ChatServer() {}
 
+    //void startServer(int port);
     void send(QString message, QTcpSocket * except = nullptr);
 
 signals:
     void messageReceived(QString message);
+    void infoOcurred(QString message);
 };
 
 #endif // CHATSERVER_H

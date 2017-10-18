@@ -4,6 +4,8 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent)
 {
     resize(QDesktopWidget().availableGeometry(this).size() * 0.7);
 
+    chatServer = new ChatServer(this);
+
     QWidget * container = new QWidget();
     setCentralWidget(container);
 
@@ -27,37 +29,35 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent)
     QLabel * message = new QLabel("Message: ");
     layout->addWidget(message, 3, 0);
 
-    messageLine = new QLineEdit();
-    layout->addWidget(messageLine, 3, 1);
+    inputLine = new QLineEdit();
+    layout->addWidget(inputLine, 3, 1);
 
     QPushButton * sendButton = new QPushButton("Send message");
-    connect(sendButton, SIGNAL(clicked()), this, SLOT(sendClicked()));
+    connect(sendButton, SIGNAL(clicked()), this, SLOT(sendMessage()));
     layout->addWidget(sendButton, 3, 2);
 }
 
 void MainWindow::startServer()
 {
-    chatServer = new ChatServer(this);
-
     bool success = chatServer->listen(QHostAddress::Any, quint16(portLine->text().toInt()));
 
     if(success)
     {
         qDebug() << "Server started";
-        connect(chatServer, SIGNAL(messageReceived(QString)), this, SLOT(writeReceivedMsgToTextEdit(QString)));
+        connect(chatServer, SIGNAL(messageReceived(QString)), this, SLOT(writeReceivedMsg(QString)));
     }
     else
         qDebug() << "Server failed to start";
 }
 
-void MainWindow::writeReceivedMsgToTextEdit(QString msg)
+void MainWindow::writeReceivedMsg(QString msg)
 {
     messagesArea->append(msg);
 }
 
-void MainWindow::sendClicked()
+void MainWindow::sendMessage()
 {
-    QString message = messageLine->text();
+    QString message = inputLine->text();
     chatServer->send(message);
     messagesArea->append(message);
 }
