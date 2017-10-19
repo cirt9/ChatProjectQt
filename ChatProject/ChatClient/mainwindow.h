@@ -9,6 +9,7 @@
 #include <QPushButton>
 #include <chatclient.h>
 #include <QTextEdit>
+#include <QMessageBox>
 
 class MainWindow : public QMainWindow
 {
@@ -26,6 +27,10 @@ private slots:
 public:
     MainWindow(QWidget * parent = nullptr);
     ~MainWindow() {}
+
+public slots:
+    void errorReaction(QString error);
+    void infoReaction(QString info);
 };
 
 #endif // MAINWINDOW_H

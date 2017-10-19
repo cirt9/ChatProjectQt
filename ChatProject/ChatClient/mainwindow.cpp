@@ -6,6 +6,8 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent)
 
     chatClient = new ChatClient(this);
     connect(chatClient, SIGNAL(messageReceived(QString)), this, SLOT(writeReceivedMsg(QString)));
+    connect(chatClient, SIGNAL(errorOccurred(QString)), this, SLOT(errorReaction(QString)));
+    connect(chatClient, SIGNAL(infoOccurred(QString)), this, SLOT(infoReaction(QString)));
 
     QWidget * container = new QWidget();
     setCentralWidget(container);
@@ -55,4 +57,14 @@ void MainWindow::sendMessage()
 void MainWindow::writeReceivedMsg(QString msg)
 {
     messagesArea->append(msg);
+}
+
+void MainWindow::errorReaction(QString error)
+{
+    QMessageBox::critical(this, QString("Error"), error);
+}
+
+void MainWindow::infoReaction(QString info)
+{
+    QMessageBox::information(this, QString("Information"), info);
 }
