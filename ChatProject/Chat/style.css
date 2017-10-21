@@ -1,3 +1,23 @@
+MainWindow
+{
+background: qlineargradient(x1:0, y1:0, x2:1, y2:1,
+                stop:0 rgba(255,255,255,0.15), stop:1 rgba(50,50,50,0.15));
+}
+
+#MainMenuTitleLabel
+{
+color: rgb(70,159,70);
+font: bold 60px;
+}
+
+#MainMenuAuthorLabel
+{
+color: rgb(70,159,70);
+font: 10px;
+}
+
+/* Chat Widget */
+
 #ChatWidget
 {
 background: qlineargradient(x1:0, y1:0, x2:1, y2:1,
