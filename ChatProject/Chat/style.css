@@ -4,16 +4,42 @@ background: qlineargradient(x1:0, y1:0, x2:1, y2:1,
                 stop:0 rgba(255,255,255,0.15), stop:1 rgba(50,50,50,0.15));
 }
 
+/* Main Menu */
+
 #MainMenuTitleLabel
 {
-color: rgb(70,159,70);
+color: rgb(95, 116, 163);
 font: bold 60px;
 }
 
 #MainMenuAuthorLabel
 {
-color: rgb(70,159,70);
-font: 10px;
+color: rgb(95, 116, 163);
+font: 12px;
+}
+
+#MainMenuButton
+{
+background: rgb(35, 69, 146);
+font: bold 30px;
+border: 1px solid rgb(6, 44, 132);
+color: rgb(122, 138, 175);
+border-radius: 3px;
+font-family: arial;
+padding: 5px;
+}
+
+#MainMenuButton:hover
+{
+background: qlineargradient(x1:1, y1:1, x2:0, y2:0,
+            stop:0 rgb(6, 44, 132), stop:1 rgb(35, 69, 146));
+}
+
+#MainMenuButton:pressed
+{
+background: qlineargradient(x1:1, y1:1, x2:0, y2:0,
+            stop:0 rgb(4, 40, 122), stop:1 rgb(35, 69, 146));
+color: rgb(95, 116, 163);
 }
 
 /* Chat Widget */

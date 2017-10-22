@@ -8,7 +8,7 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent)
     uiContainer = new QStackedWidget();
     setCentralWidget(uiContainer);
 
-    createMenu();
+    createUi();
 
     /*ChatWidget * chat = new ChatWidget(40, this);
     chat->setObjectName("ChatWidget");
@@ -22,35 +22,73 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent)
     */
 }
 
+void MainWindow::displayMenu()
+{
+
+}
+
+void MainWindow::createUi()
+{
+    createMenu();
+}
+
 void MainWindow::createMenu()
 {
     QWidget * menuContainer = new QWidget();
-    QGridLayout * menuLayout = new QGridLayout();
+    QVBoxLayout * menuLayout = new QVBoxLayout();
+    menuLayout->setSpacing(10);
 
-    QSpacerItem * leftSpacer = new QSpacerItem(0, QSizePolicy::Expanding, QSizePolicy::Expanding);
-    menuLayout->addItem(leftSpacer, 0, 0);
-    QSpacerItem * rightSpacer = new QSpacerItem(0, QSizePolicy::Expanding, QSizePolicy::Expanding);
-    menuLayout->addItem(rightSpacer, 0, 2);
+    menuLayout->addStretch(1);
 
-    QLabel * title = new QLabel("Chat");
+    QLabel * title = new QLabel("Chat online");
+    title->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     title->setObjectName("MainMenuTitleLabel");
     title->setAlignment(Qt::AlignCenter);
-    menuLayout->addWidget(title, 0, 1, Qt::AlignTop);
+    menuLayout->addWidget(title);
 
     QLabel * author = new QLabel("Created by Bartłomiej Wójtowicz");
     author->setObjectName("MainMenuAuthorLabel");
-    author->setAlignment(Qt::AlignRight);
-    menuLayout->addWidget(author, 1, 1, Qt::AlignTop);
+    author->setAlignment(Qt::AlignHCenter);
+    menuLayout->addWidget(author);
 
-    QPushButton * startServerButton = new QPushButton("Create new server");
-    menuLayout->addWidget(startServerButton, 2, 1);
+    menuLayout->addStretch(1);
 
-    QPushButton * joinServerButton = new QPushButton("Join existing server");
-    menuLayout->addWidget(joinServerButton, 3, 1);
+    QPushButton * startServerButton = new QPushButton("Create New Server");
+    startServerButton->setObjectName("MainMenuButton");
+    menuLayout->addWidget(startServerButton);
+
+    QPushButton * joinServerButton = new QPushButton("Join Existing Server");
+    joinServerButton->setObjectName("MainMenuButton");
+    menuLayout->addWidget(joinServerButton);
 
     QPushButton * quitButton = new QPushButton("Quit");
-    menuLayout->addWidget(quitButton, 4, 1);
+    quitButton->setObjectName("MainMenuButton");
+    connect(quitButton, SIGNAL(clicked(bool)), this, SLOT(close()));
+    menuLayout->addWidget(quitButton);
 
-    menuContainer->setLayout(menuLayout);
+    menuLayout->addStretch(2);
+
+    QGridLayout * centeredMenu = createCenteredLayout(menuLayout);
+    menuContainer->setLayout(centeredMenu);
     uiContainer->addWidget(menuContainer);
+}
+
+void MainWindow::createServerUi()
+{
+
+}
+
+QGridLayout * MainWindow::createCenteredLayout(QLayout * layout)
+{
+    QGridLayout * centeredLayout = new QGridLayout();
+
+    QSpacerItem * leftSpacer = new QSpacerItem(0, QSizePolicy::Expanding, QSizePolicy::Expanding);
+    centeredLayout->addItem(leftSpacer, 0, 0);
+
+    centeredLayout->addLayout(layout, 0, 1);
+
+    QSpacerItem * rightSpacer = new QSpacerItem(0, QSizePolicy::Expanding, QSizePolicy::Expanding);
+    centeredLayout->addItem(rightSpacer, 0, 2);
+
+    return centeredLayout;
 }

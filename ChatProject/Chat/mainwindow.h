@@ -8,6 +8,7 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QGridLayout>
+#include <QVBoxLayout>
 
 class MainWindow : public QMainWindow
 {
@@ -16,14 +17,17 @@ class MainWindow : public QMainWindow
 private:
     QStackedWidget * uiContainer;
 
+    void createUi();
     void createMenu();
+    void createServerUi();
+    QGridLayout * createCenteredLayout(QLayout * layout);
 
 public:
     MainWindow(QWidget * parent = 0);
     ~MainWindow() {}
 
 public slots:
-    //void displayMenu();
+    void displayMenu();
 };
 
 #endif // MAINWINDOW_H
