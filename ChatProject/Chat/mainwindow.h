@@ -9,6 +9,7 @@
 #include <QPushButton>
 #include <QGridLayout>
 #include <QVBoxLayout>
+#include <QLineEdit>
 
 class MainWindow : public QMainWindow
 {
@@ -20,7 +21,12 @@ private:
     void createUi();
     void createMenu();
     void createServerUi();
+    void createClientUi();
     QGridLayout * createCenteredLayout(QLayout * layout);
+
+private slots:
+    void displayServer();
+    void displayClient();
 
 public:
     MainWindow(QWidget * parent = 0);
