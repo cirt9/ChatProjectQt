@@ -31,43 +31,20 @@ void MainWindow::createUi()
 
 void MainWindow::createMenu()
 {
-    QWidget * menuContainer = new QWidget();
+    MainMenuWidget * menu = new MainMenuWidget();
+    menu->addTextBelowTitle("Created by Bartłomiej Wójtowicz");
+    menu->addButton("Create New Server");
+    connect(menu->getButton(0), SIGNAL(clicked(bool)), this, SLOT(displayServer()));
+    menu->addButton("Join Existing Server");
+    connect(menu->getButton(1), SIGNAL(clicked(bool)), this, SLOT(displayClient()));
+    menu->addButton("Quit");
+    connect(menu->getButton(2), SIGNAL(clicked(bool)), this, SLOT(close()));
+
     QVBoxLayout * menuLayout = new QVBoxLayout();
-    menuLayout->setSpacing(10);
-
-    menuLayout->addStretch(1);
-
-    QLabel * title = new QLabel("Chat online");
-    title->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    title->setObjectName("MainMenuTitleLabel");
-    title->setAlignment(Qt::AlignCenter);
-    menuLayout->addWidget(title);
-
-    QLabel * author = new QLabel("Created by Bartłomiej Wójtowicz");
-    author->setObjectName("MainMenuAuthorLabel");
-    author->setAlignment(Qt::AlignHCenter);
-    menuLayout->addWidget(author);
-
-    menuLayout->addStretch(1);
-
-    QPushButton * startServerButton = new QPushButton("Create New Server");
-    startServerButton->setObjectName("MainMenuButton");
-    connect(startServerButton, SIGNAL(clicked(bool)), this, SLOT(displayServer()));
-    menuLayout->addWidget(startServerButton);
-
-    QPushButton * joinServerButton = new QPushButton("Join Existing Server");
-    joinServerButton->setObjectName("MainMenuButton");
-    connect(joinServerButton, SIGNAL(clicked(bool)), this, SLOT(displayClient()));
-    menuLayout->addWidget(joinServerButton);
-
-    QPushButton * quitButton = new QPushButton("Quit");
-    quitButton->setObjectName("MainMenuButton");
-    connect(quitButton, SIGNAL(clicked(bool)), this, SLOT(close()));
-    menuLayout->addWidget(quitButton);
-
-    menuLayout->addStretch(2);
-
+    menuLayout->addWidget(menu);
     QGridLayout * centeredMenu = createCenteredLayout(menuLayout);
+
+    QWidget * menuContainer = new QWidget();
     menuContainer->setLayout(centeredMenu);
     uiContainer->addWidget(menuContainer);
 }

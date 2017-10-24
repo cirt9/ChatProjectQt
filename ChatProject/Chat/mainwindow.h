@@ -10,6 +10,7 @@
 #include <QGridLayout>
 #include <QVBoxLayout>
 #include <QLineEdit>
+#include <mainmenuwidget.h>
 
 class MainWindow : public QMainWindow
 {

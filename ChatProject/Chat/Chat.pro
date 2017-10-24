@@ -14,10 +14,12 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    chatwidget.cpp
+    chatwidget.cpp \
+    mainmenuwidget.cpp
 
 HEADERS  += mainwindow.h \
-    chatwidget.h
+    chatwidget.h \
+    mainmenuwidget.h
 
 DISTFILES +=
 
