@@ -24,6 +24,7 @@ private:
     void createServerUi();
     void createClientUi();
     QGridLayout * createCenteredLayout(QLayout * layout);
+    QGridLayout * createCenteredLayout(QWidget * widget);
 
 private slots:
     void displayServer();

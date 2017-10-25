@@ -42,6 +42,58 @@ background: qlineargradient(x1:1, y1:1, x2:0, y2:0,
 color: rgb(95, 116, 163);
 }
 
+/* ServerUi */
+
+#ServerUiLeftButton
+{
+background: rgb(35, 69, 146);
+font: bold 15px;
+border: 1px solid rgb(6, 44, 132);
+color: rgb(122, 138, 175);
+border-top-left-radius: 3px;
+border-bottom-left-radius: 3px;
+font-family: arial;
+padding: 5px;
+}
+
+#ServerUiRightButton
+{
+background: rgb(35, 69, 146);
+font: bold 15px;
+border: 1px solid rgb(6, 44, 132);
+color: rgb(122, 138, 175);
+border-top-right-radius: 3px;
+border-bottom-right-radius: 3px;
+font-family: arial;
+padding: 5px;
+}
+
+#ServerUiLeftButton:hover,
+#ServerUiRightButton:hover
+{
+background: qlineargradient(x1:1, y1:1, x2:0, y2:0,
+            stop:0 rgb(6, 44, 132), stop:1 rgb(35, 69, 146));
+}
+
+#ServerUiLeftButton:pressed,
+#ServerUiRightButton:pressed
+{
+background: qlineargradient(x1:1, y1:1, x2:0, y2:0,
+            stop:0 rgb(4, 40, 122), stop:1 rgb(35, 69, 146));
+color: rgb(95, 116, 163);
+}
+
+#ServerUiPortInput
+{
+border-top: 1px solid rgb(6, 44, 132);
+border-bottom: 1px solid rgb(6, 44, 132);
+background: rgb(35, 69, 146);
+color: rgb(122, 138, 175);
+font: 14px;
+font-family: arial;
+padding: 5px;
+}
+
 /* Chat Widget */
 
 #ChatWidget

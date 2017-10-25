@@ -1,6 +1,6 @@
 #include "mainmenuwidget.h"
 
-MainMenuWidget::MainMenuWidget(QWidget * parent) : QWidget(parent)
+MainMenuWidget::MainMenuWidget(QString title, QWidget * parent) : QWidget(parent)
 {
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
@@ -11,10 +11,10 @@ MainMenuWidget::MainMenuWidget(QWidget * parent) : QWidget(parent)
 
     menuLayout->addStretch(1);
 
-    QLabel * title = new QLabel("Chat online");
-    title->setObjectName("MainMenuTitleLabel");
-    title->setAlignment(Qt::AlignCenter);
-    menuLayout->addWidget(title);
+    QLabel * titleLabel = new QLabel(title);
+    titleLabel->setObjectName("MainMenuTitleLabel");
+    titleLabel->setAlignment(Qt::AlignCenter);
+    menuLayout->addWidget(titleLabel);
 
     menuLayout->addStretch(1);
     menuLayout->addStretch(2);
@@ -34,6 +34,18 @@ void MainMenuWidget::addButton(QString text)
     button->setObjectName("MainMenuButton");
     buttons.push_back(button);
     menuLayout->insertWidget(menuLayout->count() - 1, button);
+}
+
+void MainMenuWidget::removeLastButton()
+{
+    if(buttons.size() > 0)
+    {
+        QPushButton * toRemove = buttons[buttons.size() - 1];
+        menuLayout->removeWidget(toRemove);
+        buttons.removeLast();
+
+        toRemove->deleteLater();
+    }
 }
 
 QPushButton * MainMenuWidget::getButton(size_t index) const

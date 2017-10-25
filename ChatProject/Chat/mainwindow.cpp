@@ -31,7 +31,7 @@ void MainWindow::createUi()
 
 void MainWindow::createMenu()
 {
-    MainMenuWidget * menu = new MainMenuWidget();
+    MainMenuWidget * menu = new MainMenuWidget("Chat Online");
     menu->addTextBelowTitle("Created by Bartłomiej Wójtowicz");
     menu->addButton("Create New Server");
     connect(menu->getButton(0), SIGNAL(clicked(bool)), this, SLOT(displayServer()));
@@ -40,9 +40,7 @@ void MainWindow::createMenu()
     menu->addButton("Quit");
     connect(menu->getButton(2), SIGNAL(clicked(bool)), this, SLOT(close()));
 
-    QVBoxLayout * menuLayout = new QVBoxLayout();
-    menuLayout->addWidget(menu);
-    QGridLayout * centeredMenu = createCenteredLayout(menuLayout);
+    QGridLayout * centeredMenu = createCenteredLayout(menu);
 
     QWidget * menuContainer = new QWidget();
     menuContainer->setLayout(centeredMenu);
@@ -53,18 +51,22 @@ void MainWindow::createServerUi()
 {
     QWidget * serverUiContainer = new QWidget();
     QGridLayout * serverLayout = new QGridLayout();
+    serverLayout->setHorizontalSpacing(0);
     serverLayout->setAlignment(Qt::AlignTop);
     serverUiContainer->setLayout(serverLayout);
 
-    QPushButton * menuButton = new QPushButton("Menu");
-    connect(menuButton, SIGNAL(clicked(bool)), this, SLOT(displayMenu()));
-    serverLayout->addWidget(menuButton, 0, 0);
+    QPushButton * backToMenuButton = new QPushButton("Menu");
+    backToMenuButton->setObjectName("ServerUiLeftButton");
+    connect(backToMenuButton, SIGNAL(clicked(bool)), this, SLOT(displayMenu()));
+    serverLayout->addWidget(backToMenuButton, 0, 0);
 
     QLineEdit * portInput = new QLineEdit();
+    portInput->setObjectName("ServerUiPortInput");
     portInput->setPlaceholderText("Port");
     serverLayout->addWidget(portInput, 0, 1);
 
     QPushButton * runButton = new QPushButton("Run");
+    runButton->setObjectName("ServerUiRightButton");
     serverLayout->addWidget(runButton, 0, 2);
 
     uiContainer->addWidget(serverUiContainer);
@@ -95,6 +97,21 @@ void MainWindow::createClientUi()
     uiContainer->addWidget(clientUiContainer);
 }
 
+void MainWindow::displayMenu()
+{
+    uiContainer->setCurrentIndex(0);
+}
+
+void MainWindow::displayServer()
+{
+    uiContainer->setCurrentIndex(1);
+}
+
+void MainWindow::displayClient()
+{
+    uiContainer->setCurrentIndex(2);
+}
+
 QGridLayout * MainWindow::createCenteredLayout(QLayout * layout)
 {
     QGridLayout * centeredLayout = new QGridLayout();
@@ -110,17 +127,17 @@ QGridLayout * MainWindow::createCenteredLayout(QLayout * layout)
     return centeredLayout;
 }
 
-void MainWindow::displayMenu()
+QGridLayout * MainWindow::createCenteredLayout(QWidget * widget)
 {
-    uiContainer->setCurrentIndex(0);
-}
+    QGridLayout * centeredLayout = new QGridLayout();
 
-void MainWindow::displayServer()
-{
-    uiContainer->setCurrentIndex(1);
-}
+    QSpacerItem * leftSpacer = new QSpacerItem(0, QSizePolicy::Expanding, QSizePolicy::Expanding);
+    centeredLayout->addItem(leftSpacer, 0, 0);
 
-void MainWindow::displayClient()
-{
-    uiContainer->setCurrentIndex(2);
+    centeredLayout->addWidget(widget, 0, 1);
+
+    QSpacerItem * rightSpacer = new QSpacerItem(0, QSizePolicy::Expanding, QSizePolicy::Expanding);
+    centeredLayout->addItem(rightSpacer, 0, 2);
+
+    return centeredLayout;
 }
