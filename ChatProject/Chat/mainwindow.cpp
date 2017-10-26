@@ -77,21 +77,26 @@ void MainWindow::createClientUi()
     QWidget * clientUiContainer = new QWidget();
     QGridLayout * clientLayout = new QGridLayout();
     clientLayout->setAlignment(Qt::AlignTop);
+    clientLayout->setSpacing(0);
     clientUiContainer->setLayout(clientLayout);
 
     QPushButton * backToMenuButton = new QPushButton("Menu");
+    backToMenuButton->setObjectName("ClientUiLeftButton");
     connect(backToMenuButton, SIGNAL(clicked(bool)), this, SLOT(displayMenu()));
     clientLayout->addWidget(backToMenuButton, 0, 0);
 
     QLineEdit * portInput = new QLineEdit();
     portInput->setPlaceholderText("Port");
+    portInput->setObjectName("ClientUiInput");
     clientLayout->addWidget(portInput, 0, 1);
 
     QLineEdit * ipInput = new QLineEdit();
     ipInput->setPlaceholderText("Ip Address");
+    ipInput->setObjectName("ClientUiInput");
     clientLayout->addWidget(ipInput, 0, 2);
 
     QPushButton * connectButton = new QPushButton("Connect");
+    connectButton->setObjectName("ClientUiRightButton");
     clientLayout->addWidget(connectButton, 0, 3);
 
     uiContainer->addWidget(clientUiContainer);
