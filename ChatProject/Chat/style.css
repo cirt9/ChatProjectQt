@@ -42,9 +42,9 @@ background: qlineargradient(x1:1, y1:1, x2:0, y2:0,
 color: rgb(95, 116, 163);
 }
 
-/* ServerUi */
+/* Server Widget style */
 
-#ServerUiLeftButton
+#ServerWidgetBackButton
 {
 background: rgb(35, 69, 146);
 font: bold 15px;
@@ -56,7 +56,7 @@ font-family: arial;
 padding: 5px;
 }
 
-#ServerUiRightButton
+#ServerWidgetControlButton
 {
 background: rgb(35, 69, 146);
 font: bold 15px;
@@ -68,22 +68,22 @@ font-family: arial;
 padding: 5px;
 }
 
-#ServerUiLeftButton:hover,
-#ServerUiRightButton:hover
+#ServerWidgetBackButton:hover,
+#ServerWidgetControlButton:hover
 {
 background: qlineargradient(x1:1, y1:1, x2:0, y2:0,
             stop:0 rgb(6, 44, 132), stop:1 rgb(35, 69, 146));
 }
 
-#ServerUiLeftButton:pressed,
-#ServerUiRightButton:pressed
+#ServerWidgetBackButton:pressed,
+#ServerWidgetControlButton:pressed
 {
 background: qlineargradient(x1:1, y1:1, x2:0, y2:0,
             stop:0 rgb(4, 40, 122), stop:1 rgb(35, 69, 146));
 color: rgb(95, 116, 163);
 }
 
-#ServerUiPortInput
+#ServerWidgetPortInput
 {
 border-top: 1px solid rgb(6, 44, 132);
 border-bottom: 1px solid rgb(6, 44, 132);

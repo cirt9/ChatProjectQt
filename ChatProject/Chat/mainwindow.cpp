@@ -49,25 +49,14 @@ void MainWindow::createMenu()
 
 void MainWindow::createServerUi()
 {
+    ServerWidget * serverWidget = new ServerWidget();
+
+    QVBoxLayout * serverLayout = new QVBoxLayout();
+    serverLayout->addWidget(serverWidget);
+    serverLayout->setAlignment(serverWidget, Qt::AlignTop);
+
     QWidget * serverUiContainer = new QWidget();
-    QGridLayout * serverLayout = new QGridLayout();
-    serverLayout->setHorizontalSpacing(0);
-    serverLayout->setAlignment(Qt::AlignTop);
     serverUiContainer->setLayout(serverLayout);
-
-    QPushButton * backToMenuButton = new QPushButton("Menu");
-    backToMenuButton->setObjectName("ServerUiLeftButton");
-    connect(backToMenuButton, SIGNAL(clicked(bool)), this, SLOT(displayMenu()));
-    serverLayout->addWidget(backToMenuButton, 0, 0);
-
-    QLineEdit * portInput = new QLineEdit();
-    portInput->setObjectName("ServerUiPortInput");
-    portInput->setPlaceholderText("Port");
-    serverLayout->addWidget(portInput, 0, 1);
-
-    QPushButton * runButton = new QPushButton("Run");
-    runButton->setObjectName("ServerUiRightButton");
-    serverLayout->addWidget(runButton, 0, 2);
 
     uiContainer->addWidget(serverUiContainer);
 }

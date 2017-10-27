@@ -11,6 +11,7 @@
 #include <QVBoxLayout>
 #include <QLineEdit>
 #include <mainmenuwidget.h>
+#include <serverwidget.h>
 
 class MainWindow : public QMainWindow
 {
