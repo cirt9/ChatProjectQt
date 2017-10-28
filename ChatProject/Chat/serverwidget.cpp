@@ -7,38 +7,44 @@ ServerWidget::ServerWidget(QWidget * parent) : QWidget(parent)
 
     serverLayout = new QHBoxLayout();
     serverLayout->setSpacing(0);
+    serverLayout->setContentsMargins(0, 0, 0, 0);
     setLayout(serverLayout);
 
+    createInterface();
+}
+
+void ServerWidget::createInterface()
+{
     QPushButton * backButton = new QPushButton("Menu");
-    backButton->setMinimumWidth(100);
+    backButton->setMinimumWidth(80);
     backButton->setObjectName("ServerWidgetBackButton");
     connect(backButton, SIGNAL(clicked(bool)), this, SIGNAL(backClicked()));
     serverLayout->addWidget(backButton);
 
     portInput = new QLineEdit();
-    portInput->setObjectName("ServerWidgetPortInput");
+    portInput->setObjectName("ServerWidgetInput");
     portInput->setPlaceholderText("Port");
     serverLayout->addWidget(portInput);
 
-    controlButton = new QPushButton("Run");
-    controlButton->setMinimumWidth(100);
-    connect(controlButton, SIGNAL(clicked(bool)), this, SLOT(changeControlState()));
-    controlButton->setObjectName("ServerWidgetControlButton");
-    serverLayout->addWidget(controlButton);
+    stateButton = new QPushButton("Run");
+    stateButton->setMinimumWidth(80);
+    connect(stateButton, SIGNAL(clicked(bool)), this, SLOT(changeState()));
+    stateButton->setObjectName("ServerWidgetStateButton");
+    serverLayout->addWidget(stateButton);
 }
 
-void ServerWidget::changeControlState()
+void ServerWidget::changeState()
 {
     if(isRunning)
     {
         isRunning = false;
-        controlButton->setText("Run");
+        stateButton->setText("Run");
         emit closeClicked();
     }
     else
     {
         isRunning = true;
-        controlButton->setText("Close");
+        stateButton->setText("Close");
         int port = portInput->text().toInt();
         emit runClicked(port);
     }

@@ -13,12 +13,14 @@ class ServerWidget : public QWidget
 private:
     QHBoxLayout * serverLayout;
     QLineEdit * portInput;
-    QPushButton * controlButton;
+    QPushButton * stateButton;
 
     bool isRunning;
 
+    void createInterface();
+
 private slots:
-    void changeControlState();
+    void changeState();
 
 public:
     ServerWidget(QWidget * parent = nullptr);

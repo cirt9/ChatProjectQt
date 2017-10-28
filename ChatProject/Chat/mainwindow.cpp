@@ -50,45 +50,31 @@ void MainWindow::createMenu()
 void MainWindow::createServerUi()
 {
     ServerWidget * serverWidget = new ServerWidget();
+    connect(serverWidget, SIGNAL(backClicked()), this, SLOT(displayMenu()));
 
     QVBoxLayout * serverLayout = new QVBoxLayout();
     serverLayout->addWidget(serverWidget);
     serverLayout->setAlignment(serverWidget, Qt::AlignTop);
 
-    QWidget * serverUiContainer = new QWidget();
-    serverUiContainer->setLayout(serverLayout);
+    QWidget * serverWidgetContainer = new QWidget();
+    serverWidgetContainer->setLayout(serverLayout);
 
-    uiContainer->addWidget(serverUiContainer);
+    uiContainer->addWidget(serverWidgetContainer);
 }
 
 void MainWindow::createClientUi()
 {
-    QWidget * clientUiContainer = new QWidget();
-    QGridLayout * clientLayout = new QGridLayout();
-    clientLayout->setAlignment(Qt::AlignTop);
-    clientLayout->setSpacing(0);
-    clientUiContainer->setLayout(clientLayout);
+    ClientWidget * clientWidget = new ClientWidget();
+    connect(clientWidget, SIGNAL(backClicked()), this, SLOT(displayMenu()));
 
-    QPushButton * backToMenuButton = new QPushButton("Menu");
-    backToMenuButton->setObjectName("ClientUiLeftButton");
-    connect(backToMenuButton, SIGNAL(clicked(bool)), this, SLOT(displayMenu()));
-    clientLayout->addWidget(backToMenuButton, 0, 0);
+    QVBoxLayout * clientLayout = new QVBoxLayout();
+    clientLayout->addWidget(clientWidget);
+    clientLayout->setAlignment(clientWidget, Qt::AlignTop);
 
-    QLineEdit * portInput = new QLineEdit();
-    portInput->setPlaceholderText("Port");
-    portInput->setObjectName("ClientUiInput");
-    clientLayout->addWidget(portInput, 0, 1);
+    QWidget * clientWidgetContainer = new QWidget();
+    clientWidgetContainer->setLayout(clientLayout);
 
-    QLineEdit * ipInput = new QLineEdit();
-    ipInput->setPlaceholderText("Ip Address");
-    ipInput->setObjectName("ClientUiInput");
-    clientLayout->addWidget(ipInput, 0, 2);
-
-    QPushButton * connectButton = new QPushButton("Connect");
-    connectButton->setObjectName("ClientUiRightButton");
-    clientLayout->addWidget(connectButton, 0, 3);
-
-    uiContainer->addWidget(clientUiContainer);
+    uiContainer->addWidget(clientWidgetContainer);
 }
 
 void MainWindow::displayMenu()

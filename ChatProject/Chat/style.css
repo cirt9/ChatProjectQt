@@ -42,7 +42,7 @@ background: qlineargradient(x1:1, y1:1, x2:0, y2:0,
 color: rgb(95, 116, 163);
 }
 
-/* Server Widget style */
+/* ServerWidget style */
 
 #ServerWidgetBackButton
 {
@@ -56,7 +56,7 @@ font-family: arial;
 padding: 5px;
 }
 
-#ServerWidgetControlButton
+#ServerWidgetStateButton
 {
 background: rgb(35, 69, 146);
 font: bold 15px;
@@ -69,21 +69,21 @@ padding: 5px;
 }
 
 #ServerWidgetBackButton:hover,
-#ServerWidgetControlButton:hover
+#ServerWidgetStateButton:hover
 {
 background: qlineargradient(x1:1, y1:1, x2:0, y2:0,
             stop:0 rgb(6, 44, 132), stop:1 rgb(35, 69, 146));
 }
 
 #ServerWidgetBackButton:pressed,
-#ServerWidgetControlButton:pressed
+#ServerWidgetStateButton:pressed
 {
 background: qlineargradient(x1:1, y1:1, x2:0, y2:0,
             stop:0 rgb(4, 40, 122), stop:1 rgb(35, 69, 146));
 color: rgb(95, 116, 163);
 }
 
-#ServerWidgetPortInput
+#ServerWidgetInput
 {
 border-top: 1px solid rgb(6, 44, 132);
 border-bottom: 1px solid rgb(6, 44, 132);
@@ -94,9 +94,9 @@ font-family: arial;
 padding: 5px;
 }
 
-/* Client Ui */
+/* ClientWidget style */
 
-#ClientUiLeftButton
+#ClientWidgetBackButton
 {
 background: rgb(35, 69, 146);
 font: bold 15px;
@@ -110,7 +110,7 @@ font-family: arial;
 padding: 5px;
 }
 
-#ClientUiRightButton
+#ClientWidgetStateButton
 {
 background: rgb(35, 69, 146);
 font: bold 15px;
@@ -122,22 +122,22 @@ font-family: arial;
 padding: 5px;
 }
 
-#ClientUiLeftButton:hover,
-#ClientUiRightButton:hover
+#ClientWidgetBackButton:hover,
+#ClientWidgetStateButton:hover
 {
 background: qlineargradient(x1:1, y1:1, x2:0, y2:0,
             stop:0 rgb(6, 44, 132), stop:1 rgb(35, 69, 146));
 }
 
-#ClientUiLeftButton:pressed,
-#ClientUiRightButton:pressed
+#ClientWidgetBackButton:pressed,
+#ClientWidgetStateButton:pressed
 {
 background: qlineargradient(x1:1, y1:1, x2:0, y2:0,
             stop:0 rgb(4, 40, 122), stop:1 rgb(35, 69, 146));
 color: rgb(95, 116, 163);
 }
 
-#ClientUiInput
+#ClientWidgetInput
 {
 border-top: 1px solid rgb(6, 44, 132);
 border-bottom: 1px solid rgb(6, 44, 132);

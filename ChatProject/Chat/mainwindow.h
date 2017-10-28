@@ -12,6 +12,7 @@
 #include <QLineEdit>
 #include <mainmenuwidget.h>
 #include <serverwidget.h>
+#include <clientwidget.h>
 
 class MainWindow : public QMainWindow
 {

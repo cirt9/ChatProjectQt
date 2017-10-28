@@ -3,7 +3,6 @@
 MainMenuWidget::MainMenuWidget(QString title, QWidget * parent) : QWidget(parent)
 {
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    setObjectName("MainMenu");
 
     menuLayout = new QVBoxLayout();
     menuLayout->setAlignment(Qt::AlignTop);
