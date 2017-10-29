@@ -20,6 +20,7 @@ class MainWindow : public QMainWindow
 
 private:
     QStackedWidget * uiContainer;
+    ChatWidget * chat;
 
     void createUi();
     void createMenu();
@@ -27,6 +28,9 @@ private:
     void createClientUi();
     QGridLayout * createCenteredLayout(QLayout * layout);
     QGridLayout * createCenteredLayout(QWidget * widget);
+
+    void createChat();
+    void resetChat();
 
 private slots:
     void displayServer();

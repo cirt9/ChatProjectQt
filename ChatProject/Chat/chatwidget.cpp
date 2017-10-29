@@ -76,6 +76,11 @@ void ChatWidget::scrollMaxToBottom()
     scrollBar->setValue(scrollBar->maximum());
 }
 
+void ChatWidget::clear()
+{
+    messagesArea->setText("<b>[Server]</b>: Have a nice day!");
+}
+
 void ChatWidget::mousePressEvent(QMouseEvent * event)
 {
     offset = event->pos();

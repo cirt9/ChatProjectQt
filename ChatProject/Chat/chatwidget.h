@@ -38,6 +38,7 @@ public:
     ~ChatWidget() {}
 
     void addMsg(QString nickname, QString message);
+    void clear();
 
     void enableMoving(bool enable = true);
     void disableOffTheScreenMoving(bool disable = true);

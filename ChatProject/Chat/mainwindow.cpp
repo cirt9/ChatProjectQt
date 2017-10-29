@@ -9,17 +9,6 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent)
     setCentralWidget(uiContainer);
 
     createUi();
-
-    /*ChatWidget * chat = new ChatWidget(40, this);
-    chat->setObjectName("ChatWidget");
-    chat->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    chat->enableMoving();
-    chat->disableOffTheScreenMoving();
-    chat->setFixedSize(550, 350);
-    //setCentralWidget(chat);
-
-    chat->move(10, 10);
-    */
 }
 
 void MainWindow::createUi()
@@ -27,6 +16,7 @@ void MainWindow::createUi()
     createMenu();
     createServerUi();
     createClientUi();
+    createChat();
 }
 
 void MainWindow::createMenu()
@@ -80,16 +70,49 @@ void MainWindow::createClientUi()
 void MainWindow::displayMenu()
 {
     uiContainer->setCurrentIndex(0);
+    chat->setVisible(false);
 }
 
 void MainWindow::displayServer()
 {
     uiContainer->setCurrentIndex(1);
+    resetChat();
+    chat->setVisible(true);
 }
 
 void MainWindow::displayClient()
 {
     uiContainer->setCurrentIndex(2);
+    resetChat();
+    chat->setVisible(true);
+}
+
+void MainWindow::createChat()
+{
+    chat = new ChatWidget(40, this);
+    chat->setObjectName("ChatWidget");
+    chat->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    chat->enableMoving();
+    chat->disableOffTheScreenMoving();
+    chat->setFixedSize(550, 350);
+
+    size_t x = this->rect().width()/2 - chat->rect().width()/2;
+    size_t y = this->rect().height()/2 - chat->rect().height()/2;
+
+    chat->move(x, y);
+    chat->setVisible(false);
+}
+
+void MainWindow::resetChat()
+{
+    if(chat)
+    {
+        size_t x = this->rect().width()/2 - chat->rect().width()/2;
+        size_t y = this->rect().height()/2 - chat->rect().height()/2;
+
+        chat->move(x, y);
+        chat->clear();
+    }
 }
 
 QGridLayout * MainWindow::createCenteredLayout(QLayout * layout)
