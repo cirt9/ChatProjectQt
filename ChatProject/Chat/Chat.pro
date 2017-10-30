@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -17,13 +17,15 @@ SOURCES += main.cpp\
     chatwidget.cpp \
     mainmenuwidget.cpp \
     clientwidget.cpp \
-    serverwidget.cpp
+    serverwidget.cpp \
+    ../ChatServer/chatserver.cpp
 
 HEADERS  += mainwindow.h \
     chatwidget.h \
     mainmenuwidget.h \
     clientwidget.h \
-    serverwidget.h
+    serverwidget.h \
+    ../ChatServer/chatserver.h
 
 DISTFILES +=
 

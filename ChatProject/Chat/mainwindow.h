@@ -13,6 +13,7 @@
 #include <mainmenuwidget.h>
 #include <serverwidget.h>
 #include <clientwidget.h>
+#include <../ChatServer/chatserver.h>
 
 class MainWindow : public QMainWindow
 {
@@ -20,7 +21,9 @@ class MainWindow : public QMainWindow
 
 private:
     QStackedWidget * uiContainer;
+
     ChatWidget * chat;
+    ChatServer * server;
 
     void createUi();
     void createMenu();
@@ -35,6 +38,10 @@ private:
 private slots:
     void displayServer();
     void displayClient();
+
+    void startServer(int port);
+    void writeReceivedMsgToChat(QString msg);
+    void sendMsgFromServer();
 
 public:
     MainWindow(QWidget * parent = 0);

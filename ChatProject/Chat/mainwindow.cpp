@@ -8,6 +8,8 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent)
     uiContainer = new QStackedWidget();
     setCentralWidget(uiContainer);
 
+    server = new ChatServer();
+
     createUi();
 }
 
@@ -41,6 +43,7 @@ void MainWindow::createServerUi()
 {
     ServerWidget * serverWidget = new ServerWidget();
     connect(serverWidget, SIGNAL(backClicked()), this, SLOT(displayMenu()));
+    connect(serverWidget, SIGNAL(runClicked(int)), this, SLOT(startServer(int)));
 
     QVBoxLayout * serverLayout = new QVBoxLayout();
     serverLayout->addWidget(serverWidget);
@@ -113,6 +116,30 @@ void MainWindow::resetChat()
         chat->move(x, y);
         chat->clear();
     }
+}
+
+void MainWindow::startServer(int port)
+{
+    bool success = server->listen(QHostAddress::Any, quint16(port));
+
+    if(success)
+    {
+        qDebug() << "Server started";
+        connect(server, SIGNAL(messageReceived(QString)), this, SLOT(writeReceivedMsgToChat(QString)));
+    }
+    else
+        qDebug() << "Server failed to start";
+}
+
+void MainWindow::writeReceivedMsgToChat(QString msg)
+{
+    chat->addMsg("Test", msg);
+}
+
+void MainWindow::sendMsgFromServer()
+{
+    QString message = "test";
+    server->send(message);
 }
 
 QGridLayout * MainWindow::createCenteredLayout(QLayout * layout)
