@@ -42,6 +42,9 @@ public:
 
     void enableMoving(bool enable = true);
     void disableOffTheScreenMoving(bool disable = true);
+
+signals:
+    void messageSent(QString msg);
 };
 
 #endif // CHATWIDGET_H

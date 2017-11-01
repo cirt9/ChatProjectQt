@@ -27,7 +27,8 @@ void ClientWidget::createInterface()
     clientLayout->addWidget(ipInput);
 
     portInput = new QLineEdit();
-    portInput->setPlaceholderText("Port");
+    portInput->setPlaceholderText("Port number");
+    portInput->setValidator(new QIntValidator(1024, 65535, this));
     portInput->setObjectName("ClientWidgetInput");
     clientLayout->addWidget(portInput);
 

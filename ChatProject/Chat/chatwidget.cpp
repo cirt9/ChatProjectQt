@@ -65,6 +65,7 @@ void ChatWidget::sendMessage()
     {
         addMsg("Nickname", textInputBar->text());
         scrollMaxToBottom();
+        emit messageSent(textInputBar->text());
 
         textInputBar->clear();
     }

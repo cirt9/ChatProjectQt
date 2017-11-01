@@ -23,14 +23,31 @@ void ServerWidget::createInterface()
 
     portInput = new QLineEdit();
     portInput->setObjectName("ServerWidgetInput");
-    portInput->setPlaceholderText("Port");
+    portInput->setPlaceholderText("Port number");
+    portInput->setValidator(new QIntValidator(MIN_PORT, MAX_PORT, this));
     serverLayout->addWidget(portInput);
 
     stateButton = new QPushButton("Run");
     stateButton->setMinimumWidth(80);
-    connect(stateButton, SIGNAL(clicked(bool)), this, SLOT(changeState()));
+    connect(stateButton, SIGNAL(clicked(bool)), this, SLOT(runOrCloseClicked()));
     stateButton->setObjectName("ServerWidgetStateButton");
     serverLayout->addWidget(stateButton);
+}
+
+void ServerWidget::runOrCloseClicked()
+{
+    if(isRunning)
+        emit closeClicked();
+
+    else
+    {
+        int port = portInput->text().toInt();
+
+        if(port < MIN_PORT || port > MAX_PORT)
+            QMessageBox::information(this, "Port selection", "Wrong port selected");
+        else
+            emit runClicked(port);
+    }
 }
 
 void ServerWidget::changeState()
@@ -39,13 +56,10 @@ void ServerWidget::changeState()
     {
         isRunning = false;
         stateButton->setText("Run");
-        emit closeClicked();
     }
     else
     {
         isRunning = true;
         stateButton->setText("Close");
-        int port = portInput->text().toInt();
-        emit runClicked(port);
     }
 }

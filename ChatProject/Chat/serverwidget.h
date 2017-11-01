@@ -5,6 +5,8 @@
 #include <QHBoxLayout>
 #include <QPushButton>
 #include <QLineEdit>
+#include <QIntValidator>
+#include <QMessageBox>
 
 class ServerWidget : public QWidget
 {
@@ -15,15 +17,20 @@ private:
     QLineEdit * portInput;
     QPushButton * stateButton;
 
+    static const int MIN_PORT = 1024;
+    static const int MAX_PORT = 65535;
+
     bool isRunning;
 
     void createInterface();
 
 private slots:
-    void changeState();
+    void runOrCloseClicked();
 
 public:
     ServerWidget(QWidget * parent = nullptr);
+
+    void changeState();
 
 signals:
     void backClicked();

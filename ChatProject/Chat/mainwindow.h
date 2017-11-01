@@ -23,6 +23,7 @@ private:
     QStackedWidget * uiContainer;
 
     ChatWidget * chat;
+    ServerWidget * serverWidget;
     ChatServer * server;
 
     void createUi();
@@ -40,8 +41,10 @@ private slots:
     void displayClient();
 
     void startServer(int port);
+    void closeServer();
     void writeReceivedMsgToChat(QString msg);
-    void sendMsgFromServer();
+    void sendMsgFromServer(QString msg);
+    void cleanUpServer();
 
 public:
     MainWindow(QWidget * parent = 0);

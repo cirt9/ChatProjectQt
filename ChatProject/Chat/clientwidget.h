@@ -5,6 +5,7 @@
 #include <QHBoxLayout>
 #include <QPushButton>
 #include <QLineEdit>
+#include <QIntValidator>
 
 class ClientWidget : public QWidget
 {

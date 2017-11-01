@@ -41,9 +41,11 @@ void MainWindow::createMenu()
 
 void MainWindow::createServerUi()
 {
-    ServerWidget * serverWidget = new ServerWidget();
+    serverWidget = new ServerWidget();
+    connect(serverWidget, SIGNAL(backClicked()), this, SLOT(cleanUpServer()));
     connect(serverWidget, SIGNAL(backClicked()), this, SLOT(displayMenu()));
     connect(serverWidget, SIGNAL(runClicked(int)), this, SLOT(startServer(int)));
+    connect(serverWidget, SIGNAL(closeClicked()), this, SLOT(closeServer()));
 
     QVBoxLayout * serverLayout = new QVBoxLayout();
     serverLayout->addWidget(serverWidget);
@@ -73,14 +75,11 @@ void MainWindow::createClientUi()
 void MainWindow::displayMenu()
 {
     uiContainer->setCurrentIndex(0);
-    chat->setVisible(false);
 }
 
 void MainWindow::displayServer()
 {
     uiContainer->setCurrentIndex(1);
-    resetChat();
-    chat->setVisible(true);
 }
 
 void MainWindow::displayClient()
@@ -106,6 +105,12 @@ void MainWindow::createChat()
     chat->setVisible(false);
 }
 
+void MainWindow::cleanUpServer()
+{
+    resetChat();
+    closeServer();
+}
+
 void MainWindow::resetChat()
 {
     if(chat)
@@ -126,9 +131,31 @@ void MainWindow::startServer(int port)
     {
         qDebug() << "Server started";
         connect(server, SIGNAL(messageReceived(QString)), this, SLOT(writeReceivedMsgToChat(QString)));
+        connect(chat, SIGNAL(messageSent(QString)), this, SLOT(sendMsgFromServer(QString)));
+
+        chat->setVisible(true);
+
+        if(serverWidget)
+            serverWidget->changeState();
     }
     else
         qDebug() << "Server failed to start";
+}
+
+void MainWindow::closeServer()
+{
+    if(server->isListening())
+    {
+        server->close();
+        disconnect(server, SIGNAL(messageReceived(QString)), this, SLOT(writeReceivedMsgToChat(QString)));
+        disconnect(chat, SIGNAL(messageSent(QString)), this, SLOT(sendMsgFromServer(QString)));
+
+        cleanUpServer();
+        chat->setVisible(false);
+
+        if(serverWidget)
+            serverWidget->changeState();
+    }
 }
 
 void MainWindow::writeReceivedMsgToChat(QString msg)
@@ -136,10 +163,9 @@ void MainWindow::writeReceivedMsgToChat(QString msg)
     chat->addMsg("Test", msg);
 }
 
-void MainWindow::sendMsgFromServer()
+void MainWindow::sendMsgFromServer(QString msg)
 {
-    QString message = "test";
-    server->send(message);
+    server->send(msg);
 }
 
 QGridLayout * MainWindow::createCenteredLayout(QLayout * layout)
