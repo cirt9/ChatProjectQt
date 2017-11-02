@@ -14,6 +14,7 @@
 #include <serverwidget.h>
 #include <clientwidget.h>
 #include <../ChatServer/chatserver.h>
+#include <QMessageBox>
 
 class MainWindow : public QMainWindow
 {
@@ -37,14 +38,15 @@ private:
     void resetChat();
 
 private slots:
-    void displayServer();
     void displayClient();
 
+    void displayServer();
     void startServer(int port);
     void closeServer();
-    void writeReceivedMsgToChat(QString msg);
     void sendMsgFromServer(QString msg);
     void cleanUpServer();
+
+    void writeReceivedMsgToChat(QString msg);
 
 public:
     MainWindow(QWidget * parent = 0);

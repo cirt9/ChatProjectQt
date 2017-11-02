@@ -8,6 +8,8 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent)
     uiContainer = new QStackedWidget();
     setCentralWidget(uiContainer);
 
+    serverWidget = nullptr;
+    chat = nullptr;
     server = new ChatServer();
 
     createUi();
@@ -41,20 +43,23 @@ void MainWindow::createMenu()
 
 void MainWindow::createServerUi()
 {
-    serverWidget = new ServerWidget();
-    connect(serverWidget, SIGNAL(backClicked()), this, SLOT(cleanUpServer()));
-    connect(serverWidget, SIGNAL(backClicked()), this, SLOT(displayMenu()));
-    connect(serverWidget, SIGNAL(runClicked(int)), this, SLOT(startServer(int)));
-    connect(serverWidget, SIGNAL(closeClicked()), this, SLOT(closeServer()));
+    if(!serverWidget)
+    {
+        serverWidget = new ServerWidget();
+        connect(serverWidget, SIGNAL(backClicked()), this, SLOT(cleanUpServer()));
+        connect(serverWidget, SIGNAL(backClicked()), this, SLOT(displayMenu()));
+        connect(serverWidget, SIGNAL(runClicked(int)), this, SLOT(startServer(int)));
+        connect(serverWidget, SIGNAL(closeClicked()), this, SLOT(closeServer()));
 
-    QVBoxLayout * serverLayout = new QVBoxLayout();
-    serverLayout->addWidget(serverWidget);
-    serverLayout->setAlignment(serverWidget, Qt::AlignTop);
+        QVBoxLayout * serverLayout = new QVBoxLayout();
+        serverLayout->addWidget(serverWidget);
+        serverLayout->setAlignment(serverWidget, Qt::AlignTop);
 
-    QWidget * serverWidgetContainer = new QWidget();
-    serverWidgetContainer->setLayout(serverLayout);
+        QWidget * serverWidgetContainer = new QWidget();
+        serverWidgetContainer->setLayout(serverLayout);
 
-    uiContainer->addWidget(serverWidgetContainer);
+        uiContainer->addWidget(serverWidgetContainer);
+    }
 }
 
 void MainWindow::createClientUi()
@@ -91,18 +96,21 @@ void MainWindow::displayClient()
 
 void MainWindow::createChat()
 {
-    chat = new ChatWidget(40, this);
-    chat->setObjectName("ChatWidget");
-    chat->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    chat->enableMoving();
-    chat->disableOffTheScreenMoving();
-    chat->setFixedSize(550, 350);
+    if(!chat)
+    {
+        chat = new ChatWidget(40, this);
+        chat->setObjectName("ChatWidget");
+        chat->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        chat->enableMoving();
+        chat->disableOffTheScreenMoving();
+        chat->setFixedSize(550, 350);
 
-    size_t x = this->rect().width()/2 - chat->rect().width()/2;
-    size_t y = this->rect().height()/2 - chat->rect().height()/2;
+        size_t x = this->rect().width()/2 - chat->rect().width()/2;
+        size_t y = this->rect().height()/2 - chat->rect().height()/2;
 
-    chat->move(x, y);
-    chat->setVisible(false);
+        chat->move(x, y);
+        chat->setVisible(false);
+    }
 }
 
 void MainWindow::cleanUpServer()
@@ -129,7 +137,7 @@ void MainWindow::startServer(int port)
 
     if(success)
     {
-        qDebug() << "Server started";
+        QMessageBox::information(this, "Server", "Server is now running");
         connect(server, SIGNAL(messageReceived(QString)), this, SLOT(writeReceivedMsgToChat(QString)));
         connect(chat, SIGNAL(messageSent(QString)), this, SLOT(sendMsgFromServer(QString)));
 
@@ -139,7 +147,7 @@ void MainWindow::startServer(int port)
             serverWidget->changeState();
     }
     else
-        qDebug() << "Server failed to start";
+        QMessageBox::critical(this, "Server", "Server failed to start");
 }
 
 void MainWindow::closeServer()
@@ -160,7 +168,8 @@ void MainWindow::closeServer()
 
 void MainWindow::writeReceivedMsgToChat(QString msg)
 {
-    chat->addMsg("Test", msg);
+    if(chat)
+        chat->addMsg("Test", msg);
 }
 
 void MainWindow::sendMsgFromServer(QString msg)
