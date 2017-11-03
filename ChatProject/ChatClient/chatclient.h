@@ -20,13 +20,12 @@ public:
     ~ChatClient() {}
 
 public slots:
-    void connectToHost(QString ip, int portNumber);
+    bool connectToHost(QString ip, int portNumber);
     void send(QString message);
 
 signals:
     void messageReceived(QString message);
     void errorOccurred(QString error);
-    void infoOccurred(QString info);
 };
 
 #endif // CHATCLIENT_H

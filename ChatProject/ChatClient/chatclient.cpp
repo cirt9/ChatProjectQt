@@ -10,19 +10,19 @@ ChatClient::ChatClient(QObject * parent) : QObject(parent)
     connect(clientSocket, SIGNAL(readyRead()), this, SLOT(read()));
 }
 
-void ChatClient::connectToHost(QString ip, int portNumber)
+bool ChatClient::connectToHost(QString ip, int portNumber)
 {
     clientSocket->connectToHost(ip, quint16(portNumber));
 
     if(clientSocket->waitForConnected())
     {
-        emit infoOccurred("Connected");
         qDebug() << "Connected";
+        return true;
     }
     else
     {
-        emit infoOccurred("Couldn't connect");
         qDebug() << "Couldn't connect";
+        return false;
     }
 }
 

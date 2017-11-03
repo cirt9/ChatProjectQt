@@ -30,7 +30,6 @@ public:
 
 public slots:
     void errorReaction(QString error);
-    void infoReaction(QString info);
 };
 
 #endif // MAINWINDOW_H

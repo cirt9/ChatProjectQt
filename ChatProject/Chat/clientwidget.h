@@ -6,6 +6,7 @@
 #include <QPushButton>
 #include <QLineEdit>
 #include <QIntValidator>
+#include <QMessageBox>
 
 class ClientWidget : public QWidget
 {
@@ -17,15 +18,20 @@ private:
     QLineEdit * portInput;
     QPushButton * stateButton;
 
+    static const int MIN_PORT = 1024;
+    static const int MAX_PORT = 65535;
+
     bool isConnected;
 
     void createInterface();
 
 private slots:
-    void changeState();
+    void connOrDisconnClicked();
 
 public:
     ClientWidget(QWidget * parent = nullptr);
+
+    void changeState();
 
 signals:
     void backClicked();

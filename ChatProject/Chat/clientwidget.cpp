@@ -28,15 +28,32 @@ void ClientWidget::createInterface()
 
     portInput = new QLineEdit();
     portInput->setPlaceholderText("Port number");
-    portInput->setValidator(new QIntValidator(1024, 65535, this));
+    portInput->setValidator(new QIntValidator(MIN_PORT, MAX_PORT, this));
     portInput->setObjectName("ClientWidgetInput");
     clientLayout->addWidget(portInput);
 
     stateButton = new QPushButton("Connect");
     stateButton->setObjectName("ClientWidgetStateButton");
     stateButton->setMinimumWidth(100);
-    connect(stateButton, SIGNAL(clicked(bool)), this, SLOT(changeState()));
+    connect(stateButton, SIGNAL(clicked(bool)), this, SLOT(connOrDisconnClicked()));
     clientLayout->addWidget(stateButton);
+}
+
+void ClientWidget::connOrDisconnClicked()
+{
+    if(isConnected)
+        emit disconnectClicked();
+
+    else
+    {
+        QString ip = ipInput->text();
+        int port = portInput->text().toInt();
+
+        if(port < MIN_PORT || port > MAX_PORT)
+            QMessageBox::information(this, "Wrong port selected", "Select port number between 1024-65535");
+        else
+            emit connectClicked(ip, port);
+    }
 }
 
 void ClientWidget::changeState()
@@ -45,14 +62,10 @@ void ClientWidget::changeState()
     {
         isConnected = false;
         stateButton->setText("Connect");
-        emit disconnectClicked();
     }
     else
     {
         isConnected = true;
         stateButton->setText("Disconnect");
-        QString ip = ipInput->text();
-        int port = portInput->text().toInt();
-        emit connectClicked(ip, port);
     }
 }

@@ -18,14 +18,16 @@ SOURCES += main.cpp\
     mainmenuwidget.cpp \
     clientwidget.cpp \
     serverwidget.cpp \
-    ../ChatServer/chatserver.cpp
+    ../ChatServer/chatserver.cpp \
+    ../ChatClient/chatclient.cpp
 
 HEADERS  += mainwindow.h \
     chatwidget.h \
     mainmenuwidget.h \
     clientwidget.h \
     serverwidget.h \
-    ../ChatServer/chatserver.h
+    ../ChatServer/chatserver.h \
+    ../ChatClient/chatclient.h
 
 DISTFILES +=
 

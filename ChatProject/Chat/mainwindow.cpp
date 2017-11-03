@@ -9,8 +9,10 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent)
     setCentralWidget(uiContainer);
 
     serverWidget = nullptr;
+    clientWidget = nullptr;
     chat = nullptr;
     server = new ChatServer();
+    client = new ChatClient();
 
     createUi();
 }
@@ -64,17 +66,22 @@ void MainWindow::createServerUi()
 
 void MainWindow::createClientUi()
 {
-    ClientWidget * clientWidget = new ClientWidget();
-    connect(clientWidget, SIGNAL(backClicked()), this, SLOT(displayMenu()));
+    if(!clientWidget)
+    {
+        clientWidget = new ClientWidget();
+        connect(clientWidget, SIGNAL(backClicked()), this, SLOT(displayMenu()));
+        connect(clientWidget, SIGNAL(connectClicked(QString,int)),
+                this, SLOT(connectToServer(QString,int)));
 
-    QVBoxLayout * clientLayout = new QVBoxLayout();
-    clientLayout->addWidget(clientWidget);
-    clientLayout->setAlignment(clientWidget, Qt::AlignTop);
+        QVBoxLayout * clientLayout = new QVBoxLayout();
+        clientLayout->addWidget(clientWidget);
+        clientLayout->setAlignment(clientWidget, Qt::AlignTop);
 
-    QWidget * clientWidgetContainer = new QWidget();
-    clientWidgetContainer->setLayout(clientLayout);
+        QWidget * clientWidgetContainer = new QWidget();
+        clientWidgetContainer->setLayout(clientLayout);
 
-    uiContainer->addWidget(clientWidgetContainer);
+        uiContainer->addWidget(clientWidgetContainer);
+    }
 }
 
 void MainWindow::displayMenu()
@@ -90,8 +97,6 @@ void MainWindow::displayServer()
 void MainWindow::displayClient()
 {
     uiContainer->setCurrentIndex(2);
-    resetChat();
-    chat->setVisible(true);
 }
 
 void MainWindow::createChat()
@@ -133,21 +138,22 @@ void MainWindow::resetChat()
 
 void MainWindow::startServer(int port)
 {
-    bool success = server->listen(QHostAddress::Any, quint16(port));
-
-    if(success)
+    if(server)
     {
-        QMessageBox::information(this, "Server", "Server is now running");
-        connect(server, SIGNAL(messageReceived(QString)), this, SLOT(writeReceivedMsgToChat(QString)));
-        connect(chat, SIGNAL(messageSent(QString)), this, SLOT(sendMsgFromServer(QString)));
+        bool success = server->listen(QHostAddress::Any, quint16(port));
 
-        chat->setVisible(true);
+        if(success)
+        {
+            QMessageBox::information(this, "Server", "Server is now running");
+            connect(server, SIGNAL(messageReceived(QString)), this, SLOT(writeReceivedMsgToChat(QString)));
+            connect(chat, SIGNAL(messageSent(QString)), this, SLOT(sendMsgFromServer(QString)));
 
-        if(serverWidget)
+            chat->setVisible(true);
             serverWidget->changeState();
+        }
+        else
+            QMessageBox::critical(this, "Server", "Server failed to start");
     }
-    else
-        QMessageBox::critical(this, "Server", "Server failed to start");
 }
 
 void MainWindow::closeServer()
@@ -166,15 +172,34 @@ void MainWindow::closeServer()
     }
 }
 
+void MainWindow::sendMsgFromServer(QString msg)
+{
+    if(server)
+        server->send(msg);
+}
+
+void MainWindow::connectToServer(QString ip, int port)
+{
+    if(client)
+    {
+        bool success = client->connectToHost(ip, port);
+
+        if(success)
+        {
+            QMessageBox::information(this, "Client", "Connected");
+
+            chat->setVisible(true);
+            clientWidget->changeState();
+        }
+        else
+            QMessageBox::information(this, "Client", "Couldn't connect");
+    }
+}
+
 void MainWindow::writeReceivedMsgToChat(QString msg)
 {
     if(chat)
         chat->addMsg("Test", msg);
-}
-
-void MainWindow::sendMsgFromServer(QString msg)
-{
-    server->send(msg);
 }
 
 QGridLayout * MainWindow::createCenteredLayout(QLayout * layout)
