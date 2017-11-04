@@ -10,7 +10,7 @@ ChatClient::ChatClient(QObject * parent) : QObject(parent)
     connect(clientSocket, SIGNAL(readyRead()), this, SLOT(read()));
 }
 
-bool ChatClient::connectToHost(QString ip, int portNumber)
+bool ChatClient::connectToServer(QString ip, int portNumber)
 {
     clientSocket->connectToHost(ip, quint16(portNumber));
 
@@ -24,6 +24,11 @@ bool ChatClient::connectToHost(QString ip, int portNumber)
         qDebug() << "Couldn't connect";
         return false;
     }
+}
+
+void ChatClient::disconnectFromServer()
+{
+    clientSocket->disconnectFromHost();
 }
 
 void ChatClient::send(QString message)
@@ -66,4 +71,9 @@ void ChatClient::read()
 
     emit messageReceived(dataString);
     qDebug() << dataString;
+}
+
+bool ChatClient::isConnected() const
+{
+    return clientSocket->state() == QTcpSocket::ConnectedState;
 }

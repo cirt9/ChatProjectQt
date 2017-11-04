@@ -19,8 +19,11 @@ public:
     explicit ChatClient(QObject * parent = nullptr);
     ~ChatClient() {}
 
+    bool isConnected() const;
+
 public slots:
-    bool connectToHost(QString ip, int portNumber);
+    bool connectToServer(QString ip, int portNumber);
+    void disconnectFromServer();
     void send(QString message);
 
 signals:

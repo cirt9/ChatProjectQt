@@ -69,9 +69,11 @@ void MainWindow::createClientUi()
     if(!clientWidget)
     {
         clientWidget = new ClientWidget();
+        connect(clientWidget, SIGNAL(backClicked()), this, SLOT(cleanUpClient()));
         connect(clientWidget, SIGNAL(backClicked()), this, SLOT(displayMenu()));
         connect(clientWidget, SIGNAL(connectClicked(QString,int)),
                 this, SLOT(connectToServer(QString,int)));
+        connect(clientWidget, SIGNAL(disconnectClicked()), this, SLOT(disconnectFromServer()));
 
         QVBoxLayout * clientLayout = new QVBoxLayout();
         clientLayout->addWidget(clientWidget);
@@ -164,11 +166,13 @@ void MainWindow::closeServer()
         disconnect(server, SIGNAL(messageReceived(QString)), this, SLOT(writeReceivedMsgToChat(QString)));
         disconnect(chat, SIGNAL(messageSent(QString)), this, SLOT(sendMsgFromServer(QString)));
 
-        cleanUpServer();
+        resetChat();
         chat->setVisible(false);
 
         if(serverWidget)
             serverWidget->changeState();
+
+        QMessageBox::information(this, "Server", "Server was closed");
     }
 }
 
@@ -182,18 +186,57 @@ void MainWindow::connectToServer(QString ip, int port)
 {
     if(client)
     {
-        bool success = client->connectToHost(ip, port);
-
-        if(success)
+        if(!client->isConnected())
         {
-            QMessageBox::information(this, "Client", "Connected");
+            bool success = client->connectToServer(ip, port);
 
-            chat->setVisible(true);
-            clientWidget->changeState();
+            if(success)
+            {
+                QMessageBox::information(this, "Client", "Connected");
+                connect(client, SIGNAL(messageReceived(QString)), this, SLOT(writeReceivedMsgToChat(QString)));
+                connect(chat, SIGNAL(messageSent(QString)), this, SLOT(sendMsgFromClient(QString)));
+
+                chat->setVisible(true);
+                clientWidget->changeState();
+            }
+            else
+                QMessageBox::information(this, "Client", "Couldn't connect");
         }
-        else
-            QMessageBox::information(this, "Client", "Couldn't connect");
     }
+}
+
+void MainWindow::disconnectFromServer()
+{
+    if(client)
+    {
+        if(client->isConnected())
+        {
+            client->disconnectFromServer();
+            disconnect(client, SIGNAL(messageReceived(QString)), this, SLOT(writeReceivedMsgToChat(QString)));
+            disconnect(chat, SIGNAL(messageSent(QString)), this, SLOT(sendMsgFromClient(QString)));
+
+            resetChat();
+            chat->setVisible(false);
+            clientWidget->changeState();
+            QMessageBox::information(this, "Client", "Disconnected");
+        }
+    }
+}
+
+void MainWindow::sendMsgFromClient(QString msg)
+{
+    if(client)
+    {
+        if(client->isConnected())
+            client->send(msg);
+    }
+
+}
+
+void MainWindow::cleanUpClient()
+{
+    resetChat();
+    disconnectFromServer();
 }
 
 void MainWindow::writeReceivedMsgToChat(QString msg)

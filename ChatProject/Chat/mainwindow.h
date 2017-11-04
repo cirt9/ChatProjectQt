@@ -49,6 +49,9 @@ private slots:
 
     void displayClient();
     void connectToServer(QString ip, int port);
+    void disconnectFromServer();
+    void sendMsgFromClient(QString msg);
+    void cleanUpClient();
 
     void writeReceivedMsgToChat(QString msg);
 

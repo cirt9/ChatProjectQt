@@ -80,6 +80,7 @@ void ChatWidget::scrollMaxToBottom()
 void ChatWidget::clear()
 {
     messagesArea->setText("<b>[Server]</b>: Have a nice day!");
+    textInputBar->clear();
 }
 
 void ChatWidget::mousePressEvent(QMouseEvent * event)

@@ -30,7 +30,7 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent)
     QPushButton * connectButton = new QPushButton("Connect");
     layout->addWidget(connectButton, 2, 0, 1, 3);
     connect(connectButton, &QPushButton::clicked, chatClient,
-            [=]{chatClient->connectToHost(addressLine->text(), portLine->text().toInt()); } );
+            [=]{chatClient->connectToServer(addressLine->text(), portLine->text().toInt()); } );
 
     messagesArea = new QTextEdit();
     layout->addWidget(messagesArea, 3, 0, 1, 3);
