@@ -44,7 +44,7 @@ void ServerWidget::runOrCloseClicked()
         int port = portInput->text().toInt();
 
         if(port < MIN_PORT || port > MAX_PORT)
-            QMessageBox::information(this, "Wrong port selected", "Select port number between 1024-65535");
+            QMessageBox::warning(this, "Wrong port selected", "Select port number between 1024-65535");
         else
             emit runClicked(port);
     }

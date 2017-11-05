@@ -195,12 +195,13 @@ void MainWindow::connectToServer(QString ip, int port)
                 QMessageBox::information(this, "Client", "Connected");
                 connect(client, SIGNAL(messageReceived(QString)), this, SLOT(writeReceivedMsgToChat(QString)));
                 connect(chat, SIGNAL(messageSent(QString)), this, SLOT(sendMsgFromClient(QString)));
+                connect(client, SIGNAL(errorOccurred(QString)), this, SLOT(errorReaction(QString)));
 
                 chat->setVisible(true);
                 clientWidget->changeState();
             }
             else
-                QMessageBox::information(this, "Client", "Couldn't connect");
+                QMessageBox::warning(this, "Client", "Couldn't connect");
         }
     }
 }
@@ -214,6 +215,7 @@ void MainWindow::disconnectFromServer()
             client->disconnectFromServer();
             disconnect(client, SIGNAL(messageReceived(QString)), this, SLOT(writeReceivedMsgToChat(QString)));
             disconnect(chat, SIGNAL(messageSent(QString)), this, SLOT(sendMsgFromClient(QString)));
+            disconnect(client, SIGNAL(errorOccurred(QString)), this, SLOT(errorReaction(QString)));
 
             resetChat();
             chat->setVisible(false);
@@ -243,6 +245,11 @@ void MainWindow::writeReceivedMsgToChat(QString msg)
 {
     if(chat)
         chat->addMsg("Test", msg);
+}
+
+void MainWindow::errorReaction(QString error)
+{
+    QMessageBox::critical(this, "Error", error);
 }
 
 QGridLayout * MainWindow::createCenteredLayout(QLayout * layout)

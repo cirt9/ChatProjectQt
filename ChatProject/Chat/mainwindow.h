@@ -55,6 +55,8 @@ private slots:
 
     void writeReceivedMsgToChat(QString msg);
 
+    void errorReaction(QString error);
+
 public:
     MainWindow(QWidget * parent = 0);
     ~MainWindow() {}

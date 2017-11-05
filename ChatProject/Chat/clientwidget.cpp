@@ -46,13 +46,21 @@ void ClientWidget::connOrDisconnClicked()
 
     else
     {
-        QString ip = ipInput->text();
+        QString ipString = ipInput->text();
         int port = portInput->text().toInt();
+        QHostAddress ip;
 
-        if(port < MIN_PORT || port > MAX_PORT)
-            QMessageBox::information(this, "Wrong port selected", "Select port number between 1024-65535");
+        if(ip.setAddress(ipString))
+        {
+            if(port < MIN_PORT || port > MAX_PORT)
+                QMessageBox::warning(this, "Wrong port selected",
+                                         "Select port number between 1024-65535");
+            else
+                emit connectClicked(ipString, port);
+        }
         else
-            emit connectClicked(ip, port);
+            QMessageBox::warning(this, "Wrong ip address",
+                                     "Please select a valid ip address");
     }
 }
 

@@ -7,6 +7,7 @@
 #include <QLineEdit>
 #include <QIntValidator>
 #include <QMessageBox>
+#include <QHostAddress>
 
 class ClientWidget : public QWidget
 {
