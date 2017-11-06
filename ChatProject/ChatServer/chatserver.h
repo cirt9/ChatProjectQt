@@ -23,6 +23,7 @@ public:
     ~ChatServer() {}
 
     void send(QString message, QTcpSocket * except = nullptr);
+    void closeServer();
 
 signals:
     void messageReceived(QString message);

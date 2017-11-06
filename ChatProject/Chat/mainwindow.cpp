@@ -162,7 +162,7 @@ void MainWindow::closeServer()
 {
     if(server->isListening())
     {
-        server->close();
+        server->closeServer();
         disconnect(server, SIGNAL(messageReceived(QString)), this, SLOT(writeReceivedMsgToChat(QString)));
         disconnect(chat, SIGNAL(messageSent(QString)), this, SLOT(sendMsgFromServer(QString)));
 

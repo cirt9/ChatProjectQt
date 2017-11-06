@@ -4,6 +4,7 @@
 ChatClient::ChatClient(QObject * parent) : QObject(parent)
 {
     clientSocket = new QTcpSocket(this);
+    clientSocket->setSocketOption(QAbstractSocket::KeepAliveOption, 1);
 
     connect(clientSocket, SIGNAL(error(QAbstractSocket::SocketError)), this,
             SLOT(lookForErrors(QAbstractSocket::SocketError)));

@@ -48,6 +48,19 @@ void ChatServer::send(QString message, QTcpSocket * except)
     }
 }
 
+void ChatServer::closeServer()
+{
+    for(auto client : clients)
+    {
+        disconnect(client, SIGNAL(readyRead()), this, SLOT(read()));
+        disconnect(client, SIGNAL(disconnected()), this, SLOT(disconnected()));
+        client->disconnectFromHost();
+        client->deleteLater();
+    }
+    clients.clear();
+    close();
+}
+
 void ChatServer::disconnected()
 {
     QTcpSocket * client = (QTcpSocket *)sender();
