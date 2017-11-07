@@ -13,6 +13,7 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent)
     chat = nullptr;
     server = new ChatServer();
     client = new ChatClient();
+    client->enableKeepAliveOption();
 
     createUi();
 }
@@ -48,7 +49,7 @@ void MainWindow::createServerUi()
     if(!serverWidget)
     {
         serverWidget = new ServerWidget();
-        connect(serverWidget, SIGNAL(backClicked()), this, SLOT(cleanUpServer()));
+        connect(serverWidget, SIGNAL(backClicked()), this, SLOT(closeServer()));
         connect(serverWidget, SIGNAL(backClicked()), this, SLOT(displayMenu()));
         connect(serverWidget, SIGNAL(runClicked(int)), this, SLOT(startServer(int)));
         connect(serverWidget, SIGNAL(closeClicked()), this, SLOT(closeServer()));
@@ -69,7 +70,7 @@ void MainWindow::createClientUi()
     if(!clientWidget)
     {
         clientWidget = new ClientWidget();
-        connect(clientWidget, SIGNAL(backClicked()), this, SLOT(cleanUpClient()));
+        connect(clientWidget, SIGNAL(backClicked()), this, SLOT(disconnectFromServer()));
         connect(clientWidget, SIGNAL(backClicked()), this, SLOT(displayMenu()));
         connect(clientWidget, SIGNAL(connectClicked(QString,int)),
                 this, SLOT(connectToServer(QString,int)));
@@ -118,12 +119,6 @@ void MainWindow::createChat()
         chat->move(x, y);
         chat->setVisible(false);
     }
-}
-
-void MainWindow::cleanUpServer()
-{
-    resetChat();
-    closeServer();
 }
 
 void MainWindow::resetChat()
@@ -196,6 +191,7 @@ void MainWindow::connectToServer(QString ip, int port)
                 connect(client, SIGNAL(messageReceived(QString)), this, SLOT(writeReceivedMsgToChat(QString)));
                 connect(chat, SIGNAL(messageSent(QString)), this, SLOT(sendMsgFromClient(QString)));
                 connect(client, SIGNAL(errorOccurred(QString)), this, SLOT(errorReaction(QString)));
+                //connect(client, SIGNAL(unscheduledDisconnection()), this, SLOT(disconnectFromServer()));
 
                 chat->setVisible(true);
                 clientWidget->changeState();
@@ -216,6 +212,7 @@ void MainWindow::disconnectFromServer()
             disconnect(client, SIGNAL(messageReceived(QString)), this, SLOT(writeReceivedMsgToChat(QString)));
             disconnect(chat, SIGNAL(messageSent(QString)), this, SLOT(sendMsgFromClient(QString)));
             disconnect(client, SIGNAL(errorOccurred(QString)), this, SLOT(errorReaction(QString)));
+            //disconnect(client, SIGNAL(unscheduledDisconnection()), this, SLOT(disconnectFromServer()));
 
             resetChat();
             chat->setVisible(false);
@@ -232,13 +229,6 @@ void MainWindow::sendMsgFromClient(QString msg)
         if(client->isConnected())
             client->send(msg);
     }
-
-}
-
-void MainWindow::cleanUpClient()
-{
-    resetChat();
-    disconnectFromServer();
 }
 
 void MainWindow::writeReceivedMsgToChat(QString msg)

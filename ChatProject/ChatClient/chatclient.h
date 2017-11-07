@@ -10,6 +10,7 @@ class ChatClient : public QObject
 
 private:
     QTcpSocket * clientSocket;
+    QString lastError;
 
 private slots:
     void lookForErrors(QAbstractSocket::SocketError socketError);
@@ -20,6 +21,8 @@ public:
     ~ChatClient() {}
 
     bool isConnected() const;
+    void enableKeepAliveOption();
+    QString getLastError() const;
 
 public slots:
     bool connectToServer(QString ip, int portNumber);
@@ -29,6 +32,7 @@ public slots:
 signals:
     void messageReceived(QString message);
     void errorOccurred(QString error);
+    void unscheduledDisconnection();
 };
 
 #endif // CHATCLIENT_H

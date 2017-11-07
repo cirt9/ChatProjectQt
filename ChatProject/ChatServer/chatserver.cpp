@@ -69,6 +69,6 @@ void ChatServer::disconnected()
     qDebug() << "Client disconnected: " << client->peerAddress().toString();
     emit infoOccurred("Client disconnected: " + client->peerAddress().toString());
     //
-
+    client->deleteLater();
     clients.remove(client);
 }

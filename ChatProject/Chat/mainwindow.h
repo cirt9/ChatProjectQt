@@ -45,13 +45,11 @@ private slots:
     void startServer(int port);
     void closeServer();
     void sendMsgFromServer(QString msg);
-    void cleanUpServer();
 
     void displayClient();
     void connectToServer(QString ip, int port);
     void disconnectFromServer();
     void sendMsgFromClient(QString msg);
-    void cleanUpClient();
 
     void writeReceivedMsgToChat(QString msg);
 

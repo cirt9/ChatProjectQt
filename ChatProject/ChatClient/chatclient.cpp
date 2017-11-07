@@ -4,7 +4,6 @@
 ChatClient::ChatClient(QObject * parent) : QObject(parent)
 {
     clientSocket = new QTcpSocket(this);
-    clientSocket->setSocketOption(QAbstractSocket::KeepAliveOption, 1);
 
     connect(clientSocket, SIGNAL(error(QAbstractSocket::SocketError)), this,
             SLOT(lookForErrors(QAbstractSocket::SocketError)));
@@ -35,16 +34,27 @@ void ChatClient::send(QString message)
 void ChatClient::lookForErrors(QAbstractSocket::SocketError socketError)
 {
     if(socketError == QAbstractSocket::RemoteHostClosedError)
-        emit errorOccurred("The connection with remote host was lost.");
+    {
+        lastError = "The connection with remote host was lost.";
+        emit unscheduledDisconnection();
+    }
 
     else if(socketError == QAbstractSocket::HostNotFoundError)
-        emit errorOccurred("The host was not found. Check the host name and port settings");
+        lastError = "The host was not found. Check the host name and port settings.";
 
     else if(socketError == QAbstractSocket::ConnectionRefusedError)
-        emit errorOccurred("The connection was refused by the peer");
+        lastError = "The connection was refused by the peer.";
+
+    else if(socketError == QAbstractSocket::SocketAccessError)
+        lastError = "The application lacks the required privileges.";
+
+    else if(socketError == QAbstractSocket::NetworkError)
+        lastError = "An error occurred with the network.";
 
     else
-        emit errorOccurred("The following error ocurred: " + clientSocket->errorString());
+        lastError = "The following error ocurred: " + clientSocket->errorString();
+
+    emit errorOccurred(lastError);
 }
 
 void ChatClient::read()
@@ -59,4 +69,14 @@ void ChatClient::read()
 bool ChatClient::isConnected() const
 {
     return clientSocket->state() == QTcpSocket::ConnectedState;
+}
+
+void ChatClient::enableKeepAliveOption()
+{
+    clientSocket->setSocketOption(QAbstractSocket::KeepAliveOption, 1);
+}
+
+QString ChatClient::getLastError() const
+{
+    return lastError;
 }
