@@ -22,7 +22,7 @@ private:
     static const int MIN_PORT = 1024;
     static const int MAX_PORT = 65535;
 
-    bool isConnected;
+    bool connected;
 
     void createInterface();
 
@@ -33,6 +33,7 @@ public:
     ClientWidget(QWidget * parent = nullptr);
 
     void changeState();
+    bool isConnected() const;
 
 signals:
     void backClicked();

@@ -3,7 +3,7 @@
 ServerWidget::ServerWidget(QWidget * parent) : QWidget(parent)
 {
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    isRunning = false;
+    running = false;
 
     serverLayout = new QHBoxLayout();
     serverLayout->setSpacing(0);
@@ -36,7 +36,7 @@ void ServerWidget::createInterface()
 
 void ServerWidget::runOrCloseClicked()
 {
-    if(isRunning)
+    if(running)
         emit closeClicked();
 
     else
@@ -52,14 +52,19 @@ void ServerWidget::runOrCloseClicked()
 
 void ServerWidget::changeState()
 {
-    if(isRunning)
+    if(running)
     {
-        isRunning = false;
+        running = false;
         stateButton->setText("Run");
     }
     else
     {
-        isRunning = true;
+        running = true;
         stateButton->setText("Close");
     }
+}
+
+bool ServerWidget::isRunning() const
+{
+    return running;
 }

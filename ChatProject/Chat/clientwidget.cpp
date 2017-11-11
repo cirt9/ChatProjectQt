@@ -3,7 +3,7 @@
 ClientWidget::ClientWidget(QWidget * parent) : QWidget(parent)
 {
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    isConnected = false;
+    connected = false;
 
     clientLayout = new QHBoxLayout();
     clientLayout->setSpacing(0);
@@ -41,7 +41,7 @@ void ClientWidget::createInterface()
 
 void ClientWidget::connOrDisconnClicked()
 {
-    if(isConnected)
+    if(connected)
         emit disconnectClicked();
 
     else
@@ -66,14 +66,19 @@ void ClientWidget::connOrDisconnClicked()
 
 void ClientWidget::changeState()
 {
-    if(isConnected)
+    if(connected)
     {
-        isConnected = false;
+        connected = false;
         stateButton->setText("Connect");
     }
     else
     {
-        isConnected = true;
+        connected = true;
         stateButton->setText("Disconnect");
     }
+}
+
+bool ClientWidget::isConnected() const
+{
+    return connected;
 }

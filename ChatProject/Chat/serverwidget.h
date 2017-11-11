@@ -20,7 +20,7 @@ private:
     static const int MIN_PORT = 1024;
     static const int MAX_PORT = 65535;
 
-    bool isRunning;
+    bool running;
 
     void createInterface();
 
@@ -31,6 +31,7 @@ public:
     ServerWidget(QWidget * parent = nullptr);
 
     void changeState();
+    bool isRunning() const;
 
 signals:
     void backClicked();

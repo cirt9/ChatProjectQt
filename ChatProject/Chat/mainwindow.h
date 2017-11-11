@@ -39,6 +39,7 @@ private:
 
     void createChat();
     void resetChat();
+    void cleanUpClient();
 
 private slots:
     void displayServer();
@@ -48,7 +49,8 @@ private slots:
 
     void displayClient();
     void connectToServer(QString ip, int port);
-    void disconnectFromServer(bool plannedDisconnection = true);
+    void disconnectFromServer();
+    void emergencyDisconnectFromServer();
     void sendMsgFromClient(QString msg);
 
     void writeReceivedMsgToChat(QString msg);

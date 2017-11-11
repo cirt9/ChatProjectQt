@@ -146,7 +146,8 @@ void MainWindow::startServer(int port)
             connect(chat, SIGNAL(messageSent(QString)), this, SLOT(sendMsgFromServer(QString)));
 
             chat->setVisible(true);
-            serverWidget->changeState();
+            if(!serverWidget->isRunning())
+                serverWidget->changeState();
         }
         else
             QMessageBox::critical(this, "Server", "Server failed to start");
@@ -164,7 +165,7 @@ void MainWindow::closeServer()
         resetChat();
         chat->setVisible(false);
 
-        if(serverWidget)
+        if(serverWidget->isRunning())
             serverWidget->changeState();
 
         QMessageBox::information(this, "Server", "Server was closed");
@@ -191,10 +192,11 @@ void MainWindow::connectToServer(QString ip, int port)
                 connect(client, SIGNAL(messageReceived(QString)), this, SLOT(writeReceivedMsgToChat(QString)));
                 connect(chat, SIGNAL(messageSent(QString)), this, SLOT(sendMsgFromClient(QString)));
                 connect(client, SIGNAL(errorOccurred(QString)), this, SLOT(errorReaction(QString)));
-                connect(client, &ChatClient::unscheduledDisconnection, this, [=]{disconnectFromServer(false);});
+                connect(client, SIGNAL(unscheduledDisconnection()), this, SLOT(emergencyDisconnectFromServer()));
 
                 chat->setVisible(true);
-                clientWidget->changeState();
+                if(!clientWidget->isConnected())
+                    clientWidget->changeState();
             }
             else
                 QMessageBox::warning(this, "Client", "Couldn't connect");
@@ -202,28 +204,49 @@ void MainWindow::connectToServer(QString ip, int port)
     }
 }
 
-void MainWindow::disconnectFromServer(bool plannedDisconnection)
+void MainWindow::disconnectFromServer()
 {
     if(client)
     {
         if(client->isConnected())
         {
             client->disconnectFromServer();
-            disconnect(client, SIGNAL(messageReceived(QString)), this, SLOT(writeReceivedMsgToChat(QString)));
-            disconnect(chat, SIGNAL(messageSent(QString)), this, SLOT(sendMsgFromClient(QString)));
-            disconnect(client, SIGNAL(errorOccurred(QString)), this, SLOT(errorReaction(QString)));
-            disconnect(client, &ChatClient::unscheduledDisconnection, this, nullptr);
+            cleanUpClient();
 
             resetChat();
             chat->setVisible(false);
-            clientWidget->changeState();
-
-            if(plannedDisconnection)
-                QMessageBox::information(this, "Client", "Disconnected");
-            else
-                errorReaction(client->getLastError());
+            QMessageBox::information(this, "Client", "Disconnected");
         }
     }
+}
+
+void MainWindow::emergencyDisconnectFromServer()
+{
+    if(client)
+    {
+        if(client->isConnected())
+        {
+            client->disconnectFromServer();
+            cleanUpClient();
+
+            resetChat();
+            chat->setVisible(false);
+            errorReaction(client->getLastError());
+        }
+    }
+}
+
+void MainWindow::cleanUpClient()
+{
+    disconnect(client, SIGNAL(messageReceived(QString)),
+               this, SLOT(writeReceivedMsgToChat(QString)));
+    disconnect(chat, SIGNAL(messageSent(QString)), this, SLOT(sendMsgFromClient(QString)));
+    disconnect(client, SIGNAL(errorOccurred(QString)), this, SLOT(errorReaction(QString)));
+    disconnect(client, SIGNAL(unscheduledDisconnection()),
+               this, SLOT(emergencyDisconnectFromServer()));
+
+    if(clientWidget->isConnected())
+        clientWidget->changeState();
 }
 
 void MainWindow::sendMsgFromClient(QString msg)
