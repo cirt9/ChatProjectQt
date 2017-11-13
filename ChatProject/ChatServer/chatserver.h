@@ -11,6 +11,8 @@ class ChatServer : public QTcpServer
 private:
     QSet<QTcpSocket *> clients;
 
+    void processPacket(QTcpSocket * client, int id = 0);
+
 private slots:
     void read();
     void disconnected();

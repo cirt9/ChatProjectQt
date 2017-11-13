@@ -141,13 +141,14 @@ void MainWindow::startServer(int port)
 
         if(success)
         {
-            QMessageBox::information(this, "Server", "Server is now running");
             connect(server, SIGNAL(messageReceived(QString)), this, SLOT(writeReceivedMsgToChat(QString)));
             connect(chat, SIGNAL(messageSent(QString)), this, SLOT(sendMsgFromServer(QString)));
 
             chat->setVisible(true);
             if(!serverWidget->isRunning())
                 serverWidget->changeState();
+
+            QMessageBox::information(this, "Server", "Server is now running");
         }
         else
             QMessageBox::critical(this, "Server", "Server failed to start");
@@ -188,7 +189,6 @@ void MainWindow::connectToServer(QString ip, int port)
 
             if(success)
             {
-                QMessageBox::information(this, "Client", "Connected");
                 connect(client, SIGNAL(messageReceived(QString)), this, SLOT(writeReceivedMsgToChat(QString)));
                 connect(chat, SIGNAL(messageSent(QString)), this, SLOT(sendMsgFromClient(QString)));
                 connect(client, SIGNAL(errorOccurred(QString)), this, SLOT(errorReaction(QString)));
@@ -197,6 +197,8 @@ void MainWindow::connectToServer(QString ip, int port)
                 chat->setVisible(true);
                 if(!clientWidget->isConnected())
                     clientWidget->changeState();
+
+                QMessageBox::information(this, "Client", "Connected");
             }
             else
                 QMessageBox::warning(this, "Client", "Couldn't connect");

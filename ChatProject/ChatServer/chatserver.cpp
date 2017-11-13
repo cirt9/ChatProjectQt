@@ -25,14 +25,48 @@ void ChatServer::read()
 {
     QTcpSocket * client = (QTcpSocket *)sender();
 
-    while(client->canReadLine())
+    if(client->canReadLine())
+    {
+        int messageId = QString::fromUtf8(client->readLine()).trimmed().toInt();
+        processPacket(client, messageId);
+    }
+
+    /*while(client->canReadLine())
     {
         QString line = QString::fromUtf8(client->readLine()).trimmed();
         emit messageReceived(line);
         qDebug() << line;
 
         send(line, client);
+    }*/
+}
+
+void ChatServer::processPacket(QTcpSocket * client, int id)
+{
+    switch (id)
+    {
+    case 0:
+            while(client->canReadLine())
+            {
+                QString line = QString::fromUtf8(client->readLine()).trimmed();
+                emit messageReceived(line);
+                qDebug() << line;
+
+                send(line, client);
+            }
+        break;
+
+    case 1:
+            while(client->canReadLine())
+            {
+                QString stub = QString::fromUtf8(client->readLine()).trimmed();
+            }
+            qDebug() << "case 1";
+        break;
+    default:
+        break;
     }
+
 }
 
 void ChatServer::send(QString message, QTcpSocket * except)
