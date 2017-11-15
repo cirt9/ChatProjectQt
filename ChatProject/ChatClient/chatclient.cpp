@@ -28,7 +28,9 @@ void ChatClient::disconnectFromServer()
 void ChatClient::send(QString message)
 {
     message = message.trimmed();
-    clientSocket->write(QString("0\n" + message + "\n").toUtf8());
+    int messageId = 0;
+
+    clientSocket->write(QString(messageId + "\n" + message + "\n").toUtf8());
 }
 
 void ChatClient::lookForErrors(QAbstractSocket::SocketError socketError)

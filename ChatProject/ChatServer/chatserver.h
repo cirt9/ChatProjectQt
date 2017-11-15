@@ -3,13 +3,21 @@
 
 #include <QTcpServer>
 #include <QTcpSocket>
+#include <QMutableSetIterator>
 
 class ChatServer : public QTcpServer
 {
     Q_OBJECT
 
 private:
-    QSet<QTcpSocket *> clients;
+
+    struct Client
+    {
+        QTcpSocket * socket;
+        QString nickname;
+    };
+
+    QSet<Client *> clients;
 
     void processPacket(QTcpSocket * client, int id = 0);
 
