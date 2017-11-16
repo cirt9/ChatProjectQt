@@ -4,12 +4,15 @@
 #include <QTcpServer>
 #include <QTcpSocket>
 #include <QMutableSetIterator>
+#include <QSharedPointer>
 
 class ChatServer : public QTcpServer
 {
     Q_OBJECT
 
 private:
+    const static int NORMAL_MSG = 0;
+    const static int NICKNAME_CHANGE = 1;
 
     struct Client
     {
@@ -17,9 +20,11 @@ private:
         QString nickname;
     };
 
-    QSet<Client *> clients;
+    QSet<QSharedPointer<Client> > clients;
 
-    void processPacket(QTcpSocket * client, int id = 0);
+    void processPacket(QTcpSocket * clientSocket, int packetId = 0);
+    void manageMessage(QTcpSocket * clientSocket);
+    void changeClientNickname(QTcpSocket * clientSocket);
 
 private slots:
     void read();

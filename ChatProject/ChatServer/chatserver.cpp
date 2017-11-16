@@ -8,7 +8,7 @@ ChatServer::ChatServer(QObject * parent) : QTcpServer(parent)
 
 void ChatServer::incomingConnection(int socketfd)
 {
-    Client * client = new Client();
+    QSharedPointer<Client> client = QSharedPointer<Client>(new Client());
     client->socket = new QTcpSocket(this);
     client->socket->setSocketDescriptor(socketfd);
     client->nickname = QString("Nickname"+clients.size());
@@ -25,41 +25,37 @@ void ChatServer::incomingConnection(int socketfd)
 
 void ChatServer::read()
 {
-    QTcpSocket * client = (QTcpSocket *)sender();
+    QTcpSocket * clientSocket = (QTcpSocket *)sender();
 
-    if(client->canReadLine())
+    if(clientSocket->canReadLine())
     {
-        int messageId = QString::fromUtf8(client->readLine()).trimmed().toInt();
-        processPacket(client, messageId);
+        int messageId = QString::fromUtf8(clientSocket->readLine()).trimmed().toInt();
+        processPacket(clientSocket, messageId);
     }
 }
 
-void ChatServer::processPacket(QTcpSocket * client, int id)
+void ChatServer::processPacket(QTcpSocket * clientSocket, int packetId)
 {
-    switch (id)
+    switch (packetId)
     {
-    case 0:
-            while(client->canReadLine())
-            {
-                QString line = QString::fromUtf8(client->readLine()).trimmed();
-                emit messageReceived(line);
-                qDebug() << line;
+    case NORMAL_MSG: manageMessage(clientSocket); break;
+    case NICKNAME_CHANGE: changeClientNickname(clientSocket); break;
 
-                send(line, client);
-            }
-        break;
-
-    case 1:
-            while(client->canReadLine())
-            {
-                QString stub = QString::fromUtf8(client->readLine()).trimmed();
-            }
-            qDebug() << "case 1";
-        break;
-    default:
-        break;
+    default: break;
     }
 
+}
+
+void ChatServer::manageMessage(QTcpSocket * clientSocket)
+{
+    while(clientSocket->canReadLine())
+    {
+        QString line = QString::fromUtf8(clientSocket->readLine()).trimmed();
+        emit messageReceived(line);
+        qDebug() << line;
+
+        send(line, clientSocket);
+    }
 }
 
 void ChatServer::send(QString message, QTcpSocket * except)
@@ -75,6 +71,15 @@ void ChatServer::send(QString message, QTcpSocket * except)
     }
 }
 
+void ChatServer::changeClientNickname(QTcpSocket * clientSocket)
+{
+    while(clientSocket->canReadLine())
+    {
+        QString stub = QString::fromUtf8(clientSocket->readLine()).trimmed();
+    }
+    qDebug() << "case 1";
+}
+
 void ChatServer::closeServer()
 {
     for(auto client : clients)
@@ -83,7 +88,6 @@ void ChatServer::closeServer()
         disconnect(client->socket, SIGNAL(disconnected()), this, SLOT(disconnected()));
         client->socket->disconnectFromHost();
         client->socket->deleteLater();
-        delete client;
     }
     clients.clear();
     close();
@@ -91,23 +95,21 @@ void ChatServer::closeServer()
 
 void ChatServer::disconnected()
 {
-    QTcpSocket * client = (QTcpSocket *)sender();
+    QTcpSocket * clientSocket = (QTcpSocket *)sender();
 
     //
-    qDebug() << "Client disconnected: " << client->peerAddress().toString();
-    emit infoOccurred("Client disconnected: " + client->peerAddress().toString());
+    qDebug() << "Client disconnected: " << clientSocket->peerAddress().toString();
+    emit infoOccurred("Client disconnected: " + clientSocket->peerAddress().toString());
     //
-    client->deleteLater();
 
-    QMutableSetIterator<Client *> i(clients);
-     while (i.hasNext())
-     {
-         Client * clientData = i.next();
-         if(clientData->socket == client)
-         {
-             delete clientData;
-             i.remove();
-             break;
-         }
-     }
+    QMutableSetIterator<QSharedPointer<Client> > i(clients);
+    while(i.hasNext())
+    {
+        if(i.next()->socket == clientSocket)
+        {
+            clientSocket->deleteLater();
+            i.remove();
+            break;
+        }
+    }
 }
