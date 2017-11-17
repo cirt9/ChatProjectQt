@@ -11,8 +11,10 @@ class ChatServer : public QTcpServer
     Q_OBJECT
 
 private:
-    const static int NORMAL_MSG = 0;
-    const static int NICKNAME_CHANGE = 1;
+    const static int PACKET_MIN_ID = 0;
+    const static int PACKET_MAX_ID = 1;
+    const static int PACKET_NORMAL_MSG_ID = 0;
+    const static int PACKET_NICKNAME_CHANGE_ID = 1;
 
     struct Client
     {
@@ -24,7 +26,7 @@ private:
 
     void processPacket(QTcpSocket * clientSocket, int packetId = 0);
     void manageMessage(QTcpSocket * clientSocket);
-    void changeClientNickname(QTcpSocket * clientSocket);
+    void setClientNickname(QTcpSocket * clientSocket);
 
 private slots:
     void read();

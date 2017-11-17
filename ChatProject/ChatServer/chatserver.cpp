@@ -29,17 +29,22 @@ void ChatServer::read()
 
     if(clientSocket->canReadLine())
     {
-        int messageId = QString::fromUtf8(clientSocket->readLine()).trimmed().toInt();
-        processPacket(clientSocket, messageId);
+        bool isInteger;
+        int messageId = QString::fromUtf8(clientSocket->readLine()).trimmed().toInt(&isInteger);
+
+        if(isInteger && messageId >= PACKET_MIN_ID && messageId <= PACKET_MAX_ID)
+            processPacket(clientSocket, messageId);
+        else
+            QByteArray data = clientSocket->readAll();
     }
 }
 
 void ChatServer::processPacket(QTcpSocket * clientSocket, int packetId)
 {
-    switch (packetId)
+    switch(packetId)
     {
-    case NORMAL_MSG: manageMessage(clientSocket); break;
-    case NICKNAME_CHANGE: changeClientNickname(clientSocket); break;
+    case PACKET_NORMAL_MSG_ID: manageMessage(clientSocket); break;
+    case PACKET_NICKNAME_CHANGE_ID: setClientNickname(clientSocket); break;
 
     default: break;
     }
@@ -71,13 +76,22 @@ void ChatServer::send(QString message, QTcpSocket * except)
     }
 }
 
-void ChatServer::changeClientNickname(QTcpSocket * clientSocket)
+void ChatServer::setClientNickname(QTcpSocket * clientSocket)
 {
     while(clientSocket->canReadLine())
     {
-        QString stub = QString::fromUtf8(clientSocket->readLine()).trimmed();
+        QString newNickname = QString::fromUtf8(clientSocket->readLine()).trimmed();
+        qDebug() << newNickname;
+
+        for(auto client : clients)
+        {
+            if(client->socket == clientSocket)
+            {
+                client->nickname = newNickname;
+                break;
+            }
+        }
     }
-    qDebug() << "case 1";
 }
 
 void ChatServer::closeServer()

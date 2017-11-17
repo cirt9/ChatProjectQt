@@ -30,7 +30,7 @@ void ChatClient::send(QString message)
     message = message.trimmed();
     int messageId = 0;
 
-    clientSocket->write(QString(messageId + "\n" + message + "\n").toUtf8());
+    clientSocket->write((QString::number(messageId) + "\n" + message + "\n").toUtf8());
 }
 
 void ChatClient::lookForErrors(QAbstractSocket::SocketError socketError)
