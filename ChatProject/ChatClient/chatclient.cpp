@@ -25,10 +25,19 @@ void ChatClient::disconnectFromServer()
     clientSocket->disconnectFromHost();
 }
 
-void ChatClient::send(QString message)
+void ChatClient::sendMessage(QString message)
+{
+    send(NORMAL_MESSAGE_ID, message);
+}
+
+void ChatClient::setNickname(QString nickname)
+{
+    send(NICKNAME_CHANGE_ID, nickname);
+}
+
+void ChatClient::send(int messageId, QString message)
 {
     message = message.trimmed();
-    int messageId = 0;
 
     clientSocket->write((QString::number(messageId) + "\n" + message + "\n").toUtf8());
 }

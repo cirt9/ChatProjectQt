@@ -32,10 +32,10 @@ void ChatServer::read()
         bool isInteger;
         int messageId = QString::fromUtf8(clientSocket->readLine()).trimmed().toInt(&isInteger);
 
-        if(isInteger && messageId >= PACKET_MIN_ID && messageId <= PACKET_MAX_ID)
+        if(isInteger)
             processPacket(clientSocket, messageId);
         else
-            QByteArray data = clientSocket->readAll();
+            flushClientSocket(clientSocket);
     }
 }
 
@@ -48,7 +48,7 @@ void ChatServer::processPacket(QTcpSocket * clientSocket, int packetId)
 
     default: break;
     }
-
+    flushClientSocket(clientSocket);
 }
 
 void ChatServer::manageMessage(QTcpSocket * clientSocket)
@@ -92,6 +92,12 @@ void ChatServer::setClientNickname(QTcpSocket * clientSocket)
             }
         }
     }
+}
+
+void ChatServer::flushClientSocket(QTcpSocket * clientSocket)
+{
+    if(clientSocket->canReadLine())
+        QByteArray data = clientSocket->readAll();
 }
 
 void ChatServer::closeServer()

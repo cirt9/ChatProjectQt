@@ -11,7 +11,7 @@ MainMenuWidget::MainMenuWidget(QString title, QWidget * parent) : QWidget(parent
 
     menuLayout->addStretch(1);
 
-    QLabel * titleLabel = new QLabel(title);
+    titleLabel = new QLabel(title);
     titleLabel->setObjectName("MainMenuTitleLabel");
     titleLabel->setAlignment(Qt::AlignCenter);
     menuLayout->addWidget(titleLabel);
@@ -26,6 +26,12 @@ void MainMenuWidget::addTextBelowTitle(QString text)
     textBelowTitle->setObjectName("MainMenuBelowTitleLabel");
     textBelowTitle->setAlignment(Qt::AlignHCenter);
     menuLayout->insertWidget(2, textBelowTitle);
+}
+
+void MainMenuWidget::addEffectForTitle(QGraphicsEffect * effect)
+{
+    if(titleLabel)
+        titleLabel->setGraphicsEffect(effect);
 }
 
 void MainMenuWidget::addButton(QString text)

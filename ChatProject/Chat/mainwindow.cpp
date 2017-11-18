@@ -30,6 +30,7 @@ void MainWindow::createMenu()
 {
     MainMenuWidget * menu = new MainMenuWidget("Chat Online");
     menu->addTextBelowTitle("Created by Bartłomiej Wójtowicz");
+    menu->addEffectForTitle(createShadow());
     menu->addButton("Create New Server");
     connect(menu->getButton(0), SIGNAL(clicked(bool)), this, SLOT(displayServer()));
     menu->addButton("Join Existing Server");
@@ -256,7 +257,7 @@ void MainWindow::sendMsgFromClient(QString msg)
     if(client)
     {
         if(client->isConnected())
-            client->send(msg);
+            client->sendMessage(msg);
     }
 }
 
@@ -299,4 +300,15 @@ QGridLayout * MainWindow::createCenteredLayout(QWidget * widget)
     centeredLayout->addItem(rightSpacer, 0, 2);
 
     return centeredLayout;
+}
+
+QGraphicsDropShadowEffect * MainWindow::createShadow()
+{
+    QGraphicsDropShadowEffect * shadow = new QGraphicsDropShadowEffect();
+    shadow->setBlurRadius(20);
+    shadow->setXOffset(4);
+    shadow->setYOffset(4);
+    shadow->setColor(Qt::black);
+
+    return shadow;
 }

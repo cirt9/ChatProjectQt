@@ -49,7 +49,7 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent)
 void MainWindow::sendMessage()
 {
     QString message = inputLine->text();
-    chatClient->send(message);
+    chatClient->sendMessage(message);
     messagesArea->append(message);
 }
 

@@ -16,6 +16,7 @@
 #include <../ChatServer/chatserver.h>
 #include <../ChatClient/chatclient.h>
 #include <QMessageBox>
+#include <QGraphicsDropShadowEffect>
 
 class MainWindow : public QMainWindow
 {
@@ -36,6 +37,8 @@ private:
     void createClientUi();
     QGridLayout * createCenteredLayout(QLayout * layout);
     QGridLayout * createCenteredLayout(QWidget * widget);
+
+    QGraphicsDropShadowEffect * createShadow();
 
     void createChat();
     void resetChat();
