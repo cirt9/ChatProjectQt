@@ -36,7 +36,7 @@ public slots:
     void setNickname(QString nickname);
 
 signals:
-    void messageReceived(QString message);
+    void messageReceived(QString nickname, QString message);
     void errorOccurred(QString error);
     void unscheduledDisconnection();
 };

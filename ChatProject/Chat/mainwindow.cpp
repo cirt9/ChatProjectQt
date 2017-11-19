@@ -142,7 +142,8 @@ void MainWindow::startServer(int port)
 
         if(success)
         {
-            connect(server, SIGNAL(messageReceived(QString)), this, SLOT(writeReceivedMsgToChat(QString)));
+            connect(server, SIGNAL(messageReceived(QString, QString)),
+                    this, SLOT(writeReceivedMsgToChat(QString, QString)));
             connect(chat, SIGNAL(messageSent(QString)), this, SLOT(sendMsgFromServer(QString)));
 
             chat->setVisible(true);
@@ -161,7 +162,7 @@ void MainWindow::closeServer()
     if(server->isListening())
     {
         server->closeServer();
-        disconnect(server, SIGNAL(messageReceived(QString)), this, SLOT(writeReceivedMsgToChat(QString)));
+        disconnect(server, SIGNAL(messageReceived(QString, QString)), this, SLOT(writeReceivedMsgToChat(QString, QString)));
         disconnect(chat, SIGNAL(messageSent(QString)), this, SLOT(sendMsgFromServer(QString)));
 
         resetChat();
@@ -177,7 +178,7 @@ void MainWindow::closeServer()
 void MainWindow::sendMsgFromServer(QString msg)
 {
     if(server)
-        server->send(msg);
+        server->send(server->getServerName(), msg);
 }
 
 void MainWindow::connectToServer(QString ip, int port)
@@ -190,7 +191,8 @@ void MainWindow::connectToServer(QString ip, int port)
 
             if(success)
             {
-                connect(client, SIGNAL(messageReceived(QString)), this, SLOT(writeReceivedMsgToChat(QString)));
+                connect(client, SIGNAL(messageReceived(QString, QString)),
+                        this, SLOT(writeReceivedMsgToChat(QString, QString)));
                 connect(chat, SIGNAL(messageSent(QString)), this, SLOT(sendMsgFromClient(QString)));
                 connect(client, SIGNAL(errorOccurred(QString)), this, SLOT(errorReaction(QString)));
                 connect(client, SIGNAL(unscheduledDisconnection()), this, SLOT(emergencyDisconnectFromServer()));
@@ -241,8 +243,8 @@ void MainWindow::emergencyDisconnectFromServer()
 
 void MainWindow::cleanUpClient()
 {
-    disconnect(client, SIGNAL(messageReceived(QString)),
-               this, SLOT(writeReceivedMsgToChat(QString)));
+    disconnect(client, SIGNAL(messageReceived(QString, QString)),
+               this, SLOT(writeReceivedMsgToChat(QString, QString)));
     disconnect(chat, SIGNAL(messageSent(QString)), this, SLOT(sendMsgFromClient(QString)));
     disconnect(client, SIGNAL(errorOccurred(QString)), this, SLOT(errorReaction(QString)));
     disconnect(client, SIGNAL(unscheduledDisconnection()),
@@ -261,10 +263,10 @@ void MainWindow::sendMsgFromClient(QString msg)
     }
 }
 
-void MainWindow::writeReceivedMsgToChat(QString msg)
+void MainWindow::writeReceivedMsgToChat(QString nickname, QString msg)
 {
     if(chat)
-        chat->addMsg("Test", msg);
+        chat->addMsg(nickname, msg);
 }
 
 void MainWindow::errorReaction(QString error)

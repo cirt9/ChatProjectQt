@@ -3,7 +3,7 @@
 
 ChatServer::ChatServer(QObject * parent) : QTcpServer(parent)
 {
-
+    setServerName("Server");
 }
 
 void ChatServer::incomingConnection(int socketfd)
@@ -11,7 +11,7 @@ void ChatServer::incomingConnection(int socketfd)
     QSharedPointer<Client> client = QSharedPointer<Client>(new Client());
     client->socket = new QTcpSocket(this);
     client->socket->setSocketDescriptor(socketfd);
-    client->nickname = QString("Nickname"+clients.size());
+    client->nickname = QString("Client") + QString::number(clients.size());
     clients.insert(client);
 
     //
@@ -53,23 +53,33 @@ void ChatServer::processPacket(QTcpSocket * clientSocket, int packetId)
 
 void ChatServer::manageMessage(QTcpSocket * clientSocket)
 {
+    QString nickname;
+    for(auto client : clients)
+    {
+        if(client->socket == clientSocket)
+        {
+            nickname = client->nickname;
+            break;
+        }
+    }
+
     while(clientSocket->canReadLine())
     {
         QString line = QString::fromUtf8(clientSocket->readLine()).trimmed();
-        emit messageReceived(line);
+        emit messageReceived(nickname, line);
         qDebug() << line;
 
-        send(line, clientSocket);
+        send(nickname, line, clientSocket);
     }
 }
 
-void ChatServer::send(QString message, QTcpSocket * except)
+void ChatServer::send(QString nickname, QString message, QTcpSocket * except)
 {
     for(auto client : clients)
     {
         if(client->socket != except)
         {
-            client->socket->write(message.trimmed().toUtf8());
+            client->socket->write((nickname + "\n" + message).trimmed().toUtf8());
             client->socket->flush();
             client->socket->waitForBytesWritten(30000);
         }
@@ -111,6 +121,7 @@ void ChatServer::closeServer()
     }
     clients.clear();
     close();
+    setServerName("Server");
 }
 
 void ChatServer::disconnected()
@@ -132,4 +143,14 @@ void ChatServer::disconnected()
             break;
         }
     }
+}
+
+void ChatServer::setServerName(QString name)
+{
+    serverName = name;
+}
+
+QString ChatServer::getServerName() const
+{
+    return serverName;
 }

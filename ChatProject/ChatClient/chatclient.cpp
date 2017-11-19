@@ -72,9 +72,14 @@ void ChatClient::read()
 {
     QByteArray data = clientSocket->readAll();
     QString dataString(data);
-
-    emit messageReceived(dataString);
     qDebug() << dataString;
+
+    int index = dataString.indexOf("\n");
+
+    QString nickname = dataString.left(index);
+    QString message = dataString.mid(index);
+
+    emit messageReceived(nickname, message);
 }
 
 bool ChatClient::isConnected() const

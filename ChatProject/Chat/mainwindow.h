@@ -56,7 +56,7 @@ private slots:
     void emergencyDisconnectFromServer();
     void sendMsgFromClient(QString msg);
 
-    void writeReceivedMsgToChat(QString msg);
+    void writeReceivedMsgToChat(QString nickname, QString msg);
 
     void errorReaction(QString error);
 

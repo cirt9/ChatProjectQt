@@ -44,20 +44,21 @@ void MainWindow::startServer()
     if(success)
     {
         qDebug() << "Server started";
-        connect(chatServer, SIGNAL(messageReceived(QString)), this, SLOT(writeReceivedMsg(QString)));
+        connect(chatServer, SIGNAL(messageReceived(QString, QString)),
+                this, SLOT(writeReceivedMsg(QString, QString)));
     }
     else
         qDebug() << "Server failed to start";
 }
 
-void MainWindow::writeReceivedMsg(QString msg)
+void MainWindow::writeReceivedMsg(QString nickname, QString msg)
 {
-    messagesArea->append(msg);
+    messagesArea->append(nickname + " " + msg);
 }
 
 void MainWindow::sendMessage()
 {
     QString message = inputLine->text();
-    chatServer->send(message);
+    chatServer->send(chatServer->getServerName(), message);
     messagesArea->append(message);
 }

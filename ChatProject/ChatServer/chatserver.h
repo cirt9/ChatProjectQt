@@ -14,6 +14,8 @@ private:
     const static int PACKET_NORMAL_MSG_ID = 0;
     const static int PACKET_NICKNAME_CHANGE_ID = 1;
 
+    QString serverName;
+
     struct Client
     {
         QTcpSocket * socket;
@@ -38,11 +40,14 @@ public:
     ChatServer(QObject * parent = nullptr);
     ~ChatServer() {}
 
-    void send(QString message, QTcpSocket * except = nullptr);
+    void send(QString nickname, QString message, QTcpSocket * except = nullptr);
     void closeServer();
 
+    void setServerName(QString name);
+    QString getServerName() const;
+
 signals:
-    void messageReceived(QString message);
+    void messageReceived(QString nickname, QString message);
     void infoOccurred(QString message);
 };
 
