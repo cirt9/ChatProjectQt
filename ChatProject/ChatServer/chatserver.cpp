@@ -12,6 +12,7 @@ void ChatServer::incomingConnection(int socketfd)
     client->socket = new QTcpSocket(this);
     client->socket->setSocketDescriptor(socketfd);
     client->nickname = QString("Client") + QString::number(clients.size());
+    client->nextBlockSize = 0;
     clients.insert(client);
 
     //
@@ -25,52 +26,64 @@ void ChatServer::incomingConnection(int socketfd)
 
 void ChatServer::read()
 {
-    QTcpSocket * clientSocket = (QTcpSocket *)sender();
+    QSharedPointer<Client> client = findClient((QTcpSocket *)sender());
 
-    if(clientSocket->canReadLine())
+    if(client == nullptr)
+        return;
+
+    QDataStream in(client->socket);
+    in.setVersion(QDataStream::Qt_4_6);
+
+    if(client->nextBlockSize == 0)
     {
-        bool isInteger;
-        int messageId = QString::fromUtf8(clientSocket->readLine()).trimmed().toInt(&isInteger);
-
-        if(isInteger)
-            processPacket(clientSocket, messageId);
-        else
-            flushClientSocket(clientSocket);
+        if(client->socket->bytesAvailable() < sizeof(quint16))
+            return;
+        in >> client->nextBlockSize;
     }
+
+    if(client->nextBlockSize == 0xFFFF)
+        return;
+
+    if(client->socket->bytesAvailable() < client->nextBlockSize)
+        return;
+
+    quint8 packetId;
+    in >> packetId;
+    qDebug() << packetId;
+    processPacket(client, in, packetId);
+    client->nextBlockSize = 0;
 }
 
-void ChatServer::processPacket(QTcpSocket * clientSocket, int packetId)
+void ChatServer::processPacket(QSharedPointer<Client> client, QDataStream & in, quint8 packetId)
 {
     switch(packetId)
     {
-    case PACKET_NORMAL_MSG_ID: manageMessage(clientSocket); break;
-    case PACKET_NICKNAME_CHANGE_ID: setClientNickname(clientSocket); break;
+    case PACKET_NORMAL_MSG_ID: manageMessage(client, in); break;
+    case PACKET_NICKNAME_CHANGE_ID: setClientNickname(client, in); break;
 
-    default: break;
+    default: flushClientSocket(client->socket); break;
     }
-    flushClientSocket(clientSocket);
 }
 
-void ChatServer::manageMessage(QTcpSocket * clientSocket)
+void ChatServer::manageMessage(QSharedPointer<Client> client, QDataStream & in)
 {
-    QString nickname;
-    for(auto client : clients)
-    {
-        if(client->socket == clientSocket)
-        {
-            nickname = client->nickname;
-            break;
-        }
-    }
+    QString message;
+    in >> message;
 
-    while(clientSocket->canReadLine())
-    {
-        QString line = QString::fromUtf8(clientSocket->readLine()).trimmed();
-        emit messageReceived(nickname, line);
-        qDebug() << line;
+    emit messageReceived(client->nickname, message);
+    qDebug() << message;
 
-        send(nickname, line, clientSocket);
-    }
+    send(client->nickname, message, client->socket);
+}
+
+void ChatServer::setClientNickname(QSharedPointer<Client> client, QDataStream & in)
+{
+    QString newNickname;
+    in >> newNickname;
+
+    client->nickname = newNickname;
+
+    qDebug() << newNickname;
 }
 
 void ChatServer::send(QString nickname, QString message, QTcpSocket * except)
@@ -79,35 +92,22 @@ void ChatServer::send(QString nickname, QString message, QTcpSocket * except)
     {
         if(client->socket != except)
         {
-            client->socket->write((nickname + "\n" + message).trimmed().toUtf8());
-            client->socket->flush();
-            client->socket->waitForBytesWritten(30000);
-        }
-    }
-}
+            QByteArray block;
+            QDataStream out(&block, QIODevice::WriteOnly);
+            out.setVersion(QDataStream::Qt_4_6);
 
-void ChatServer::setClientNickname(QTcpSocket * clientSocket)
-{
-    while(clientSocket->canReadLine())
-    {
-        QString newNickname = QString::fromUtf8(clientSocket->readLine()).trimmed();
-        qDebug() << newNickname;
-
-        for(auto client : clients)
-        {
-            if(client->socket == clientSocket)
-            {
-                client->nickname = newNickname;
-                break;
-            }
+            out << quint16(0) << nickname << message;
+            out.device()->seek(0);
+            out << quint16(block.size() - sizeof(quint16));
+            client->socket->write(block);
         }
     }
 }
 
 void ChatServer::flushClientSocket(QTcpSocket * clientSocket)
 {
-    if(clientSocket->canReadLine())
-        QByteArray data = clientSocket->readAll();
+    if(clientSocket->bytesAvailable())
+        clientSocket->readAll();
 }
 
 void ChatServer::closeServer()
@@ -153,4 +153,14 @@ void ChatServer::setServerName(QString name)
 QString ChatServer::getServerName() const
 {
     return serverName;
+}
+
+QSharedPointer<ChatServer::Client> ChatServer::findClient(QTcpSocket * socket)
+{
+    for(auto client : clients)
+    {
+        if(socket == client->socket)
+            return client;
+    }
+    return nullptr;
 }

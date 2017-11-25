@@ -162,7 +162,8 @@ void MainWindow::closeServer()
     if(server->isListening())
     {
         server->closeServer();
-        disconnect(server, SIGNAL(messageReceived(QString, QString)), this, SLOT(writeReceivedMsgToChat(QString, QString)));
+        disconnect(server, SIGNAL(messageReceived(QString, QString)),
+                   this, SLOT(writeReceivedMsgToChat(QString, QString)));
         disconnect(chat, SIGNAL(messageSent(QString)), this, SLOT(sendMsgFromServer(QString)));
 
         resetChat();
@@ -195,7 +196,8 @@ void MainWindow::connectToServer(QString ip, int port)
                         this, SLOT(writeReceivedMsgToChat(QString, QString)));
                 connect(chat, SIGNAL(messageSent(QString)), this, SLOT(sendMsgFromClient(QString)));
                 connect(client, SIGNAL(errorOccurred(QString)), this, SLOT(errorReaction(QString)));
-                connect(client, SIGNAL(unscheduledDisconnection()), this, SLOT(emergencyDisconnectFromServer()));
+                connect(client, SIGNAL(unscheduledDisconnection()),
+                        this, SLOT(emergencyDisconnectFromServer()));
 
                 chat->setVisible(true);
                 if(!clientWidget->isConnected())

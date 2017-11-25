@@ -4,6 +4,7 @@
 ChatClient::ChatClient(QObject * parent) : QObject(parent)
 {
     clientSocket = new QTcpSocket(this);
+    nextBlockSize = 0;
 
     connect(clientSocket, SIGNAL(error(QAbstractSocket::SocketError)), this,
             SLOT(lookForErrors(QAbstractSocket::SocketError)));
@@ -15,7 +16,10 @@ bool ChatClient::connectToServer(QString ip, int portNumber)
     clientSocket->connectToHost(ip, quint16(portNumber));
 
     if(clientSocket->waitForConnected())
+    {
+        nextBlockSize = 0;
         return true;
+    }
     else
         return false;
 }
@@ -35,11 +39,44 @@ void ChatClient::setNickname(QString nickname)
     send(NICKNAME_CHANGE_ID, nickname);
 }
 
-void ChatClient::send(int messageId, QString message)
+void ChatClient::send(quint8 messageId, QString message)
 {
-    message = message.trimmed();
+    QByteArray block;
+    QDataStream out(&block, QIODevice::WriteOnly);
+    out.setVersion(QDataStream::Qt_4_6);
 
-    clientSocket->write((QString::number(messageId) + "\n" + message + "\n").toUtf8());
+    out << quint16(0) << messageId << message;
+
+    out.device()->seek(0);
+    out << quint16(block.size() - sizeof(quint16));
+    clientSocket->write(block);
+}
+
+void ChatClient::read()
+{
+    QDataStream in(clientSocket);
+    in.setVersion(QDataStream::Qt_4_6);
+
+    if(nextBlockSize == 0)
+    {
+        if(clientSocket->bytesAvailable() < sizeof(quint16))
+            return;
+        in >> nextBlockSize;
+    }
+
+    if(nextBlockSize == 0xFFFF)
+        return;
+
+    if(clientSocket->bytesAvailable() < nextBlockSize)
+        return;
+
+    QString nickname;
+    QString message;
+
+    in >> nickname >> message;
+    nextBlockSize = 0;
+
+    emit messageReceived(nickname, message);
 }
 
 void ChatClient::lookForErrors(QAbstractSocket::SocketError socketError)
@@ -66,20 +103,6 @@ void ChatClient::lookForErrors(QAbstractSocket::SocketError socketError)
         lastError = "The following error ocurred: " + clientSocket->errorString();
 
     emit errorOccurred(lastError);
-}
-
-void ChatClient::read()
-{
-    QByteArray data = clientSocket->readAll();
-    QString dataString(data);
-    qDebug() << dataString;
-
-    int index = dataString.indexOf("\n");
-
-    QString nickname = dataString.left(index);
-    QString message = dataString.mid(index);
-
-    emit messageReceived(nickname, message);
 }
 
 bool ChatClient::isConnected() const

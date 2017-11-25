@@ -5,14 +5,15 @@
 #include <QTcpSocket>
 #include <QMutableSetIterator>
 #include <QSharedPointer>
+#include <QDataStream>
 
 class ChatServer : public QTcpServer
 {
     Q_OBJECT
 
 private:
-    const static int PACKET_NORMAL_MSG_ID = 0;
-    const static int PACKET_NICKNAME_CHANGE_ID = 1;
+    const static quint8 PACKET_NORMAL_MSG_ID = 0;
+    const static quint8 PACKET_NICKNAME_CHANGE_ID = 1;
 
     QString serverName;
 
@@ -20,14 +21,17 @@ private:
     {
         QTcpSocket * socket;
         QString nickname;
+        quint16 nextBlockSize;
     };
 
     QSet<QSharedPointer<Client> > clients;
 
-    void processPacket(QTcpSocket * clientSocket, int packetId = 0);
-    void manageMessage(QTcpSocket * clientSocket);
-    void setClientNickname(QTcpSocket * clientSocket);
+    void processPacket(QSharedPointer<Client> client, QDataStream & in, quint8 packetId = 0);
+    void manageMessage(QSharedPointer<Client> client, QDataStream & in);
+    void setClientNickname(QSharedPointer<Client> client, QDataStream & in);
+
     void flushClientSocket(QTcpSocket * clientSocket);
+    QSharedPointer<Client> findClient(QTcpSocket * socket);
 
 private slots:
     void read();
