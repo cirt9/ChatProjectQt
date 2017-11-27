@@ -11,8 +11,8 @@ void ChatServer::incomingConnection(int socketfd)
     QSharedPointer<Client> client = QSharedPointer<Client>(new Client());
     client->socket = new QTcpSocket(this);
     client->socket->setSocketDescriptor(socketfd);
-    client->nickname = QString("Client") + QString::number(clients.size());
     client->nextBlockSize = 0;
+    client->nickname = QString("Client") + QString::number(clients.size());
     clients.insert(client);
 
     //
@@ -41,9 +41,6 @@ void ChatServer::read()
         in >> client->nextBlockSize;
     }
 
-    if(client->nextBlockSize == 0xFFFF)
-        return;
-
     if(client->socket->bytesAvailable() < client->nextBlockSize)
         return;
 
@@ -58,8 +55,8 @@ void ChatServer::processPacket(QSharedPointer<Client> client, QDataStream & in, 
 {
     switch(packetId)
     {
-    case PACKET_NORMAL_MSG_ID: manageMessage(client, in); break;
-    case PACKET_NICKNAME_CHANGE_ID: setClientNickname(client, in); break;
+    case PACKET_ID_NORMAL_MSG: manageMessage(client, in); break;
+    case PACKET_ID_NICKNAME_CHANGE: setClientNickname(client, in); break;
 
     default: flushClientSocket(client->socket); break;
     }
@@ -153,6 +150,16 @@ void ChatServer::setServerName(QString name)
 QString ChatServer::getServerName() const
 {
     return serverName;
+}
+
+QStringList ChatServer::getClientsNames() const
+{
+    QStringList clientsNames;
+
+    for(auto client : clients)
+        clientsNames << client->nickname;
+
+    return clientsNames;
 }
 
 QSharedPointer<ChatServer::Client> ChatServer::findClient(QTcpSocket * socket)

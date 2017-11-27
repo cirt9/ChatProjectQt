@@ -12,16 +12,16 @@ class ChatServer : public QTcpServer
     Q_OBJECT
 
 private:
-    const static quint8 PACKET_NORMAL_MSG_ID = 0;
-    const static quint8 PACKET_NICKNAME_CHANGE_ID = 1;
+    const static quint8 PACKET_ID_NORMAL_MSG = 0;
+    const static quint8 PACKET_ID_NICKNAME_CHANGE = 1;
 
     QString serverName;
 
     struct Client
     {
         QTcpSocket * socket;
-        QString nickname;
         quint16 nextBlockSize;
+        QString nickname;
     };
 
     QSet<QSharedPointer<Client> > clients;
@@ -49,6 +49,7 @@ public:
 
     void setServerName(QString name);
     QString getServerName() const;
+    QStringList getClientsNames() const;
 
 signals:
     void messageReceived(QString nickname, QString message);

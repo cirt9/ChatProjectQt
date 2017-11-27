@@ -46,7 +46,6 @@ void ChatClient::send(quint8 messageId, QString message)
     out.setVersion(QDataStream::Qt_4_6);
 
     out << quint16(0) << messageId << message;
-
     out.device()->seek(0);
     out << quint16(block.size() - sizeof(quint16));
     clientSocket->write(block);
@@ -64,18 +63,14 @@ void ChatClient::read()
         in >> nextBlockSize;
     }
 
-    if(nextBlockSize == 0xFFFF)
-        return;
-
     if(clientSocket->bytesAvailable() < nextBlockSize)
         return;
 
     QString nickname;
     QString message;
-
     in >> nickname >> message;
-    nextBlockSize = 0;
 
+    nextBlockSize = 0;
     emit messageReceived(nickname, message);
 }
 

@@ -73,8 +73,8 @@ void MainWindow::createClientUi()
         clientWidget = new ClientWidget();
         connect(clientWidget, SIGNAL(backClicked()), this, SLOT(disconnectFromServer()));
         connect(clientWidget, SIGNAL(backClicked()), this, SLOT(displayMenu()));
-        connect(clientWidget, SIGNAL(connectClicked(QString,int)),
-                this, SLOT(connectToServer(QString,int)));
+        connect(clientWidget, SIGNAL(connectClicked(QString, int)),
+                this, SLOT(connectToServer(QString, int)));
         connect(clientWidget, SIGNAL(disconnectClicked()), this, SLOT(disconnectFromServer()));
 
         QVBoxLayout * clientLayout = new QVBoxLayout();
