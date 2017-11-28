@@ -9,6 +9,7 @@
 #include <QPushButton>
 #include <QGridLayout>
 #include <chatserver.h>
+#include <QMessageBox>
 
 class MainWindow : public QMainWindow
 {

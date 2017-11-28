@@ -43,17 +43,17 @@ void MainWindow::startServer()
 
     if(success)
     {
-        qDebug() << "Server started";
+        QMessageBox::information(this, "Server", "Server is now running");
         connect(chatServer, SIGNAL(messageReceived(QString, QString)),
                 this, SLOT(writeReceivedMsg(QString, QString)));
     }
     else
-        qDebug() << "Server failed to start";
+        QMessageBox::critical(this, "Server", "Server failed to start");
 }
 
 void MainWindow::writeReceivedMsg(QString nickname, QString msg)
 {
-    messagesArea->append(nickname + " " + msg);
+    messagesArea->append(nickname + ": " + msg);
 }
 
 void MainWindow::sendMessage()

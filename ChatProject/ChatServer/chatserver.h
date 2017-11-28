@@ -15,8 +15,6 @@ private:
     const static quint8 PACKET_ID_NORMAL_MSG = 0;
     const static quint8 PACKET_ID_NICKNAME_CHANGE = 1;
 
-    QString serverName;
-
     struct Client
     {
         QTcpSocket * socket;
@@ -24,6 +22,7 @@ private:
         QString nickname;
     };
 
+    QString serverName;
     QSet<QSharedPointer<Client> > clients;
 
     void processPacket(QSharedPointer<Client> client, QDataStream & in, quint8 packetId = 0);
@@ -53,7 +52,8 @@ public:
 
 signals:
     void messageReceived(QString nickname, QString message);
-    void infoOccurred(QString message);
+    void newClientConnected();
+    void clientDisconnected(QString nickname);
 };
 
 #endif // CHATSERVER_H

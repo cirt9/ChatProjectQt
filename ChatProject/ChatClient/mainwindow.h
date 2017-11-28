@@ -22,7 +22,7 @@ private:
 
 private slots:
     void sendMessage();
-    void writeReceivedMsg(QString msg);
+    void writeReceivedMsg(QString nickname, QString msg);
 
 public:
     MainWindow(QWidget * parent = nullptr);

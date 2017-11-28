@@ -5,7 +5,7 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent)
     resize(QDesktopWidget().availableGeometry(this).size() * 0.7);
 
     chatClient = new ChatClient(this);
-    connect(chatClient, SIGNAL(messageReceived(QString)), this, SLOT(writeReceivedMsg(QString)));
+    connect(chatClient, SIGNAL(messageReceived(QString, QString)), this, SLOT(writeReceivedMsg(QString, QString)));
     connect(chatClient, SIGNAL(errorOccurred(QString)), this, SLOT(errorReaction(QString)));
 
     QWidget * container = new QWidget();
@@ -53,9 +53,9 @@ void MainWindow::sendMessage()
     messagesArea->append(message);
 }
 
-void MainWindow::writeReceivedMsg(QString msg)
+void MainWindow::writeReceivedMsg(QString nickname, QString msg)
 {
-    messagesArea->append(msg);
+    messagesArea->append(nickname + ": " + msg);
 }
 
 void MainWindow::errorReaction(QString error)

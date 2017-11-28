@@ -15,11 +15,7 @@ void ChatServer::incomingConnection(int socketfd)
     client->nickname = QString("Client") + QString::number(clients.size());
     clients.insert(client);
 
-    //
-    qDebug() << "New client from: " + client->socket->peerAddress().toString();
-    emit infoOccurred("New client from: " + client->socket->peerAddress().toString());
-    //
-
+    emit newClientConnected();
     connect(client->socket, SIGNAL(readyRead()), this, SLOT(read()));
     connect(client->socket, SIGNAL(disconnected()), this, SLOT(disconnected()));
 }
@@ -68,8 +64,6 @@ void ChatServer::manageMessage(QSharedPointer<Client> client, QDataStream & in)
     in >> message;
 
     emit messageReceived(client->nickname, message);
-    qDebug() << message;
-
     send(client->nickname, message, client->socket);
 }
 
@@ -79,7 +73,6 @@ void ChatServer::setClientNickname(QSharedPointer<Client> client, QDataStream & 
     in >> newNickname;
 
     client->nickname = newNickname;
-
     qDebug() << newNickname;
 }
 
@@ -125,16 +118,12 @@ void ChatServer::disconnected()
 {
     QTcpSocket * clientSocket = (QTcpSocket *)sender();
 
-    //
-    qDebug() << "Client disconnected: " << clientSocket->peerAddress().toString();
-    emit infoOccurred("Client disconnected: " + clientSocket->peerAddress().toString());
-    //
-
     QMutableSetIterator<QSharedPointer<Client> > i(clients);
     while(i.hasNext())
     {
         if(i.next()->socket == clientSocket)
         {
+            emit clientDisconnected("nickname");
             clientSocket->deleteLater();
             i.remove();
             break;

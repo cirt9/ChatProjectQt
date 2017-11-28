@@ -1,5 +1,4 @@
 #include "chatclient.h"
-#include <QDebug>
 
 ChatClient::ChatClient(QObject * parent) : QObject(parent)
 {
