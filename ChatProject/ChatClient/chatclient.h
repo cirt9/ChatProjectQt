@@ -10,14 +10,14 @@ class ChatClient : public QObject
     Q_OBJECT
 
 private:
-    const static quint8 NORMAL_MESSAGE_ID = 0;
-    const static quint8 NICKNAME_CHANGE_ID = 1;
+    const static quint8 PACKET_ID_NORMAL_MSG = 0;
+    const static quint8 PACKET_ID_NICKNAME_CHANGE = 1;
 
     QTcpSocket * clientSocket;
     quint16 nextBlockSize;
     QString lastError;
 
-    void send(quint8 messageId, QString message);
+    void send(quint8 packetId, QString message);
 
 private slots:
     void lookForErrors(QAbstractSocket::SocketError socketError);

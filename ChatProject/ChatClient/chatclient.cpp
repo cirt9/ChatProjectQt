@@ -30,21 +30,21 @@ void ChatClient::disconnectFromServer()
 
 void ChatClient::sendMessage(QString message)
 {
-    send(NORMAL_MESSAGE_ID, message);
+    send(PACKET_ID_NORMAL_MSG, message);
 }
 
 void ChatClient::setNickname(QString nickname)
 {
-    send(NICKNAME_CHANGE_ID, nickname);
+    send(PACKET_ID_NICKNAME_CHANGE, nickname);
 }
 
-void ChatClient::send(quint8 messageId, QString message)
+void ChatClient::send(quint8 packetId, QString message)
 {
     QByteArray block;
     QDataStream out(&block, QIODevice::WriteOnly);
     out.setVersion(QDataStream::Qt_4_6);
 
-    out << quint16(0) << messageId << message;
+    out << quint16(0) << packetId << message;
     out.device()->seek(0);
     out << quint16(block.size() - sizeof(quint16));
     clientSocket->write(block);

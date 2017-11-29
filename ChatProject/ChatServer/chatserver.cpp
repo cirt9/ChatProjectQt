@@ -4,6 +4,8 @@
 ChatServer::ChatServer(QObject * parent) : QTcpServer(parent)
 {
     setServerName("Server");
+    lastClientIndex = 0;
+    duplicateClientNamesAllowed = true;
 }
 
 void ChatServer::incomingConnection(int socketfd)
@@ -12,7 +14,7 @@ void ChatServer::incomingConnection(int socketfd)
     client->socket = new QTcpSocket(this);
     client->socket->setSocketDescriptor(socketfd);
     client->nextBlockSize = 0;
-    client->nickname = QString("Client") + QString::number(clients.size());
+    client->nickname = QString("Client") + QString::number(lastClientIndex++);
     clients.insert(client);
 
     emit newClientConnected();
@@ -69,11 +71,20 @@ void ChatServer::manageMessage(QSharedPointer<Client> client, QDataStream & in)
 
 void ChatServer::setClientNickname(QSharedPointer<Client> client, QDataStream & in)
 {
-    QString newNickname;
-    in >> newNickname;
+    if(duplicateClientNamesAllowed)
+    {
+        QString newNickname;
+        in >> newNickname;
 
-    client->nickname = newNickname;
-    qDebug() << newNickname;
+        client->nickname = newNickname;
+    }
+    else
+    {
+        //check if name is a duplicate
+        // if it is then return error to client
+        // if it isnt change nickname
+        ;
+    }
 }
 
 void ChatServer::send(QString nickname, QString message, QTcpSocket * except)
@@ -112,6 +123,8 @@ void ChatServer::closeServer()
     clients.clear();
     close();
     setServerName("Server");
+    lastClientIndex = 0;
+    allowDuplicateClientNames(false);
 }
 
 void ChatServer::disconnected()
@@ -123,12 +136,17 @@ void ChatServer::disconnected()
     {
         if(i.next()->socket == clientSocket)
         {
-            emit clientDisconnected("nickname");
+            emit clientDisconnected(i.value()->nickname);
             clientSocket->deleteLater();
             i.remove();
             break;
         }
     }
+}
+
+void ChatServer::allowDuplicateClientNames(bool allowed)
+{
+    duplicateClientNamesAllowed = allowed;
 }
 
 void ChatServer::setServerName(QString name)

@@ -24,6 +24,8 @@ private:
 
     QString serverName;
     QSet<QSharedPointer<Client> > clients;
+    unsigned int lastClientIndex;
+    bool duplicateClientNamesAllowed;
 
     void processPacket(QSharedPointer<Client> client, QDataStream & in, quint8 packetId = 0);
     void manageMessage(QSharedPointer<Client> client, QDataStream & in);
@@ -46,6 +48,7 @@ public:
     void send(QString nickname, QString message, QTcpSocket * except = nullptr);
     void closeServer();
 
+    void allowDuplicateClientNames(bool allowed);
     void setServerName(QString name);
     QString getServerName() const;
     QStringList getClientsNames() const;
