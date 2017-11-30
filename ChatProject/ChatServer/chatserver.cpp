@@ -71,20 +71,47 @@ void ChatServer::manageMessage(QSharedPointer<Client> client, QDataStream & in)
 
 void ChatServer::setClientNickname(QSharedPointer<Client> client, QDataStream & in)
 {
+    QString newNickname;
+    in >> newNickname;
+
     if(duplicateClientNamesAllowed)
     {
-        QString newNickname;
-        in >> newNickname;
-
         client->nickname = newNickname;
+        sendResponse(client, "Nickname changed");
     }
+
     else
     {
-        //check if name is a duplicate
-        // if it is then return error to client
-        // if it isnt change nickname
-        ;
+        bool isDuplicate = false;
+        for(auto client : clients)
+        {
+            if(client->nickname == newNickname)
+            {
+                isDuplicate = true;
+                break;
+            }
+        }
+
+        if(isDuplicate)
+            sendResponse(client, "Nickname has not been changed because another user already uses it");
+        else
+        {
+            client->nickname = newNickname;
+            sendResponse(client, "Nickname changed");
+        }
     }
+}
+
+void ChatServer::sendResponse(QSharedPointer<Client> client, QString response)
+{
+    QByteArray block;
+    QDataStream out(&block, QIODevice::WriteOnly);
+    out.setVersion(QDataStream::Qt_4_6);
+
+    out << quint16(0) << PACKET_ID_SERVER_RESPONSE << response;
+    out.device()->seek(0);
+    out << quint16(block.size() - sizeof(quint16));
+    client->socket->write(block);
 }
 
 void ChatServer::send(QString nickname, QString message, QTcpSocket * except)

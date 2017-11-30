@@ -12,6 +12,7 @@ class ChatClient : public QObject
 private:
     const static quint8 PACKET_ID_NORMAL_MSG = 0;
     const static quint8 PACKET_ID_NICKNAME_CHANGE = 1;
+    const static quint8 PACKET_ID_SERVER_RESPONSE = 2;
 
     QTcpSocket * clientSocket;
     quint16 nextBlockSize;
