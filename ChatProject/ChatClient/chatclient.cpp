@@ -28,6 +28,47 @@ void ChatClient::disconnectFromServer()
     clientSocket->disconnectFromHost();
 }
 
+void ChatClient::read()
+{
+    QDataStream in(clientSocket);
+    in.setVersion(QDataStream::Qt_4_6);
+
+    if(nextBlockSize == 0)
+    {
+        if(clientSocket->bytesAvailable() < sizeof(quint16))
+            return;
+        in >> nextBlockSize;
+    }
+
+    if(clientSocket->bytesAvailable() < nextBlockSize)
+        return;
+
+    quint8 packetId;
+    in >> packetId;
+    processPacket(in, packetId);
+
+    nextBlockSize = 0;
+}
+
+void ChatClient::processPacket(QDataStream & in, quint8 packetId)
+{
+    switch(packetId)
+    {
+    case PACKET_ID_NORMAL_MSG: manageMessage(in); break;
+
+    default: break;
+    }
+}
+
+void ChatClient::manageMessage(QDataStream & in)
+{
+    QString nickname;
+    QString message;
+    in >> nickname >> message;
+
+    emit messageReceived(nickname, message);
+}
+
 void ChatClient::sendMessage(QString message)
 {
     send(PACKET_ID_NORMAL_MSG, message);
@@ -48,29 +89,6 @@ void ChatClient::send(quint8 packetId, QString message)
     out.device()->seek(0);
     out << quint16(block.size() - sizeof(quint16));
     clientSocket->write(block);
-}
-
-void ChatClient::read()
-{
-    QDataStream in(clientSocket);
-    in.setVersion(QDataStream::Qt_4_6);
-
-    if(nextBlockSize == 0)
-    {
-        if(clientSocket->bytesAvailable() < sizeof(quint16))
-            return;
-        in >> nextBlockSize;
-    }
-
-    if(clientSocket->bytesAvailable() < nextBlockSize)
-        return;
-
-    QString nickname;
-    QString message;
-    in >> nickname >> message;
-
-    nextBlockSize = 0;
-    emit messageReceived(nickname, message);
 }
 
 void ChatClient::lookForErrors(QAbstractSocket::SocketError socketError)

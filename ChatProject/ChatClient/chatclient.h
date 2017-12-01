@@ -18,6 +18,8 @@ private:
     quint16 nextBlockSize;
     QString lastError;
 
+    void processPacket(QDataStream & in, quint8 packetId = 0);
+    void manageMessage(QDataStream & in);
     void send(quint8 packetId, QString message);
 
 private slots:

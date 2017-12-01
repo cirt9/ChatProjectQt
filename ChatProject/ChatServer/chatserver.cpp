@@ -124,7 +124,7 @@ void ChatServer::send(QString nickname, QString message, QTcpSocket * except)
             QDataStream out(&block, QIODevice::WriteOnly);
             out.setVersion(QDataStream::Qt_4_6);
 
-            out << quint16(0) << nickname << message;
+            out << quint16(0) << PACKET_ID_NORMAL_MSG << nickname << message;
             out.device()->seek(0);
             out << quint16(block.size() - sizeof(quint16));
             client->socket->write(block);
