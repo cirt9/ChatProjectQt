@@ -56,8 +56,9 @@ void ChatServer::processPacket(QSharedPointer<Client> client, QDataStream & in, 
     case PACKET_ID_NORMAL_MSG: manageMessage(client, in); break;
     case PACKET_ID_NICKNAME_CHANGE: setClientNickname(client, in); break;
 
-    default: flushClientSocket(client->socket); break;
+    default: break;
     }
+    flushClientSocket(client->socket);
 }
 
 void ChatServer::manageMessage(QSharedPointer<Client> client, QDataStream & in)

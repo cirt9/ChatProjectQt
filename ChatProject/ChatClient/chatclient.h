@@ -20,7 +20,10 @@ private:
 
     void processPacket(QDataStream & in, quint8 packetId = 0);
     void manageMessage(QDataStream & in);
+    void manageServerResponse(QDataStream & in);
     void send(quint8 packetId, QString message);
+
+    void flushSocket();
 
 private slots:
     void lookForErrors(QAbstractSocket::SocketError socketError);
@@ -44,6 +47,7 @@ signals:
     void messageReceived(QString nickname, QString message);
     void errorOccurred(QString error);
     void unscheduledDisconnection();
+    void serverResponded(QString response);
 };
 
 #endif // CHATCLIENT_H

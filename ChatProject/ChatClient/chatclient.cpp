@@ -55,9 +55,11 @@ void ChatClient::processPacket(QDataStream & in, quint8 packetId)
     switch(packetId)
     {
     case PACKET_ID_NORMAL_MSG: manageMessage(in); break;
+    case PACKET_ID_SERVER_RESPONSE: manageServerResponse(in); break;
 
     default: break;
     }
+    flushSocket();
 }
 
 void ChatClient::manageMessage(QDataStream & in)
@@ -67,6 +69,14 @@ void ChatClient::manageMessage(QDataStream & in)
     in >> nickname >> message;
 
     emit messageReceived(nickname, message);
+}
+
+void ChatClient::manageServerResponse(QDataStream & in)
+{
+    QString response;
+    in >> response;
+
+    emit serverResponded(response);
 }
 
 void ChatClient::sendMessage(QString message)
@@ -89,6 +99,12 @@ void ChatClient::send(quint8 packetId, QString message)
     out.device()->seek(0);
     out << quint16(block.size() - sizeof(quint16));
     clientSocket->write(block);
+}
+
+void ChatClient::flushSocket()
+{
+    if(clientSocket->bytesAvailable())
+        clientSocket->readAll();
 }
 
 void ChatClient::lookForErrors(QAbstractSocket::SocketError socketError)

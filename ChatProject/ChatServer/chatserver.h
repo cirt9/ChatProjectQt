@@ -31,8 +31,8 @@ private:
     void processPacket(QSharedPointer<Client> client, QDataStream & in, quint8 packetId = 0);
     void manageMessage(QSharedPointer<Client> client, QDataStream & in);
     void setClientNickname(QSharedPointer<Client> client, QDataStream & in);
-
     void sendResponse(QSharedPointer<Client> client, QString response);
+
     void flushClientSocket(QTcpSocket * clientSocket);
     QSharedPointer<Client> findClient(QTcpSocket * socket);
 
