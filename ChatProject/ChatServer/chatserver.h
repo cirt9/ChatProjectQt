@@ -26,7 +26,7 @@ private:
     QString serverName;
     QSet<QSharedPointer<Client> > clients;
     unsigned int lastClientIndex;
-    bool duplicateClientNamesAllowed;
+    bool duplicateNicknamesAllowed;
 
     void processPacket(QSharedPointer<Client> client, QDataStream & in, quint8 packetId = 0);
     void manageMessage(QSharedPointer<Client> client, QDataStream & in);
@@ -35,6 +35,8 @@ private:
 
     void flushClientSocket(QTcpSocket * clientSocket);
     QSharedPointer<Client> findClient(QTcpSocket * socket);
+    bool isNicknameDuplicate(QString & nickname);
+    void reset();
 
 private slots:
     void read();
@@ -50,7 +52,7 @@ public:
     void send(QString nickname, QString message, QTcpSocket * except = nullptr);
     void closeServer();
 
-    void allowDuplicateClientNames(bool allowed);
+    void allowDuplicateNicknames(bool allowed);
     void setServerName(QString name);
     QString getServerName() const;
     QStringList getClientsNames() const;

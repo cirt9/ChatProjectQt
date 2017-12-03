@@ -1,11 +1,8 @@
 #include "chatserver.h"
-#include <QDebug>
 
 ChatServer::ChatServer(QObject * parent) : QTcpServer(parent)
 {
-    setServerName("Server");
-    lastClientIndex = 0;
-    duplicateClientNamesAllowed = true;
+    reset();
 }
 
 void ChatServer::incomingConnection(int socketfd)
@@ -44,7 +41,7 @@ void ChatServer::read()
 
     quint8 packetId;
     in >> packetId;
-    qDebug() << packetId;
+
     processPacket(client, in, packetId);
     client->nextBlockSize = 0;
 }
@@ -75,7 +72,7 @@ void ChatServer::setClientNickname(QSharedPointer<Client> client, QDataStream & 
     QString newNickname;
     in >> newNickname;
 
-    if(duplicateClientNamesAllowed)
+    if(duplicateNicknamesAllowed)
     {
         client->nickname = newNickname;
         sendResponse(client, "Nickname changed");
@@ -83,18 +80,8 @@ void ChatServer::setClientNickname(QSharedPointer<Client> client, QDataStream & 
 
     else
     {
-        bool isDuplicate = false;
-        for(auto client : clients)
-        {
-            if(client->nickname == newNickname)
-            {
-                isDuplicate = true;
-                break;
-            }
-        }
-
-        if(isDuplicate)
-            sendResponse(client, "Nickname has not been changed because another user already uses it");
+        if(isNicknameDuplicate(newNickname))
+            sendResponse(client, "Nickname has not been changed because it belongs to someone else");
         else
         {
             client->nickname = newNickname;
@@ -150,9 +137,7 @@ void ChatServer::closeServer()
     }
     clients.clear();
     close();
-    setServerName("Server");
-    lastClientIndex = 0;
-    allowDuplicateClientNames(false);
+    reset();
 }
 
 void ChatServer::disconnected()
@@ -172,9 +157,9 @@ void ChatServer::disconnected()
     }
 }
 
-void ChatServer::allowDuplicateClientNames(bool allowed)
+void ChatServer::allowDuplicateNicknames(bool allowed)
 {
-    duplicateClientNamesAllowed = allowed;
+    duplicateNicknamesAllowed = allowed;
 }
 
 void ChatServer::setServerName(QString name)
@@ -205,4 +190,21 @@ QSharedPointer<ChatServer::Client> ChatServer::findClient(QTcpSocket * socket)
             return client;
     }
     return nullptr;
+}
+
+bool ChatServer::isNicknameDuplicate(QString & nickname)
+{
+    for(auto client : clients)
+    {
+        if(client->nickname == nickname)
+            return true;
+    }
+    return false;
+}
+
+void ChatServer::reset()
+{
+    setServerName("Server");
+    lastClientIndex = 0;
+    allowDuplicateNicknames(false);
 }

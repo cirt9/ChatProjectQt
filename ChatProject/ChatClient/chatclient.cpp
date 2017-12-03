@@ -45,8 +45,8 @@ void ChatClient::read()
 
     quint8 packetId;
     in >> packetId;
-    processPacket(in, packetId);
 
+    processPacket(in, packetId);
     nextBlockSize = 0;
 }
 
