@@ -64,7 +64,7 @@ void ChatServer::manageMessage(QSharedPointer<Client> client, QDataStream & in)
     in >> message;
 
     emit messageReceived(client->nickname, message);
-    send(client->nickname, message, client->socket);
+    spreadMessage(client->nickname, message, client->socket);
 }
 
 void ChatServer::setClientNickname(QSharedPointer<Client> client, QDataStream & in)
@@ -92,31 +92,15 @@ void ChatServer::setClientNickname(QSharedPointer<Client> client, QDataStream & 
 
 void ChatServer::sendResponse(QSharedPointer<Client> client, QString response)
 {
-    QByteArray block;
-    QDataStream out(&block, QIODevice::WriteOnly);
-    out.setVersion(QDataStream::Qt_4_6);
-
-    out << quint16(0) << PACKET_ID_SERVER_RESPONSE << response;
-    out.device()->seek(0);
-    out << quint16(block.size() - sizeof(quint16));
-    client->socket->write(block);
+    send(PACKET_ID_SERVER_RESPONSE, client->socket, response);
 }
 
-void ChatServer::send(QString nickname, QString message, QTcpSocket * except)
+void ChatServer::spreadMessage(QString nickname, QString message, QTcpSocket * except)
 {
     for(auto client : clients)
     {
         if(client->socket != except)
-        {
-            QByteArray block;
-            QDataStream out(&block, QIODevice::WriteOnly);
-            out.setVersion(QDataStream::Qt_4_6);
-
-            out << quint16(0) << PACKET_ID_NORMAL_MSG << nickname << message;
-            out.device()->seek(0);
-            out << quint16(block.size() - sizeof(quint16));
-            client->socket->write(block);
-        }
+            send(PACKET_ID_NORMAL_MSG, client->socket, nickname, message);
     }
 }
 

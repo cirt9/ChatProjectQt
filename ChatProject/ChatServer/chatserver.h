@@ -49,7 +49,7 @@ public:
     ChatServer(QObject * parent = nullptr);
     ~ChatServer() {}
 
-    void send(QString nickname, QString message, QTcpSocket * except = nullptr);
+    void spreadMessage(QString nickname, QString message, QTcpSocket * except = nullptr);
     void closeServer();
 
     void allowDuplicateNicknames(bool allowed);
@@ -61,6 +61,30 @@ signals:
     void messageReceived(QString nickname, QString message);
     void newClientConnected();
     void clientDisconnected(QString nickname);
+
+private:
+    void unpackToDataStream(QDataStream &){}
+
+    template<typename T, typename... Args>
+    void unpackToDataStream(QDataStream & out, T value, Args... args)
+    {
+        out << value;
+        unpackToDataStream(out, args...);
+    }
+
+    template<typename... Args>
+    void send(quint8 packetId, QTcpSocket * socket, Args... args)
+    {
+        QByteArray block;
+        QDataStream out(&block, QIODevice::WriteOnly);
+        out.setVersion(QDataStream::Qt_4_6);
+
+        out << quint16(0) << packetId;
+        unpackToDataStream(out, args...);
+        out.device()->seek(0);
+        out << quint16(block.size() - sizeof(quint16));
+        socket->write(block);
+    }
 };
 
 #endif // CHATSERVER_H

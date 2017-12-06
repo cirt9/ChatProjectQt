@@ -59,6 +59,6 @@ void MainWindow::writeReceivedMsg(QString nickname, QString msg)
 void MainWindow::sendMessage()
 {
     QString message = inputLine->text();
-    chatServer->send(chatServer->getServerName(), message);
+    chatServer->spreadMessage(chatServer->getServerName(), message);
     messagesArea->append(message);
 }

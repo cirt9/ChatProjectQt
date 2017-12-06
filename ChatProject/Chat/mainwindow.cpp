@@ -179,7 +179,7 @@ void MainWindow::closeServer()
 void MainWindow::sendMsgFromServer(QString msg)
 {
     if(server)
-        server->send(server->getServerName(), msg);
+        server->spreadMessage(server->getServerName(), msg);
 }
 
 void MainWindow::connectToServer(QString ip, int port)
