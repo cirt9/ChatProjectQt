@@ -56,6 +56,7 @@ void ChatClient::processPacket(QDataStream & in, quint8 packetId)
     {
     case PACKET_ID_NORMAL_MSG: manageMessage(in); break;
     case PACKET_ID_SERVER_RESPONSE: manageServerResponse(in); break;
+    case PACKET_ID_NICKNAME: readNewNickname(in); break;
 
     default: break;
     }
@@ -79,6 +80,14 @@ void ChatClient::manageServerResponse(QDataStream & in)
     emit serverResponded(response);
 }
 
+void ChatClient::readNewNickname(QDataStream & in)
+{
+    QString nickname;
+    in >> nickname;
+
+    emit nicknameChanged(nickname);
+}
+
 void ChatClient::sendMessage(QString message)
 {
     send(PACKET_ID_NORMAL_MSG, message);
@@ -86,7 +95,7 @@ void ChatClient::sendMessage(QString message)
 
 void ChatClient::setNickname(QString nickname)
 {
-    send(PACKET_ID_NICKNAME_CHANGE, nickname);
+    send(PACKET_ID_NICKNAME, nickname);
 }
 
 void ChatClient::send(quint8 packetId, QString message)

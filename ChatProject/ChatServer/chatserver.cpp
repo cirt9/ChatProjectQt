@@ -13,6 +13,7 @@ void ChatServer::incomingConnection(int socketfd)
     client->nextBlockSize = 0;
     client->nickname = QString("Client") + QString::number(lastClientIndex++);
     clients.insert(client);
+    sendNicknameToClient(client);
 
     emit newClientConnected();
     connect(client->socket, SIGNAL(readyRead()), this, SLOT(read()));
@@ -51,7 +52,7 @@ void ChatServer::processPacket(QSharedPointer<Client> client, QDataStream & in, 
     switch(packetId)
     {
     case PACKET_ID_NORMAL_MSG: manageMessage(client, in); break;
-    case PACKET_ID_NICKNAME_CHANGE: setClientNickname(client, in); break;
+    case PACKET_ID_NICKNAME: setClientNickname(client, in); break;
 
     default: break;
     }
@@ -93,6 +94,11 @@ void ChatServer::setClientNickname(QSharedPointer<Client> client, QDataStream & 
 void ChatServer::sendResponse(QSharedPointer<Client> client, QString response)
 {
     send(PACKET_ID_SERVER_RESPONSE, client->socket, response);
+}
+
+void ChatServer::sendNicknameToClient(QSharedPointer<ChatServer::Client> client)
+{
+    send(PACKET_ID_NICKNAME, client->socket, client->nickname);
 }
 
 void ChatServer::spreadMessage(QString nickname, QString message, QTcpSocket * except)

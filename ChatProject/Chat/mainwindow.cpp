@@ -50,12 +50,14 @@ void MainWindow::createServerUi()
     if(!serverWidget)
     {
         serverWidget = new ServerWidget();
+        serverWidget->setContentsMargins(11, 11, 11, 11);
         connect(serverWidget, SIGNAL(backClicked()), this, SLOT(closeServer()));
         connect(serverWidget, SIGNAL(backClicked()), this, SLOT(displayMenu()));
         connect(serverWidget, SIGNAL(runClicked(int)), this, SLOT(startServer(int)));
         connect(serverWidget, SIGNAL(closeClicked()), this, SLOT(closeServer()));
 
         QVBoxLayout * serverLayout = new QVBoxLayout();
+        serverLayout->setContentsMargins(0, 0, 0, 0);
         serverLayout->addWidget(serverWidget);
         serverLayout->setAlignment(serverWidget, Qt::AlignTop);
 
@@ -146,6 +148,7 @@ void MainWindow::startServer(int port)
                     this, SLOT(writeReceivedMsgToChat(QString, QString)));
             connect(chat, SIGNAL(messageSent(QString)), this, SLOT(sendMsgFromServer(QString)));
 
+            chat->setCurrentUserNickname(server->getServerName());
             chat->setVisible(true);
             if(!serverWidget->isRunning())
                 serverWidget->changeState();
@@ -198,6 +201,8 @@ void MainWindow::connectToServer(QString ip, int port)
                 connect(client, SIGNAL(errorOccurred(QString)), this, SLOT(errorReaction(QString)));
                 connect(client, SIGNAL(unscheduledDisconnection()),
                         this, SLOT(emergencyDisconnectFromServer()));
+                connect(client, SIGNAL(nicknameChanged(QString)), chat,
+                        SLOT(setCurrentUserNickname(QString)));
 
                 chat->setVisible(true);
                 if(!clientWidget->isConnected())
@@ -251,6 +256,8 @@ void MainWindow::cleanUpClient()
     disconnect(client, SIGNAL(errorOccurred(QString)), this, SLOT(errorReaction(QString)));
     disconnect(client, SIGNAL(unscheduledDisconnection()),
                this, SLOT(emergencyDisconnectFromServer()));
+    disconnect(client, SIGNAL(nicknameChanged(QString)), chat,
+            SLOT(setCurrentUserNickname(QString)));
 
     if(clientWidget->isConnected())
         clientWidget->changeState();

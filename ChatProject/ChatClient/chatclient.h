@@ -11,7 +11,7 @@ class ChatClient : public QObject
 
 private:
     const static quint8 PACKET_ID_NORMAL_MSG = 0;
-    const static quint8 PACKET_ID_NICKNAME_CHANGE = 1;
+    const static quint8 PACKET_ID_NICKNAME = 1;
     const static quint8 PACKET_ID_SERVER_RESPONSE = 2;
 
     QTcpSocket * clientSocket;
@@ -21,6 +21,7 @@ private:
     void processPacket(QDataStream & in, quint8 packetId = 0);
     void manageMessage(QDataStream & in);
     void manageServerResponse(QDataStream & in);
+    void readNewNickname(QDataStream & in);
     void send(quint8 packetId, QString message);
 
     void flushSocket();
@@ -48,6 +49,7 @@ signals:
     void errorOccurred(QString error);
     void unscheduledDisconnection();
     void serverResponded(QString response);
+    void nicknameChanged(QString nickname);
 };
 
 #endif // CHATCLIENT_H

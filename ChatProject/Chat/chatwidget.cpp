@@ -4,6 +4,7 @@ ChatWidget::ChatWidget(int barsHeight, QWidget * parent) : QGroupBox(parent)
 {
     movingEnabled = false;
     offTheScreenMovingDisabled = false;
+    currentUserNickname = "Nickname";
 
     chatLayout = new QVBoxLayout();
     chatLayout->setSpacing(0);
@@ -63,7 +64,7 @@ void ChatWidget::sendMessage()
 {
     if(textInputBar->text().size() > 0)
     {
-        addMsg("Nickname", textInputBar->text());
+        addMsg(currentUserNickname, textInputBar->text());
         scrollMaxToBottom();
         emit messageSent(textInputBar->text());
 
@@ -75,12 +76,6 @@ void ChatWidget::scrollMaxToBottom()
 {
     QScrollBar * scrollBar = messagesArea->verticalScrollBar();
     scrollBar->setValue(scrollBar->maximum());
-}
-
-void ChatWidget::clear()
-{
-    messagesArea->setText("<b>[Server]</b>: Have a nice day!");
-    textInputBar->clear();
 }
 
 void ChatWidget::mousePressEvent(QMouseEvent * event)
@@ -119,4 +114,21 @@ void ChatWidget::enableMoving(bool enable)
 void ChatWidget::disableOffTheScreenMoving(bool disable)
 {
     offTheScreenMovingDisabled = disable;
+}
+
+void ChatWidget::setCurrentUserNickname(QString nickname)
+{
+    currentUserNickname = nickname;
+}
+
+void ChatWidget::clear()
+{
+    messagesArea->setText("<b>[Server]</b>: Have a nice day!");
+    textInputBar->clear();
+}
+
+void ChatWidget::reset()
+{
+    currentUserNickname = "Nickname";
+    clear();
 }

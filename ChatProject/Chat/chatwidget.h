@@ -20,6 +20,7 @@ private:
     QPoint offset;
     bool movingEnabled;
     bool offTheScreenMovingDisabled;
+    QString currentUserNickname;
 
     void createHeader(int height);
     void createMessagesArea();
@@ -39,9 +40,13 @@ public:
 
     void addMsg(QString nickname, QString message);
     void clear();
+    void reset();
 
     void enableMoving(bool enable = true);
     void disableOffTheScreenMoving(bool disable = true);
+
+public slots:
+    void setCurrentUserNickname(QString nickname);
 
 signals:
     void messageSent(QString msg);

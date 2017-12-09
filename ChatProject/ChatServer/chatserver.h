@@ -13,7 +13,7 @@ class ChatServer : public QTcpServer
 
 private:
     const static quint8 PACKET_ID_NORMAL_MSG = 0;
-    const static quint8 PACKET_ID_NICKNAME_CHANGE = 1;
+    const static quint8 PACKET_ID_NICKNAME = 1;
     const static quint8 PACKET_ID_SERVER_RESPONSE = 2;
 
     struct Client
@@ -32,6 +32,7 @@ private:
     void manageMessage(QSharedPointer<Client> client, QDataStream & in);
     void setClientNickname(QSharedPointer<Client> client, QDataStream & in);
     void sendResponse(QSharedPointer<Client> client, QString response);
+    void sendNicknameToClient(QSharedPointer<Client> client);
 
     void flushClientSocket(QTcpSocket * clientSocket);
     QSharedPointer<Client> findClient(QTcpSocket * socket);
