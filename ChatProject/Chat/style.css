@@ -151,6 +151,15 @@ font-family: arial;
 padding: 5px;
 }
 
+/* Side Menu */
+
+#SideMenuButton
+{
+margin: 0;
+border: 1px solid black;
+background: rgb(35, 69, 146);
+}
+
 /* Chat Widget */
 
 #ChatWidget

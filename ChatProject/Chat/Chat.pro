@@ -19,7 +19,8 @@ SOURCES += main.cpp\
     clientwidget.cpp \
     serverwidget.cpp \
     ../ChatServer/chatserver.cpp \
-    ../ChatClient/chatclient.cpp
+    ../ChatClient/chatclient.cpp \
+    sidemenu.cpp
 
 HEADERS  += mainwindow.h \
     chatwidget.h \
@@ -27,7 +28,8 @@ HEADERS  += mainwindow.h \
     clientwidget.h \
     serverwidget.h \
     ../ChatServer/chatserver.h \
-    ../ChatClient/chatclient.h
+    ../ChatClient/chatclient.h \
+    sidemenu.h
 
 DISTFILES +=
 

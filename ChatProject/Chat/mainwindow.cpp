@@ -45,6 +45,8 @@ void MainWindow::createMenu()
     uiContainer->addWidget(menuContainer);
 }
 
+#include <sidemenu.h>
+
 void MainWindow::createServerUi()
 {
     if(!serverWidget)
@@ -60,7 +62,17 @@ void MainWindow::createServerUi()
         serverLayout->setContentsMargins(0, 0, 0, 0);
         serverLayout->addWidget(serverWidget);
         serverLayout->setAlignment(serverWidget, Qt::AlignTop);
+//
+        SideMenu * sideMenu = new SideMenu();
+        sideMenu->setContentsMargins(0, 0, 0, 11);
+        serverLayout->addWidget(sideMenu);
+        serverLayout->setAlignment(sideMenu, Qt::AlignLeft);
 
+        QPushButton * test = new QPushButton();
+        test->setStyleSheet("background: black");
+
+        sideMenu->addNewTab(test);
+//
         QWidget * serverWidgetContainer = new QWidget();
         serverWidgetContainer->setLayout(serverLayout);
 

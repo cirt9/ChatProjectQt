@@ -1,0 +1,46 @@
+#include "sidemenu.h"
+
+SideMenu::SideMenu(QWidget * parent) : QWidget(parent)
+{
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
+    layout = new QHBoxLayout();
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->setSpacing(0);
+    setLayout(layout);
+
+    container = new QStackedWidget();
+    container->setContentsMargins(3, 3, 3, 3);
+    container->setObjectName("SideMenuContainer");
+    container->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
+    container->setFixedWidth(100);
+    container->setStyleSheet("background: white");
+    container->hide();
+    layout->addWidget(container);
+
+    buttonsLayout = new QVBoxLayout();
+    buttonsLayout->setSpacing(0);
+    buttonsLayout->setContentsMargins(0, 0, 0, 0);
+    layout->addLayout(buttonsLayout);
+}
+
+void SideMenu::addNewTab(QWidget * widget)
+{
+    container->addWidget(widget);
+
+    QPushButton * button = new QPushButton();
+    button->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
+    button->setFixedWidth(30);
+    button->setObjectName("SideMenuButton");
+    connect(button, SIGNAL(clicked(bool)), this, SLOT(testHide()));
+    //connect(button, &QPushButton::clicked, container, [=]{container->setCurrentIndex(container->count());});
+    buttonsLayout->addWidget(button);
+}
+
+void SideMenu::testHide()
+{
+    if(/*container->count() > 0 &&*/ container->isHidden())
+        container->show();
+    else
+        container->hide();
+}
