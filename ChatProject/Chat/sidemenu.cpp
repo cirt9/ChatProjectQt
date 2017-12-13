@@ -1,4 +1,5 @@
 #include "sidemenu.h"
+#include <QDebug>
 
 SideMenu::SideMenu(QWidget * parent) : QWidget(parent)
 {
@@ -9,13 +10,16 @@ SideMenu::SideMenu(QWidget * parent) : QWidget(parent)
     layout->setSpacing(0);
     setLayout(layout);
 
+    //
+    id = 0;
+    //
+
     container = new QStackedWidget();
-    container->setContentsMargins(3, 3, 3, 3);
     container->setObjectName("SideMenuContainer");
     container->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
     container->setFixedWidth(100);
     container->setStyleSheet("background: white");
-    container->hide();
+    //container->hide();
     layout->addWidget(container);
 
     buttonsLayout = new QVBoxLayout();
@@ -26,15 +30,28 @@ SideMenu::SideMenu(QWidget * parent) : QWidget(parent)
 
 void SideMenu::addNewTab(QWidget * widget)
 {
-    container->addWidget(widget);
-
     QPushButton * button = new QPushButton();
     button->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
     button->setFixedWidth(30);
     button->setObjectName("SideMenuButton");
+    button->setProperty("id", id);
     connect(button, SIGNAL(clicked(bool)), this, SLOT(testHide()));
-    //connect(button, &QPushButton::clicked, container, [=]{container->setCurrentIndex(container->count());});
+    connect(button, SIGNAL(clicked(bool)), this, SLOT(changeTab()));
+
+    id++;
     buttonsLayout->addWidget(button);
+    buttons.append(button);
+
+    container->addWidget(widget);
+}
+
+void SideMenu::changeTab()
+{
+    QPushButton * button = (QPushButton *)sender();
+    int buttonId = button->property("id").toInt();
+
+    qDebug() << buttonId;
+    container->setCurrentIndex(buttonId);
 }
 
 void SideMenu::testHide()

@@ -6,6 +6,7 @@
 #include <QVBoxLayout>
 #include <QPushButton>
 #include <QStackedWidget>
+#include <QList>
 
 class SideMenu : public QWidget
 {
@@ -15,6 +16,10 @@ private:
     QStackedWidget * container;
     QVBoxLayout * buttonsLayout;
 
+    QList<QPushButton *> buttons;
+
+    int id;
+
 public:
     SideMenu(QWidget * parent = nullptr);
 
@@ -22,6 +27,7 @@ public:
 
 public slots:
     void testHide();
+    void changeTab();
 };
 
 #endif // SIDEMENU_H

@@ -44,7 +44,7 @@ void MainWindow::createMenu()
     menuContainer->setLayout(centeredMenu);
     uiContainer->addWidget(menuContainer);
 }
-
+//
 #include <sidemenu.h>
 
 void MainWindow::createServerUi()
@@ -68,10 +68,14 @@ void MainWindow::createServerUi()
         serverLayout->addWidget(sideMenu);
         serverLayout->setAlignment(sideMenu, Qt::AlignLeft);
 
-        QPushButton * test = new QPushButton();
-        test->setStyleSheet("background: black");
+        QWidget * test = new QWidget();
+        test->setStyleSheet("background: blue");
+
+        QWidget * test2 = new QWidget();
+        test2->setStyleSheet("background: red");
 
         sideMenu->addNewTab(test);
+        sideMenu->addNewTab(test2);
 //
         QWidget * serverWidgetContainer = new QWidget();
         serverWidgetContainer->setLayout(serverLayout);
