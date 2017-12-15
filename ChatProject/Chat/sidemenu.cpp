@@ -10,54 +10,97 @@ SideMenu::SideMenu(QWidget * parent) : QWidget(parent)
     layout->setSpacing(0);
     setLayout(layout);
 
-    //
-    id = 0;
-    //
+    initializeButtonsContainer();
+    initializeTabs();
+    createSideButton();
+}
 
-    container = new QStackedWidget();
-    container->setObjectName("SideMenuContainer");
-    container->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
-    container->setFixedWidth(100);
-    container->setStyleSheet("background: white");
-    //container->hide();
-    layout->addWidget(container);
+void SideMenu::initializeButtonsContainer()
+{
+    buttonsContainer = new QWidget();
 
     buttonsLayout = new QVBoxLayout();
     buttonsLayout->setSpacing(0);
+    buttonsLayout->setAlignment(Qt::AlignTop);
     buttonsLayout->setContentsMargins(0, 0, 0, 0);
-    layout->addLayout(buttonsLayout);
+    buttonsContainer->setLayout(buttonsLayout);
+    layout->addWidget(buttonsContainer);
+}
+
+void SideMenu::initializeTabs()
+{
+    tabs = new QStackedWidget();
+    tabs->setObjectName("SideMenuContainer");
+    tabs->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
+    tabs->setFixedWidth(100);
+    tabs->setStyleSheet("background: white");
+    layout->addWidget(tabs);
+}
+
+void SideMenu::createSideButton()
+{
+    QPushButton * button = new QPushButton();
+    button->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
+    button->setFixedWidth(20);
+    button->setObjectName("SideMenuButton");
+    layout->addWidget(button);
+    connect(button, SIGNAL(clicked(bool)), this, SLOT(hideTabs()));
 }
 
 void SideMenu::addNewTab(QWidget * widget)
 {
-    QPushButton * button = new QPushButton();
+    QToolButton * button = new QToolButton();
     button->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
-    button->setFixedWidth(30);
-    button->setObjectName("SideMenuButton");
-    button->setProperty("id", id);
-    connect(button, SIGNAL(clicked(bool)), this, SLOT(testHide()));
+    button->setProperty("id", getAvailableId());
     connect(button, SIGNAL(clicked(bool)), this, SLOT(changeTab()));
 
-    id++;
     buttonsLayout->addWidget(button);
     buttons.append(button);
 
-    container->addWidget(widget);
+    tabs->addWidget(widget);
+}
+
+int SideMenu::getAvailableId()
+{
+    for(int i=0; i<buttons.size()+1; i++)
+    {
+        bool available = true;
+
+        for(auto button : buttons)
+        {
+            int id = button->property("id").toInt();
+            if(id == i)
+            {
+                available = false;
+                break;
+            }
+        }
+
+        if(available)
+            return i;
+    }
+    return 0;
 }
 
 void SideMenu::changeTab()
 {
-    QPushButton * button = (QPushButton *)sender();
+    QToolButton * button = (QToolButton *)sender();
     int buttonId = button->property("id").toInt();
 
     qDebug() << buttonId;
-    container->setCurrentIndex(buttonId);
+    tabs->setCurrentIndex(buttonId);
 }
 
-void SideMenu::testHide()
+void SideMenu::hideTabs()
 {
-    if(/*container->count() > 0 &&*/ container->isHidden())
-        container->show();
+    if(/*container->count() > 0 &&*/ tabs->isHidden())
+    {
+        buttonsContainer->show();
+        tabs->show();
+    }
     else
-        container->hide();
+    {
+        buttonsContainer->hide();
+        tabs->hide();
+    }
 }

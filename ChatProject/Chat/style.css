@@ -155,8 +155,11 @@ padding: 5px;
 
 #SideMenuButton
 {
-margin: 0;
-border: 1px solid black;
+border-top-right-radius: 10px;
+border-bottom-right-radius: 10px;
+border-top: 1px solid rgb(6, 44, 132);
+border-bottom: 1px solid rgb(6, 44, 132);
+border-right: 1px solid rgb(6, 44, 132);
 background: rgb(35, 69, 146);
 }
 

@@ -7,27 +7,33 @@
 #include <QPushButton>
 #include <QStackedWidget>
 #include <QList>
+#include <QToolButton>
 
 class SideMenu : public QWidget
 {
     Q_OBJECT
 private:
     QHBoxLayout * layout;
-    QStackedWidget * container;
+    QStackedWidget * tabs;
+
     QVBoxLayout * buttonsLayout;
+    QWidget * buttonsContainer;
+    QList<QToolButton *> buttons;
 
-    QList<QPushButton *> buttons;
+    void initializeButtonsContainer();
+    void initializeTabs();
+    void createSideButton();
 
-    int id;
+    int getAvailableId();
+
+private slots:
+    void hideTabs();
+    void changeTab();
 
 public:
     SideMenu(QWidget * parent = nullptr);
 
     void addNewTab(QWidget * widget);
-
-public slots:
-    void testHide();
-    void changeTab();
 };
 
 #endif // SIDEMENU_H
