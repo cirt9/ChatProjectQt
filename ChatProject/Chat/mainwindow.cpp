@@ -69,7 +69,7 @@ void MainWindow::createServerUi()
         serverLayout->setAlignment(sideMenu, Qt::AlignLeft);
 
         QWidget * test = new QWidget();
-        test->setStyleSheet("background: blue");
+        test->setStyleSheet("background: rgb(35, 69, 146)");
 
         QWidget * test2 = new QWidget();
         test2->setStyleSheet("background: red");

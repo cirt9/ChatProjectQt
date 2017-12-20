@@ -155,8 +155,8 @@ padding: 5px;
 
 #SideMenuButtonsContainer
 {
-border-top: 1px solid rgb(6, 44, 132);
-border-bottom: 1px solid rgb(6, 44, 132);
+border-top: 2px solid rgb(6, 44, 132);
+border-bottom: 2px solid rgb(6, 44, 132);
 background: rgb(25, 59, 136);
 }
 
@@ -164,27 +164,36 @@ background: rgb(25, 59, 136);
 {
 border-top-right-radius: 10px;
 border-bottom-right-radius: 10px;
-border-top: 1px solid rgb(6, 44, 132);
-border-bottom: 1px solid rgb(6, 44, 132);
-border-right: 1px solid rgb(6, 44, 132);
-background: rgb(35, 69, 146);
+border-top: 2px solid rgb(6, 44, 132);
+border-bottom: 2px solid rgb(6, 44, 132);
+border-right: 2px solid rgb(6, 44, 132);
+background: rgb(25, 59, 136);
+}
+
+#SideMenuButton:hover
+{
+background: rgb(27, 62, 139);
 }
 
 #SideMenuContainer
 {
-border-top: 1px solid rgb(6, 44, 132);
-border-bottom: 1px solid rgb(6, 44, 132);
+border: 2px solid rgb(6,44,132);
 }
 
 #SideMenuToolButton
 {
-background: rgb(104, 89, 75);
-border: 3px solid rgb(59, 41, 24);
+background: rgb(76,76,76);
+border: 3px solid rgb(25,25,25);
+}
+
+#SideMenuToolButton:hover
+{
+background: rgb(50, 50, 50);
 }
 
 #SideMenuToolButton:pressed
 {
-background: rgb(89, 61, 44);
+background: rgb(40, 40, 40);
 }
 
 /* Chat Widget */
