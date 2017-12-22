@@ -76,6 +76,8 @@ void MainWindow::createServerUi()
 
         sideMenu->addNewTab(test);
         sideMenu->addNewTab(test2);
+        sideMenu->setDownButton(0);
+        sideMenu->setTab(0);
 //
         QWidget * serverWidgetContainer = new QWidget();
         serverWidgetContainer->setLayout(serverLayout);

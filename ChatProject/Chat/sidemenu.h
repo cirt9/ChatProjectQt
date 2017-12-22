@@ -24,7 +24,7 @@ private:
     void initializeTabs();
     void createSideButton();
 
-    int getAvailableId();
+    void riseButtons();
 
 private slots:
     void hideTabs();
@@ -34,6 +34,9 @@ public:
     SideMenu(QWidget * parent = nullptr);
 
     void addNewTab(QWidget * widget);
+    void removeLastTab();
+    void setDownButton(int id);
+    void setTab(int id);
 };
 
 #endif // SIDEMENU_H

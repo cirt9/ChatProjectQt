@@ -1,5 +1,4 @@
 #include "sidemenu.h"
-#include <QDebug>
 
 SideMenu::SideMenu(QWidget * parent) : QWidget(parent)
 {
@@ -55,7 +54,7 @@ void SideMenu::addNewTab(QWidget * widget)
     button->setFixedSize(60, 60);
     button->setObjectName("SideMenuToolButton");
     button->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
-    button->setProperty("id", getAvailableId());
+    button->setProperty("id", buttons.size());
     connect(button, SIGNAL(clicked(bool)), this, SLOT(changeTab()));
 
     buttonsLayout->addWidget(button);
@@ -65,26 +64,21 @@ void SideMenu::addNewTab(QWidget * widget)
     tabs->addWidget(widget);
 }
 
-int SideMenu::getAvailableId()
+void SideMenu::removeLastTab()
 {
-    for(int i=0; i<buttons.size()+1; i++)
+    QWidget * toRemoveTab = tabs->widget(tabs->count()-1);
+    tabs->removeWidget(toRemoveTab);
+    toRemoveTab->deleteLater();
+
+    QToolButton * toRemoveButton = buttons.last();
+    buttons.removeLast();
+
+    if(toRemoveButton->isDown())
     {
-        bool available = true;
-
-        for(auto button : buttons)
-        {
-            int id = button->property("id").toInt();
-            if(id == i)
-            {
-                available = false;
-                break;
-            }
-        }
-
-        if(available)
-            return i;
+        setDownButton(0);
+        setTab(0);
     }
-    return 0;
+    toRemoveButton->deleteLater();
 }
 
 void SideMenu::changeTab()
@@ -92,13 +86,38 @@ void SideMenu::changeTab()
     QToolButton * button = (QToolButton *)sender();
     int buttonId = button->property("id").toInt();
 
-    qDebug() << buttonId;
+    setDownButton(buttonId);
     tabs->setCurrentIndex(buttonId);
+}
+
+void SideMenu::setDownButton(int id)
+{
+    riseButtons();
+
+    for(auto button : buttons)
+    {
+        int buttonId = button->property("id").toInt();
+
+        if(buttonId == id)
+        {
+            button->setDown(true);
+            break;
+        }
+    }
+}
+
+void SideMenu::riseButtons()
+{
+    for(auto button : buttons)
+    {
+        if(button->isDown())
+            button->setDown(false);
+    }
 }
 
 void SideMenu::hideTabs()
 {
-    if(/*container->count() > 0 &&*/ tabs->isHidden())
+    if(tabs->count() > 0 && tabs->isHidden())
     {
         buttonsContainer->show();
         tabs->show();
@@ -108,4 +127,9 @@ void SideMenu::hideTabs()
         buttonsContainer->hide();
         tabs->hide();
     }
+}
+
+void SideMenu::setTab(int id)
+{
+    tabs->setCurrentIndex(id);
 }
