@@ -40,12 +40,12 @@ void SideMenu::initializeTabs()
 
 void SideMenu::createSideButton()
 {
-    QPushButton * button = new QPushButton();
-    button->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
-    button->setFixedWidth(20);
-    button->setObjectName("SideMenuButton");
-    layout->addWidget(button);
-    connect(button, SIGNAL(clicked(bool)), this, SLOT(hideTabs()));
+    sideButton = new QPushButton();
+    sideButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
+    sideButton->setFixedWidth(20);
+    sideButton->setObjectName("SideMenuButton");
+    layout->addWidget(sideButton);
+    connect(sideButton, SIGNAL(clicked(bool)), this, SLOT(hideTabs()));
 }
 
 void SideMenu::addNewTab(QWidget * widget)
@@ -76,7 +76,7 @@ void SideMenu::removeLastTab()
     if(toRemoveButton->isDown())
     {
         setDownButton(0);
-        setTab(0);
+        setDisplayedTab(0);
     }
     toRemoveButton->deleteLater();
 }
@@ -90,20 +90,24 @@ void SideMenu::changeTab()
     tabs->setCurrentIndex(buttonId);
 }
 
-void SideMenu::setDownButton(int id)
+bool SideMenu::setDownButton(int id)
 {
-    riseButtons();
-
-    for(auto button : buttons)
+    if(id < buttons.size())
     {
-        int buttonId = button->property("id").toInt();
+        riseButtons();
 
-        if(buttonId == id)
+        for(auto button : buttons)
         {
-            button->setDown(true);
-            break;
+            int buttonId = button->property("id").toInt();
+
+            if(buttonId == id)
+            {
+                button->setDown(true);
+                return true;
+            }
         }
     }
+    return false;
 }
 
 void SideMenu::riseButtons()
@@ -129,7 +133,38 @@ void SideMenu::hideTabs()
     }
 }
 
-void SideMenu::setTab(int id)
+bool SideMenu::setDisplayedTab(int id)
 {
-    tabs->setCurrentIndex(id);
+    if(id < tabs->count())
+    {
+        tabs->setCurrentIndex(id);
+        return true;
+    }
+    return false;
+}
+
+void SideMenu::setTabsWidth(int width)
+{
+    tabs->setFixedWidth(width);
+}
+
+void SideMenu::setSideButtonWidth(int width)
+{
+    sideButton->setFixedWidth(width);
+}
+
+void SideMenu::setButtonsSize(int width, int height)
+{
+    for(auto button : buttons)
+        button->setFixedSize(width, height);
+}
+
+void SideMenu::setButtonsContentsMargins(int left, int top, int right, int bottom)
+{
+    buttonsLayout->setContentsMargins(left, top, right, bottom);
+}
+
+void SideMenu::setButtonsSpacing(int spacing)
+{
+    buttonsLayout->setSpacing(spacing);
 }

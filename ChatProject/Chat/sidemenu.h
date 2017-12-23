@@ -19,6 +19,7 @@ private:
     QVBoxLayout * buttonsLayout;
     QWidget * buttonsContainer;
     QList<QToolButton *> buttons;
+    QPushButton * sideButton;
 
     void initializeButtonsContainer();
     void initializeTabs();
@@ -35,8 +36,14 @@ public:
 
     void addNewTab(QWidget * widget);
     void removeLastTab();
-    void setDownButton(int id);
-    void setTab(int id);
+    bool setDownButton(int id);
+    bool setDisplayedTab(int id);
+
+    void setTabsWidth(int width);
+    void setSideButtonWidth(int width);
+    void setButtonsSize(int width, int height);
+    void setButtonsContentsMargins(int left, int top, int right, int bottom);
+    void setButtonsSpacing(int spacing);
 };
 
 #endif // SIDEMENU_H

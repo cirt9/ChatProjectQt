@@ -71,13 +71,14 @@ void MainWindow::createServerUi()
         QWidget * test = new QWidget();
         test->setStyleSheet("background: rgb(35, 69, 146)");
 
-        QWidget * test2 = new QWidget();
-        test2->setStyleSheet("background: red");
+        QLabel * placeHolder = new QLabel("Nothing here");
+        placeHolder->setAlignment(Qt::AlignHCenter);
+        placeHolder->setStyleSheet("background: rgb(35, 69, 146); color: rgb(225,225,225); font-size: 35px");
 
         sideMenu->addNewTab(test);
-        sideMenu->addNewTab(test2);
+        sideMenu->addNewTab(placeHolder);
         sideMenu->setDownButton(0);
-        sideMenu->setTab(0);
+        sideMenu->setDisplayedTab(0);
 //
         QWidget * serverWidgetContainer = new QWidget();
         serverWidgetContainer->setLayout(serverLayout);
