@@ -7,7 +7,7 @@
 #include <QPushButton>
 #include <QStackedWidget>
 #include <QList>
-#include <QToolButton>
+#include <QCheckBox>
 
 class SideMenu : public QWidget
 {
@@ -18,7 +18,7 @@ private:
 
     QVBoxLayout * buttonsLayout;
     QWidget * buttonsContainer;
-    QList<QToolButton *> buttons;
+    QList<QCheckBox *> buttons;
     QPushButton * sideButton;
 
     void initializeButtonsContainer();
