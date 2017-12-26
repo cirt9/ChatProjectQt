@@ -52,7 +52,7 @@ void SideMenu::addNewTab(QWidget * widget)
 {
     QCheckBox * button = new QCheckBox();
     button->setFixedSize(60, 60);
-    button->setObjectName("SideMenuToolButton");
+    button->setObjectName("SideMenuCheckBox");
     button->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
     button->setProperty("id", buttons.size());
     connect(button, SIGNAL(clicked(bool)), this, SLOT(changeTab()));
@@ -75,7 +75,7 @@ void SideMenu::removeLastTab()
 
     if(toRemoveButton->isChecked())
     {
-        setDownButton(0);
+        setButtonChecked(0);
         setDisplayedTab(0);
     }
     toRemoveButton->deleteLater();
@@ -88,15 +88,15 @@ void SideMenu::changeTab()
 
     button->setChecked(true);
 
-    setDownButton(buttonId);
+    setButtonChecked(buttonId);
     tabs->setCurrentIndex(buttonId);
 }
 
-bool SideMenu::setDownButton(int id)
+bool SideMenu::setButtonChecked(int id)
 {
     if(id < buttons.size())
     {
-        riseButtons();
+        setButtonsUnchecked();
 
         for(auto button : buttons)
         {
@@ -112,7 +112,7 @@ bool SideMenu::setDownButton(int id)
     return false;
 }
 
-void SideMenu::riseButtons()
+void SideMenu::setButtonsUnchecked()
 {
     for(auto button : buttons)
     {

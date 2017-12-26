@@ -151,7 +151,7 @@ font-family: arial;
 padding: 5px;
 }
 
-/* Side Menu */
+/* SideMenu */
 
 #SideMenuButtonsContainer
 {
@@ -179,25 +179,8 @@ background: rgb(27, 62, 139);
 {
 border: 2px solid rgb(6,44,132);
 }
-/*
-#SideMenuToolButton
-{
-background: rgb(76,76,76);
-border: 3px solid rgb(25,25,25);
-}
 
-#SideMenuToolButton:hover
-{
-background: rgb(60, 60, 60);
-}
-
-#SideMenuToolButton:pressed
-{
-background: rgb(40, 40, 40);
-}
-*/
-
-#SideMenuToolButton
+#SideMenuCheckBox
 {
 padding: 0;
 border: 3px solid rgb(25,25,25);
@@ -205,23 +188,69 @@ width: 60px;
 height: 60px;
 }
 
-#SideMenuToolButton::indicator
+#SideMenuCheckBox::indicator
 {
 width: 54px;
 height: 54px;
 }
 
-#SideMenuToolButton::indicator::unchecked
+#SideMenuCheckBox::indicator::unchecked
 {
 background: rgb(76,76,76);
 }
 
-#SideMenuToolButton::indicator::checked
+#SideMenuCheckBox::indicator:unchecked:hover
+{
+background: rgb(60, 60, 60);
+}
+
+#SideMenuCheckBox::indicator::checked
 {
 background: rgb(40, 40, 40);
 }
 
-/* Chat Widget */
+/* UserProfileWidget */
+
+#UserProfileWidget
+{
+background: rgb(35, 69, 146);
+}
+
+#UserProfileWidgetTitle
+{
+background: rgb(25, 59, 136);
+color: rgb(122, 138, 175);
+font-size: 45px;
+font-weight: bold;
+border-radius: 3px;
+}
+
+#UserProfileWidgetNicknameLabel
+{
+color: rgb(122, 138, 175);
+font-size: 30px;
+font-weight: bold;
+}
+
+#UserProfileWidgetNicknameInput
+{
+background: rgb(25, 59, 136);
+color: rgb(122, 138, 175);
+font-size: 20px;
+border-radius: 3px;
+}
+
+#UserProfileWidgetButton
+{
+background: rgb(25, 59, 136);
+color: rgb(122, 138, 175);
+font-size: 30px;
+font-weight: bold;
+border-radius: 3px;
+padding: 3px;
+}
+
+/* ChatWidget */
 
 #ChatWidget
 {

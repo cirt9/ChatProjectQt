@@ -29,6 +29,7 @@ private slots:
 
 public:
     ServerWidget(QWidget * parent = nullptr);
+    ~ServerWidget() {}
 
     void changeState();
     bool isRunning() const;

@@ -25,18 +25,18 @@ private:
     void initializeTabs();
     void createSideButton();
 
-    void riseButtons();
+    void setButtonsUnchecked();
 
 private slots:
-    void hideTabs();
     void changeTab();
 
 public:
     SideMenu(QWidget * parent = nullptr);
+    ~SideMenu() {}
 
     void addNewTab(QWidget * widget);
     void removeLastTab();
-    bool setDownButton(int id);
+    bool setButtonChecked(int id);
     bool setDisplayedTab(int id);
 
     void setTabsWidth(int width);
@@ -44,6 +44,9 @@ public:
     void setButtonsSize(int width, int height);
     void setButtonsContentsMargins(int left, int top, int right, int bottom);
     void setButtonsSpacing(int spacing);
+
+public slots:
+    void hideTabs();
 };
 
 #endif // SIDEMENU_H

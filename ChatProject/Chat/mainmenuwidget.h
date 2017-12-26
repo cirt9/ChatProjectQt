@@ -18,6 +18,7 @@ private:
 
 public:
     MainMenuWidget(QString title, QWidget * parent = nullptr);
+    ~MainMenuWidget() {}
 
     void addTextBelowTitle(QString text);
     void addEffectForTitle(QGraphicsEffect * effect);

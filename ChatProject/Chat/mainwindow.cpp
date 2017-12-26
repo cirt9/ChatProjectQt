@@ -46,6 +46,7 @@ void MainWindow::createMenu()
 }
 //
 #include <sidemenu.h>
+#include <userprofilewidget.h>
 
 void MainWindow::createServerUi()
 {
@@ -68,16 +69,16 @@ void MainWindow::createServerUi()
         serverLayout->addWidget(sideMenu);
         serverLayout->setAlignment(sideMenu, Qt::AlignLeft);
 
-        QWidget * test = new QWidget();
-        test->setStyleSheet("background: rgb(35, 69, 146)");
+        UserProfileWidget * profile = new UserProfileWidget();
+        profile->setObjectName("UserProfileWidget");
 
         QLabel * placeHolder = new QLabel("Nothing here");
-        placeHolder->setAlignment(Qt::AlignHCenter);
-        placeHolder->setStyleSheet("background: rgb(35, 69, 146); color: rgb(225,225,225); font-size: 35px");
+        placeHolder->setAlignment(Qt::AlignCenter);
+        placeHolder->setStyleSheet("background: rgb(35, 69, 146); color: rgb(122, 138, 175); font-size: 45px; font-weight: bold;");
 
-        sideMenu->addNewTab(test);
+        sideMenu->addNewTab(profile);
         sideMenu->addNewTab(placeHolder);
-        sideMenu->setDownButton(0);
+        sideMenu->setButtonChecked(0);
         sideMenu->setDisplayedTab(0);
 //
         QWidget * serverWidgetContainer = new QWidget();

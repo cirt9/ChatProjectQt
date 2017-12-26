@@ -31,6 +31,7 @@ private slots:
 
 public:
     ClientWidget(QWidget * parent = nullptr);
+    ~ClientWidget() {}
 
     void changeState();
     bool isConnected() const;
