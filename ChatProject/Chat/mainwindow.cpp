@@ -69,15 +69,15 @@ void MainWindow::createServerUi()
         serverLayout->addWidget(sideMenu);
         serverLayout->setAlignment(sideMenu, Qt::AlignLeft);
 
-        UserProfileWidget * profile = new UserProfileWidget();
+        UserProfileWidget * profile = new UserProfileWidget("Profile");
         profile->setObjectName("UserProfileWidget");
 
         QLabel * placeHolder = new QLabel("Nothing here");
         placeHolder->setAlignment(Qt::AlignCenter);
         placeHolder->setStyleSheet("background: rgb(35, 69, 146); color: rgb(122, 138, 175); font-size: 45px; font-weight: bold;");
 
-        sideMenu->addNewTab(profile);
-        sideMenu->addNewTab(placeHolder);
+        sideMenu->addNewTab(profile, "SideMenuCheckBox");
+        sideMenu->addNewTab(placeHolder, "SideMenuCheckBox");
         sideMenu->setButtonChecked(0);
         sideMenu->setDisplayedTab(0);
 //

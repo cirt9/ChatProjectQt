@@ -1,11 +1,11 @@
 #include "userprofilewidget.h"
 
-UserProfileWidget::UserProfileWidget(QWidget * parent) : QWidget(parent)
+UserProfileWidget::UserProfileWidget(QString profileTitle, QWidget * parent) : QWidget(parent)
 {
     QVBoxLayout * layout = new QVBoxLayout();
     setLayout(layout);
 
-    QLabel * title = new QLabel("Profile");
+    QLabel * title = new QLabel(profileTitle);
     title->setObjectName("UserProfileWidgetTitle");
     title->setAlignment(Qt::AlignCenter);
     layout->addWidget(title);
@@ -14,22 +14,39 @@ UserProfileWidget::UserProfileWidget(QWidget * parent) : QWidget(parent)
     layout->addStretch(1);
 
     QLabel * nicknameLabel = new QLabel("Nickname");
-    nicknameLabel->setObjectName("UserProfileWidgetNicknameLabel");
+    nicknameLabel->setObjectName("UserProfileWidgetLabel");
     nicknameLabel->setAlignment(Qt::AlignLeft);
     layout->addWidget(nicknameLabel);
     layout->setAlignment(nicknameLabel, Qt::AlignTop);
 
-    QLineEdit * nicknameInput = new QLineEdit();
-    nicknameInput->setObjectName("UserProfileWidgetNicknameInput");
+    nicknameInput = new QLineEdit();
+    nicknameInput->setObjectName("UserProfileWidgetInput");
+    nicknameInput->setMaxLength(15);
     layout->addWidget(nicknameInput);
     layout->setAlignment(nicknameInput, Qt::AlignTop);
 
     layout->addStretch(5);
 
-    QPushButton * button = new QPushButton("Update");
+    button = new QPushButton("Update");
     button->setObjectName("UserProfileWidgetButton");
     layout->addWidget(button);
     layout->setAlignment(button, Qt::AlignBottom);
+    connect(button, SIGNAL(clicked(bool)), this, SLOT(emitProfileUpdated()));
+}
+
+void UserProfileWidget::emitProfileUpdated()
+{
+    emit profileUpdated(nicknameInput->text());
+}
+
+void UserProfileWidget::setMaxNameLength(int length)
+{
+    nicknameInput->setMaxLength(length);
+}
+
+void UserProfileWidget::disableButton(bool disabled)
+{
+    button->setDisabled(disabled);
 }
 
 void UserProfileWidget::paintEvent(QPaintEvent *)

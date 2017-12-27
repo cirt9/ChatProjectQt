@@ -48,11 +48,11 @@ void SideMenu::createSideButton()
     connect(sideButton, SIGNAL(clicked(bool)), this, SLOT(hideTabs()));
 }
 
-void SideMenu::addNewTab(QWidget * widget)
+void SideMenu::addNewTab(QWidget * widget, QString buttonObjectName)
 {
     QCheckBox * button = new QCheckBox();
     button->setFixedSize(60, 60);
-    button->setObjectName("SideMenuCheckBox");
+    button->setObjectName(buttonObjectName);
     button->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
     button->setProperty("id", buttons.size());
     connect(button, SIGNAL(clicked(bool)), this, SLOT(changeTab()));

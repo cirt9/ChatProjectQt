@@ -15,12 +15,24 @@ class UserProfileWidget : public QWidget
 
 private:
     QVBoxLayout * layout;
+    QLineEdit * nicknameInput;
+    QPushButton * button;
 
     void paintEvent(QPaintEvent *);
 
+private slots:
+    void emitProfileUpdated();
+
 public:
-    UserProfileWidget(QWidget * parent = nullptr);
+    UserProfileWidget(QString profileTitle, QWidget * parent = nullptr);
     ~UserProfileWidget(){}
+
+    void setNickname(QString nickname);
+    void setMaxNameLength(int length);
+    void disableButton(bool disabled);
+
+signals:
+    void profileUpdated(QString nickname);
 };
 
 #endif // USERPROFILEWIDGET_H

@@ -218,6 +218,7 @@ background: rgb(35, 69, 146);
 
 #UserProfileWidgetTitle
 {
+border: 1px solid rgb(6, 44, 132);
 background: rgb(25, 59, 136);
 color: rgb(122, 138, 175);
 font-size: 45px;
@@ -225,29 +226,44 @@ font-weight: bold;
 border-radius: 3px;
 }
 
-#UserProfileWidgetNicknameLabel
+#UserProfileWidgetLabel
 {
 color: rgb(122, 138, 175);
 font-size: 30px;
 font-weight: bold;
+font-family: arial;
 }
 
-#UserProfileWidgetNicknameInput
+#UserProfileWidgetInput
 {
 background: rgb(25, 59, 136);
 color: rgb(122, 138, 175);
 font-size: 20px;
 border-radius: 3px;
+font-family: arial;
 }
 
 #UserProfileWidgetButton
 {
 background: rgb(25, 59, 136);
+font: bold 30px;
+border: 1px solid rgb(6, 44, 132);
 color: rgb(122, 138, 175);
-font-size: 30px;
-font-weight: bold;
 border-radius: 3px;
-padding: 3px;
+padding-bottom: 2px;
+}
+
+#UserProfileWidgetButton:hover
+{
+background: qlineargradient(x1:1, y1:1, x2:0, y2:0,
+            stop:0 rgb(6, 44, 132), stop:1 rgb(25, 59, 136));
+}
+
+#UserProfileWidgetButton:pressed
+{
+background: qlineargradient(x1:1, y1:1, x2:0, y2:0,
+            stop:0 rgb(4, 40, 122), stop:1 rgb(25, 59, 136));
+color: rgb(95, 116, 163);
 }
 
 /* ChatWidget */

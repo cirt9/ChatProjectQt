@@ -34,7 +34,7 @@ public:
     SideMenu(QWidget * parent = nullptr);
     ~SideMenu() {}
 
-    void addNewTab(QWidget * widget);
+    void addNewTab(QWidget * widget, QString buttonObjectName);
     void removeLastTab();
     bool setButtonChecked(int id);
     bool setDisplayedTab(int id);
