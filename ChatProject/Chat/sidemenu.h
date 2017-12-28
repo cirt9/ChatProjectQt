@@ -7,7 +7,7 @@
 #include <QPushButton>
 #include <QStackedWidget>
 #include <QList>
-#include <QCheckBox>
+#include <checkbox.h>
 
 class SideMenu : public QWidget
 {
@@ -18,7 +18,7 @@ private:
 
     QVBoxLayout * buttonsLayout;
     QWidget * buttonsContainer;
-    QList<QCheckBox *> buttons;
+    QList<CheckBox *> buttons;
     QPushButton * sideButton;
 
     void initializeButtonsContainer();
@@ -34,7 +34,8 @@ public:
     SideMenu(QWidget * parent = nullptr);
     ~SideMenu() {}
 
-    void addNewTab(QWidget * widget, QString buttonObjectName);
+    void addNewTab(QWidget * widget);
+    void addNewTab(QWidget * widget, const QIcon & buttonIcon);
     void removeLastTab();
     bool setButtonChecked(int id);
     bool setDisplayedTab(int id);
@@ -42,6 +43,7 @@ public:
     void setTabsWidth(int width);
     void setSideButtonWidth(int width);
     void setButtonsSize(int width, int height);
+    void setButtonsIconSize(const QSize & size);
     void setButtonsContentsMargins(int left, int top, int right, int bottom);
     void setButtonsSpacing(int spacing);
 

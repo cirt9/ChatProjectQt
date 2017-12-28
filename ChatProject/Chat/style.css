@@ -180,32 +180,20 @@ background: rgb(27, 62, 139);
 border: 2px solid rgb(6,44,132);
 }
 
-#SideMenuCheckBox
+#SideMenuCheckBoxUnchecked
 {
-padding: 0;
 border: 3px solid rgb(25,25,25);
-width: 60px;
-height: 60px;
-}
-
-#SideMenuCheckBox::indicator
-{
-width: 54px;
-height: 54px;
-}
-
-#SideMenuCheckBox::indicator::unchecked
-{
 background: rgb(76,76,76);
 }
 
-#SideMenuCheckBox::indicator:unchecked:hover
+#SideMenuCheckBoxUnchecked:hover
 {
 background: rgb(60, 60, 60);
 }
 
-#SideMenuCheckBox::indicator::checked
+#SideMenuCheckBoxChecked
 {
+border: 3px solid rgb(25,25,25);
 background: rgb(40, 40, 40);
 }
 

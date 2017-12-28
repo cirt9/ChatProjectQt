@@ -21,7 +21,8 @@ SOURCES += main.cpp\
     ../ChatServer/chatserver.cpp \
     ../ChatClient/chatclient.cpp \
     sidemenu.cpp \
-    userprofilewidget.cpp
+    userprofilewidget.cpp \
+    checkbox.cpp
 
 HEADERS  += mainwindow.h \
     chatwidget.h \
@@ -31,7 +32,8 @@ HEADERS  += mainwindow.h \
     ../ChatServer/chatserver.h \
     ../ChatClient/chatclient.h \
     sidemenu.h \
-    userprofilewidget.h
+    userprofilewidget.h \
+    checkbox.h
 
 DISTFILES +=
 

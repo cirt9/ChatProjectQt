@@ -45,17 +45,34 @@ void SideMenu::createSideButton()
     sideButton->setFixedWidth(20);
     sideButton->setObjectName("SideMenuButton");
     layout->addWidget(sideButton);
-    connect(sideButton, SIGNAL(clicked(bool)), this, SLOT(hideTabs()));
+    connect(sideButton, SIGNAL(clicked()), this, SLOT(hideTabs()));
 }
 
-void SideMenu::addNewTab(QWidget * widget, QString buttonObjectName)
+void SideMenu::addNewTab(QWidget * widget)
 {
-    QCheckBox * button = new QCheckBox();
+    CheckBox * button = new CheckBox();
     button->setFixedSize(60, 60);
-    button->setObjectName(buttonObjectName);
-    button->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
+    button->setObjectName("SideMenuCheckBox");
     button->setProperty("id", buttons.size());
-    connect(button, SIGNAL(clicked(bool)), this, SLOT(changeTab()));
+    button->setIconSize(QSize(50, 50));
+    connect(button, SIGNAL(clicked()), this, SLOT(changeTab()));
+
+    buttonsLayout->addWidget(button);
+    buttonsLayout->setAlignment(button, Qt::AlignTop);
+    buttons.append(button);
+
+    tabs->addWidget(widget);
+}
+
+void SideMenu::addNewTab(QWidget * widget, const QIcon & buttonIcon)
+{
+    CheckBox * button = new CheckBox();
+    button->setFixedSize(60, 60);
+    button->setObjectName("SideMenuCheckBox");
+    button->setProperty("id", buttons.size());
+    button->setIconSize(QSize(50, 50));
+    button->setIcon(buttonIcon);
+    connect(button, SIGNAL(clicked()), this, SLOT(changeTab()));
 
     buttonsLayout->addWidget(button);
     buttonsLayout->setAlignment(button, Qt::AlignTop);
@@ -70,7 +87,7 @@ void SideMenu::removeLastTab()
     tabs->removeWidget(toRemoveTab);
     toRemoveTab->deleteLater();
 
-    QCheckBox * toRemoveButton = buttons.last();
+    CheckBox * toRemoveButton = buttons.last();
     buttons.removeLast();
 
     if(toRemoveButton->isChecked())
@@ -83,10 +100,10 @@ void SideMenu::removeLastTab()
 
 void SideMenu::changeTab()
 {
-    QCheckBox * button = (QCheckBox *)sender();
-    int buttonId = button->property("id").toInt();
+    CheckBox * button = (CheckBox *)sender();
+    int buttonId = button->getProperty("id").toInt();
 
-    button->setChecked(true);
+    button->setChecked();
 
     setButtonChecked(buttonId);
     tabs->setCurrentIndex(buttonId);
@@ -100,11 +117,11 @@ bool SideMenu::setButtonChecked(int id)
 
         for(auto button : buttons)
         {
-            int buttonId = button->property("id").toInt();
+            int buttonId = button->getProperty("id").toInt();
 
             if(buttonId == id)
             {
-                button->setChecked(true);
+                button->setChecked();
                 return true;
             }
         }
@@ -117,7 +134,7 @@ void SideMenu::setButtonsUnchecked()
     for(auto button : buttons)
     {
         if(button->isChecked())
-            button->setChecked(false);
+            button->setUnchecked();
     }
 }
 
@@ -159,6 +176,12 @@ void SideMenu::setButtonsSize(int width, int height)
 {
     for(auto button : buttons)
         button->setFixedSize(width, height);
+}
+
+void SideMenu::setButtonsIconSize(const QSize & size)
+{
+    for(auto button : buttons)
+        button->setIconSize(size);
 }
 
 void SideMenu::setButtonsContentsMargins(int left, int top, int right, int bottom)
