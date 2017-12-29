@@ -17,13 +17,13 @@ private:
     QList<QPushButton *> buttons;
 
 public:
-    MainMenuWidget(QString title, QWidget * parent = nullptr);
+    MainMenuWidget(const QString & title, QWidget * parent = nullptr);
     ~MainMenuWidget() {}
 
-    void addTextBelowTitle(QString text);
+    void addTextBelowTitle(const QString & text);
     void addEffectForTitle(QGraphicsEffect * effect);
 
-    void addButton(QString text);
+    void addButton(const QString & text);
     void removeLastButton();
     QPushButton * getButton(size_t index) const;
 };

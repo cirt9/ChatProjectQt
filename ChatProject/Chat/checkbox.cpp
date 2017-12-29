@@ -80,6 +80,12 @@ void CheckBox::setUncheckedIcon(const QIcon & icon)
     uncheckedButton->setIcon(icon);
 }
 
+void CheckBox::setText(const QString & text)
+{
+    uncheckedButton->setText(text);
+    checkedButton->setText(text);
+}
+
 void CheckBox::setUncheckedText(const QString & text)
 {
     checkedButton->setText(text);

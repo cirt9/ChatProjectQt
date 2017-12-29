@@ -1,6 +1,6 @@
 #include "mainmenuwidget.h"
 
-MainMenuWidget::MainMenuWidget(QString title, QWidget * parent) : QWidget(parent)
+MainMenuWidget::MainMenuWidget(const QString & title, QWidget * parent) : QWidget(parent)
 {
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
@@ -20,7 +20,7 @@ MainMenuWidget::MainMenuWidget(QString title, QWidget * parent) : QWidget(parent
     menuLayout->addStretch(2);
 }
 
-void MainMenuWidget::addTextBelowTitle(QString text)
+void MainMenuWidget::addTextBelowTitle(const QString & text)
 {
     QLabel * textBelowTitle = new QLabel(text);
     textBelowTitle->setObjectName("MainMenuBelowTitleLabel");
@@ -34,7 +34,7 @@ void MainMenuWidget::addEffectForTitle(QGraphicsEffect * effect)
         titleLabel->setGraphicsEffect(effect);
 }
 
-void MainMenuWidget::addButton(QString text)
+void MainMenuWidget::addButton(const QString & text)
 {
     QPushButton * button = new QPushButton(text);
     button->setObjectName("MainMenuButton");

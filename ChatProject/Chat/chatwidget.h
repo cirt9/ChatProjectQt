@@ -38,7 +38,7 @@ public:
     explicit ChatWidget(int barsHeight, QWidget * parent = 0);
     ~ChatWidget() {}
 
-    void addMsg(QString nickname, QString message);
+    void addMsg(const QString & nickname, const QString & message);
     void clear();
     void reset();
 
@@ -46,7 +46,7 @@ public:
     void disableOffTheScreenMoving(bool disable = true);
 
 public slots:
-    void setCurrentUserNickname(QString nickname);
+    void setCurrentUserNickname(const QString & nickname);
 
 signals:
     void messageSent(QString msg);

@@ -20,14 +20,15 @@ private:
 public:
     explicit CheckBox(QWidget * parent = nullptr);
 
-    void setProperty(const char *name, const QVariant value);
-    QVariant getProperty(const char *name);
+    void setProperty(const char * name, const QVariant value);
+    QVariant getProperty(const char * name);
     bool isChecked() const;
 
     void setIcon(const QIcon & icon);
     void setCheckedIcon(const QIcon & icon);
     void setIconSize(const QSize & size);
     void setUncheckedIcon(const QIcon & icon);
+    void setText(const QString & text);
     void setUncheckedText(const QString & text);
     void setCheckedText(const QString & text);
     void setObjectName(const QString & objectName);

@@ -53,7 +53,7 @@ void ChatWidget::createFooter(int height)
     connect(textInputBar, SIGNAL(returnPressed()), this, SLOT(sendMessage()));
 }
 
-void ChatWidget::addMsg(QString nickname, QString message)
+void ChatWidget::addMsg(const QString & nickname, const QString & message)
 {
     QString msgText = "<b>[" + nickname + "]</b>: " + message;
 
@@ -116,7 +116,7 @@ void ChatWidget::disableOffTheScreenMoving(bool disable)
     offTheScreenMovingDisabled = disable;
 }
 
-void ChatWidget::setCurrentUserNickname(QString nickname)
+void ChatWidget::setCurrentUserNickname(const QString & nickname)
 {
     currentUserNickname = nickname;
 }

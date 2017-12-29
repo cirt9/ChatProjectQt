@@ -21,11 +21,16 @@ private:
     QList<CheckBox *> buttons;
     QPushButton * sideButton;
 
+    int defaultButtonSize;
+    int defaultButtonsIconSize;
+
     void initializeButtonsContainer();
     void initializeTabs();
     void createSideButton();
 
     void setButtonsUnchecked();
+    CheckBox * createTabButton();
+    void addButtonToLayoutAndList(CheckBox * button);
 
 private slots:
     void changeTab();
@@ -36,6 +41,7 @@ public:
 
     void addNewTab(QWidget * widget);
     void addNewTab(QWidget * widget, const QIcon & buttonIcon);
+    void addNewTab(QWidget * widget, const QString & text);
     void removeLastTab();
     bool setButtonChecked(int id);
     bool setDisplayedTab(int id);
@@ -46,6 +52,12 @@ public:
     void setButtonsIconSize(const QSize & size);
     void setButtonsContentsMargins(int left, int top, int right, int bottom);
     void setButtonsSpacing(int spacing);
+    void setDefaultButtonSize(int size);
+    void setDefaultButtonsIconSize(int size);
+
+    int getDefaultButtonSize() const;
+    int getDefaultButtonsIconSize() const;
+
 
 public slots:
     void hideTabs();

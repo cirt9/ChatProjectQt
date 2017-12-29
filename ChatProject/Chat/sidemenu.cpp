@@ -3,6 +3,8 @@
 SideMenu::SideMenu(QWidget * parent) : QWidget(parent)
 {
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    defaultButtonSize = 50;
+    defaultButtonsIconSize = 40;
 
     layout = new QHBoxLayout();
     layout->setContentsMargins(0, 0, 0, 0);
@@ -50,35 +52,50 @@ void SideMenu::createSideButton()
 
 void SideMenu::addNewTab(QWidget * widget)
 {
-    CheckBox * button = new CheckBox();
-    button->setFixedSize(60, 60);
-    button->setObjectName("SideMenuCheckBox");
-    button->setProperty("id", buttons.size());
-    button->setIconSize(QSize(50, 50));
-    connect(button, SIGNAL(clicked()), this, SLOT(changeTab()));
-
-    buttonsLayout->addWidget(button);
-    buttonsLayout->setAlignment(button, Qt::AlignTop);
-    buttons.append(button);
+    CheckBox * button = createTabButton();
+    addButtonToLayoutAndList(button);
 
     tabs->addWidget(widget);
 }
 
 void SideMenu::addNewTab(QWidget * widget, const QIcon & buttonIcon)
 {
-    CheckBox * button = new CheckBox();
-    button->setFixedSize(60, 60);
-    button->setObjectName("SideMenuCheckBox");
-    button->setProperty("id", buttons.size());
-    button->setIconSize(QSize(50, 50));
+    CheckBox * button = createTabButton();
     button->setIcon(buttonIcon);
-    connect(button, SIGNAL(clicked()), this, SLOT(changeTab()));
-
-    buttonsLayout->addWidget(button);
-    buttonsLayout->setAlignment(button, Qt::AlignTop);
-    buttons.append(button);
+    addButtonToLayoutAndList(button);
 
     tabs->addWidget(widget);
+}
+
+void SideMenu::addNewTab(QWidget * widget, const QString & text)
+{
+    CheckBox * button = createTabButton();
+    button->setText(text);
+    addButtonToLayoutAndList(button);
+
+    tabs->addWidget(widget);
+}
+
+CheckBox * SideMenu::createTabButton()
+{
+    CheckBox * button = new CheckBox();
+    button->setFixedSize(defaultButtonSize, defaultButtonSize);
+    button->setObjectName("SideMenuCheckBox");
+    button->setProperty("id", buttons.size());
+    button->setIconSize(QSize(defaultButtonsIconSize, defaultButtonsIconSize));
+    connect(button, SIGNAL(clicked()), this, SLOT(changeTab()));
+
+    return button;
+}
+
+void SideMenu::addButtonToLayoutAndList(CheckBox * button)
+{
+    if(button)
+    {
+        buttonsLayout->addWidget(button);
+        buttonsLayout->setAlignment(button, Qt::AlignTop);
+        buttons.append(button);
+    }
 }
 
 void SideMenu::removeLastTab()
@@ -192,4 +209,24 @@ void SideMenu::setButtonsContentsMargins(int left, int top, int right, int botto
 void SideMenu::setButtonsSpacing(int spacing)
 {
     buttonsLayout->setSpacing(spacing);
+}
+
+void SideMenu::setDefaultButtonSize(int size)
+{
+    defaultButtonSize = size;
+}
+
+void SideMenu::setDefaultButtonsIconSize(int size)
+{
+    defaultButtonsIconSize = size;
+}
+
+int SideMenu::getDefaultButtonSize() const
+{
+    return defaultButtonSize;
+}
+
+int SideMenu::getDefaultButtonsIconSize() const
+{
+    return defaultButtonsIconSize;
 }
