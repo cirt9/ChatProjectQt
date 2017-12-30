@@ -49,6 +49,16 @@ void UserProfileWidget::disableButton(bool disabled)
     button->setDisabled(disabled);
 }
 
+void UserProfileWidget::setNickname(const QString & nickname)
+{
+    nicknameInput->setText(nickname);
+}
+
+QString UserProfileWidget::getNickname() const
+{
+    return nicknameInput->text();
+}
+
 void UserProfileWidget::paintEvent(QPaintEvent *)
 {
     QStyleOption option;

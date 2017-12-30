@@ -27,7 +27,8 @@ public:
     UserProfileWidget(QString profileTitle, QWidget * parent = nullptr);
     ~UserProfileWidget(){}
 
-    void setNickname(QString nickname);
+    void setNickname(const QString & nickname);
+    QString getNickname() const;
     void setMaxNameLength(int length);
     void disableButton(bool disabled);
 

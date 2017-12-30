@@ -50,38 +50,38 @@ void SideMenu::createSideButton()
     connect(sideButton, SIGNAL(clicked()), this, SLOT(hideTabs()));
 }
 
-void SideMenu::addNewTab(QWidget * widget)
+void SideMenu::addNewTab(QWidget * tab)
 {
-    CheckBox * button = createTabButton();
+    CheckBox * button = createTabButton(buttons.size());
     addButtonToLayoutAndList(button);
 
-    tabs->addWidget(widget);
+    tabs->addWidget(tab);
 }
 
-void SideMenu::addNewTab(QWidget * widget, const QIcon & buttonIcon)
+void SideMenu::addNewTab(QWidget * tab, const QIcon & buttonIcon)
 {
-    CheckBox * button = createTabButton();
+    CheckBox * button = createTabButton(buttons.size());
     button->setIcon(buttonIcon);
     addButtonToLayoutAndList(button);
 
-    tabs->addWidget(widget);
+    tabs->addWidget(tab);
 }
 
-void SideMenu::addNewTab(QWidget * widget, const QString & text)
+void SideMenu::addNewTab(QWidget * tab, const QString & text)
 {
-    CheckBox * button = createTabButton();
+    CheckBox * button = createTabButton(buttons.size());
     button->setText(text);
     addButtonToLayoutAndList(button);
 
-    tabs->addWidget(widget);
+    tabs->addWidget(tab);
 }
 
-CheckBox * SideMenu::createTabButton()
+CheckBox * SideMenu::createTabButton(int id)
 {
     CheckBox * button = new CheckBox();
     button->setFixedSize(defaultButtonSize, defaultButtonSize);
     button->setObjectName("SideMenuCheckBox");
-    button->setProperty("id", buttons.size());
+    button->setProperty("id", id);
     button->setIconSize(QSize(defaultButtonsIconSize, defaultButtonsIconSize));
     connect(button, SIGNAL(clicked()), this, SLOT(changeTab()));
 
@@ -90,12 +90,9 @@ CheckBox * SideMenu::createTabButton()
 
 void SideMenu::addButtonToLayoutAndList(CheckBox * button)
 {
-    if(button)
-    {
-        buttonsLayout->addWidget(button);
-        buttonsLayout->setAlignment(button, Qt::AlignTop);
-        buttons.append(button);
-    }
+    buttonsLayout->addWidget(button);
+    buttonsLayout->setAlignment(button, Qt::AlignTop);
+    buttons.append(button);
 }
 
 void SideMenu::removeLastTab()
@@ -167,6 +164,66 @@ void SideMenu::hideTabs()
         buttonsContainer->hide();
         tabs->hide();
     }
+}
+
+bool SideMenu::insertTab(int index, QWidget * tab)
+{
+    if(index < 0 || index > buttons.size())
+        return false;
+
+    increaseIds(index);
+    CheckBox * button = createTabButton(index);
+    insertButtonToLayoutAndList(index, button);
+    tabs->insertWidget(index, tab);
+    return true;
+}
+
+void SideMenu::increaseIds(int startFrom)
+{
+    for(int i=startFrom; i<buttons.size(); i++)
+    {
+        int currentId = buttons[i]->getProperty("id").toInt();
+        buttons[i]->setProperty("id", currentId+1);
+    }
+}
+
+bool SideMenu::removeTab(int index)
+{
+    if(index < 0 || index >= buttons.size())
+        return false;
+
+    QWidget * toRemoveTab = tabs->widget(index);
+    tabs->removeWidget(toRemoveTab);
+    toRemoveTab->deleteLater();
+
+    CheckBox * toRemoveButton = buttons[index];
+    buttons.removeAt(index);
+
+    if(toRemoveButton->isChecked())
+    {
+        setButtonChecked(0);
+        setDisplayedTab(0);
+    }
+    toRemoveButton->deleteLater();
+
+    decreaseIds(index);
+    return true;
+}
+
+void SideMenu::decreaseIds(int finishOn)
+{
+    for(int i=buttons.size()-1; i>=finishOn; i--)
+    {
+        int currentId = buttons[i]->getProperty("id").toInt();
+        buttons[i]->setProperty("id", currentId-1);
+    }
+}
+
+void SideMenu::insertButtonToLayoutAndList(int index, CheckBox * button)
+{
+    buttonsLayout->insertWidget(index, button);
+    buttonsLayout->setAlignment(button, Qt::AlignTop);
+    buttons.insert(index, button);
 }
 
 bool SideMenu::setDisplayedTab(int id)
