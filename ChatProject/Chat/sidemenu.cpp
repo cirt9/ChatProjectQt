@@ -53,7 +53,7 @@ void SideMenu::createSideButton()
 void SideMenu::addNewTab(QWidget * tab)
 {
     CheckBox * button = createTabButton(buttons.size());
-    addButtonToLayoutAndList(button);
+    insertButtonToLayoutAndList(buttons.size(), button);
 
     tabs->addWidget(tab);
 }
@@ -62,7 +62,7 @@ void SideMenu::addNewTab(QWidget * tab, const QIcon & buttonIcon)
 {
     CheckBox * button = createTabButton(buttons.size());
     button->setIcon(buttonIcon);
-    addButtonToLayoutAndList(button);
+    insertButtonToLayoutAndList(buttons.size(), button);
 
     tabs->addWidget(tab);
 }
@@ -71,7 +71,7 @@ void SideMenu::addNewTab(QWidget * tab, const QString & text)
 {
     CheckBox * button = createTabButton(buttons.size());
     button->setText(text);
-    addButtonToLayoutAndList(button);
+    insertButtonToLayoutAndList(buttons.size(), button);
 
     tabs->addWidget(tab);
 }
@@ -88,13 +88,6 @@ CheckBox * SideMenu::createTabButton(int id)
     return button;
 }
 
-void SideMenu::addButtonToLayoutAndList(CheckBox * button)
-{
-    buttonsLayout->addWidget(button);
-    buttonsLayout->setAlignment(button, Qt::AlignTop);
-    buttons.append(button);
-}
-
 void SideMenu::removeLastTab()
 {
     QWidget * toRemoveTab = tabs->widget(tabs->count()-1);
@@ -105,10 +98,8 @@ void SideMenu::removeLastTab()
     buttons.removeLast();
 
     if(toRemoveButton->isChecked())
-    {
-        setButtonChecked(0);
         setDisplayedTab(0);
-    }
+
     toRemoveButton->deleteLater();
 }
 
@@ -178,6 +169,32 @@ bool SideMenu::insertTab(int index, QWidget * tab)
     return true;
 }
 
+bool SideMenu::insertTab(int index, QWidget * tab, const QIcon & buttonIcon)
+{
+    if(index < 0 || index > buttons.size())
+        return false;
+
+    increaseIds(index);
+    CheckBox * button = createTabButton(index);
+    button->setIcon(buttonIcon);
+    insertButtonToLayoutAndList(index, button);
+    tabs->insertWidget(index, tab);
+    return true;
+}
+
+bool SideMenu::insertTab(int index, QWidget * tab, const QString & text)
+{
+    if(index < 0 || index > buttons.size())
+        return false;
+
+    increaseIds(index);
+    CheckBox * button = createTabButton(index);
+    button->setText(text);
+    insertButtonToLayoutAndList(index, button);
+    tabs->insertWidget(index, tab);
+    return true;
+}
+
 void SideMenu::increaseIds(int startFrom)
 {
     for(int i=startFrom; i<buttons.size(); i++)
@@ -200,12 +217,9 @@ bool SideMenu::removeTab(int index)
     buttons.removeAt(index);
 
     if(toRemoveButton->isChecked())
-    {
-        setButtonChecked(0);
         setDisplayedTab(0);
-    }
-    toRemoveButton->deleteLater();
 
+    toRemoveButton->deleteLater();
     decreaseIds(index);
     return true;
 }
@@ -230,8 +244,12 @@ bool SideMenu::setDisplayedTab(int id)
 {
     if(id < tabs->count())
     {
-        tabs->setCurrentIndex(id);
-        return true;
+        if(setButtonChecked(id))
+        {
+            tabs->setCurrentIndex(id);
+            return true;
+        }
+        return false;
     }
     return false;
 }

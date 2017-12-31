@@ -78,7 +78,6 @@ void MainWindow::createServerUi()
 
         sideMenu->addNewTab(profile, QIcon(":/icons/profile.png"));
         sideMenu->addNewTab(placeHolder);
-        sideMenu->setButtonChecked(0);
         sideMenu->setDisplayedTab(0);
 //
         QWidget * serverWidgetContainer = new QWidget();

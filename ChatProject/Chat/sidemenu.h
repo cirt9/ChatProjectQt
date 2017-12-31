@@ -29,8 +29,8 @@ private:
     void createSideButton();
 
     void setButtonsUnchecked();
+    bool setButtonChecked(int id);
     CheckBox * createTabButton(int id);
-    void addButtonToLayoutAndList(CheckBox * button);
     void insertButtonToLayoutAndList(int index, CheckBox * button);
 
     void increaseIds(int startFrom);
@@ -47,9 +47,10 @@ public:
     void addNewTab(QWidget * tab, const QIcon & buttonIcon);
     void addNewTab(QWidget * tab, const QString & text);
     void removeLastTab();
+    bool insertTab(int index, QWidget * tab, const QIcon & buttonIcon);
+    bool insertTab(int index, QWidget * tab, const QString & text);
     bool insertTab(int index, QWidget * tab);
     bool removeTab(int index);
-    bool setButtonChecked(int id);
     bool setDisplayedTab(int id);
 
     void setTabsWidth(int width);
