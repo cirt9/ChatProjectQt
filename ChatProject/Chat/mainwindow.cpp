@@ -44,9 +44,6 @@ void MainWindow::createMenu()
     menuContainer->setLayout(centeredMenu);
     uiContainer->addWidget(menuContainer);
 }
-//
-#include <sidemenu.h>
-#include <userprofilewidget.h>
 
 void MainWindow::createServerUi()
 {
@@ -63,23 +60,11 @@ void MainWindow::createServerUi()
         serverLayout->setContentsMargins(0, 0, 0, 0);
         serverLayout->addWidget(serverWidget);
         serverLayout->setAlignment(serverWidget, Qt::AlignTop);
-//
-        SideMenu * sideMenu = new SideMenu();
-        sideMenu->setContentsMargins(0, 0, 0, 11);
+
+        SideMenu * sideMenu = createSideMenu();
         serverLayout->addWidget(sideMenu);
         serverLayout->setAlignment(sideMenu, Qt::AlignLeft);
 
-        UserProfileWidget * profile = new UserProfileWidget("Profile");
-        profile->setObjectName("UserProfileWidget");
-
-        QLabel * placeHolder = new QLabel("Nothing here");
-        placeHolder->setAlignment(Qt::AlignCenter);
-        placeHolder->setStyleSheet("background: rgb(35, 69, 146); color: rgb(122, 138, 175); font-size: 45px; font-weight: bold;");
-
-        sideMenu->addNewTab(profile, QIcon(":/icons/profile.png"));
-        sideMenu->addNewTab(placeHolder);
-        sideMenu->setDisplayedTab(0);
-//
         QWidget * serverWidgetContainer = new QWidget();
         serverWidgetContainer->setLayout(serverLayout);
 
@@ -300,6 +285,39 @@ void MainWindow::writeReceivedMsgToChat(QString nickname, QString msg)
 void MainWindow::errorReaction(QString error)
 {
     QMessageBox::critical(this, "Error", error);
+}
+
+SideMenu * MainWindow::createSideMenu()
+{
+    SideMenu * sideMenu = new SideMenu();
+    sideMenu->setContentsMargins(0, 0, 0, 11);
+
+    UserProfileWidget * profile = new UserProfileWidget("Profile");
+    profile->setObjectName("UserProfileWidget");
+    connect(profile, SIGNAL(profileUpdated(QString)), this, SLOT(changeServerName(QString)));
+
+    QLabel * placeHolder = new QLabel("Nothing here");
+    placeHolder->setAlignment(Qt::AlignCenter);
+    placeHolder->setStyleSheet("background: rgb(35, 69, 146); color: rgb(122, 138, 175); font-size: 45px; font-weight: bold;");
+
+    sideMenu->addNewTab(profile, QIcon(":/icons/profile.png"));
+    sideMenu->addNewTab(placeHolder);
+    sideMenu->setDisplayedTab(0);
+
+    return sideMenu;
+}
+
+void MainWindow::changeServerName(QString name)
+{
+    if(server)
+    {
+        server->setServerName(name);
+        chat->setCurrentUserNickname(name);
+    }
+    else
+    {
+        ;
+    }
 }
 
 QGridLayout * MainWindow::createCenteredLayout(QLayout * layout)

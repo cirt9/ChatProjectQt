@@ -17,6 +17,8 @@
 #include <../ChatClient/chatclient.h>
 #include <QMessageBox>
 #include <QGraphicsDropShadowEffect>
+#include <sidemenu.h>
+#include <userprofilewidget.h>
 
 class MainWindow : public QMainWindow
 {
@@ -38,11 +40,12 @@ private:
     QGridLayout * createCenteredLayout(QLayout * layout);
     QGridLayout * createCenteredLayout(QWidget * widget);
 
-    QGraphicsDropShadowEffect * createShadow();
-
     void createChat();
     void resetChat();
     void cleanUpClient();
+
+    QGraphicsDropShadowEffect * createShadow();
+    SideMenu * createSideMenu();
 
 private slots:
     void displayServer();
@@ -58,6 +61,7 @@ private slots:
 
     void writeReceivedMsgToChat(QString nickname, QString msg);
 
+    void changeServerName(QString name);
     void errorReaction(QString error);
 
 public:
