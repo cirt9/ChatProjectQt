@@ -1,4 +1,5 @@
 #include "chatserver.h"
+const QString ChatServer::DEFAULT_SERVER_NAME = QString("Server");
 
 ChatServer::ChatServer(QObject * parent) : QTcpServer(parent)
 {
@@ -152,9 +153,15 @@ void ChatServer::allowDuplicateNicknames(bool allowed)
     duplicateNicknamesAllowed = allowed;
 }
 
-void ChatServer::setServerName(QString name)
+void ChatServer::setServerName(const QString & name)
 {
-    serverName = name;
+    if(name == serverName)
+        emit nameCurrentlyUsed("Server is currently using this name.");
+    else
+    {
+        serverName = name;
+        emit nameChanged("Server successfully changed its name to: "+serverName);
+    }
 }
 
 QString ChatServer::getServerName() const
@@ -194,7 +201,7 @@ bool ChatServer::isNicknameDuplicate(QString & nickname)
 
 void ChatServer::reset()
 {
-    setServerName("Server");
+    serverName = DEFAULT_SERVER_NAME;
     lastClientIndex = 0;
     allowDuplicateNicknames(false);
 }

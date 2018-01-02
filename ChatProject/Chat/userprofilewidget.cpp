@@ -36,7 +36,8 @@ UserProfileWidget::UserProfileWidget(QString profileTitle, QWidget * parent) : Q
 
 void UserProfileWidget::emitProfileUpdated()
 {
-    emit profileUpdated(nicknameInput->text());
+    if(!nicknameInput->text().isEmpty())
+        emit profileUpdated(nicknameInput->text());
 }
 
 void UserProfileWidget::setMaxNameLength(int length)
@@ -47,6 +48,11 @@ void UserProfileWidget::setMaxNameLength(int length)
 void UserProfileWidget::disableButton(bool disabled)
 {
     button->setDisabled(disabled);
+}
+
+void UserProfileWidget::setNicknameInputMask(const QString & mask)
+{
+    nicknameInput->setInputMask(mask);
 }
 
 void UserProfileWidget::setNickname(const QString & nickname)

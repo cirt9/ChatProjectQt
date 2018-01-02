@@ -47,6 +47,8 @@ protected:
     void incomingConnection(int socketfd);
 
 public:
+    const static QString DEFAULT_SERVER_NAME;
+
     ChatServer(QObject * parent = nullptr);
     ~ChatServer() {}
 
@@ -54,7 +56,7 @@ public:
     void closeServer();
 
     void allowDuplicateNicknames(bool allowed);
-    void setServerName(QString name);
+    void setServerName(const QString & name);
     QString getServerName() const;
     QStringList getClientsNames() const;
 
@@ -62,6 +64,9 @@ signals:
     void messageReceived(QString nickname, QString message);
     void newClientConnected();
     void clientDisconnected(QString nickname);
+
+    void nameChanged(QString message);
+    void nameCurrentlyUsed(QString message);
 
 private:
     void unpackToDataStream(QDataStream &){}
