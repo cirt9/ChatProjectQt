@@ -67,6 +67,7 @@ signals:
 
     void nameChanged(QString message);
     void nameCurrentlyUsed(QString message);
+    void serverReseted();
 
 private:
     void unpackToDataStream(QDataStream &){}

@@ -50,9 +50,10 @@ void UserProfileWidget::disableButton(bool disabled)
     button->setDisabled(disabled);
 }
 
-void UserProfileWidget::setNicknameInputMask(const QString & mask)
+void UserProfileWidget::disableNicknameWhitespaces()
 {
-    nicknameInput->setInputMask(mask);
+    QRegExp rx("^\\S+$");
+    nicknameInput->setValidator(new QRegExpValidator(rx, this));
 }
 
 void UserProfileWidget::setNickname(const QString & nickname)

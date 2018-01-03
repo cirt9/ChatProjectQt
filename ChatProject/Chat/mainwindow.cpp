@@ -16,6 +16,9 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent)
     client->enableKeepAliveOption();
 
     createUi();
+
+    connect(server, SIGNAL(nameChanged(QString)), this, SLOT(displayInfo(QString)));
+    connect(server, SIGNAL(nameCurrentlyUsed(QString)), this, SLOT(displayInfo(QString)));
 }
 
 void MainWindow::createUi()
@@ -287,14 +290,22 @@ void MainWindow::errorReaction(QString error)
     QMessageBox::critical(this, "Error", error);
 }
 
+void MainWindow::displayInfo(QString info)
+{
+    QMessageBox::information(this, "Information", info);
+}
+
 SideMenu * MainWindow::createSideMenu()
 {
     SideMenu * sideMenu = new SideMenu();
     sideMenu->setContentsMargins(0, 0, 0, 11);
 
     UserProfileWidget * profile = new UserProfileWidget("Profile");
+    profile->disableNicknameWhitespaces();
+    profile->setNickname(server->getServerName());
     profile->setObjectName("UserProfileWidget");
     connect(profile, SIGNAL(profileUpdated(QString)), this, SLOT(changeServerName(QString)));
+    connect(server, &ChatServer::serverReseted, profile, [=]{profile->setNickname(ChatServer::DEFAULT_SERVER_NAME);});
 
     QLabel * placeHolder = new QLabel("Nothing here");
     placeHolder->setAlignment(Qt::AlignCenter);

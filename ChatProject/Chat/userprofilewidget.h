@@ -31,7 +31,7 @@ public:
     QString getNickname() const;
     void setMaxNameLength(int length);
     void disableButton(bool disabled);
-    void setNicknameInputMask(const QString & mask);
+    void disableNicknameWhitespaces();
 
 signals:
     void profileUpdated(QString nickname);

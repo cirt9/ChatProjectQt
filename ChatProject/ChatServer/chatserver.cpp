@@ -204,4 +204,6 @@ void ChatServer::reset()
     serverName = DEFAULT_SERVER_NAME;
     lastClientIndex = 0;
     allowDuplicateNicknames(false);
+
+    emit serverReseted();
 }

@@ -62,6 +62,7 @@ private slots:
     void writeReceivedMsgToChat(QString nickname, QString msg);
 
     void changeServerName(QString name);
+    void displayInfo(QString info);
     void errorReaction(QString error);
 
 public:
