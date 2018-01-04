@@ -10,7 +10,7 @@ ChatClient::ChatClient(QObject * parent) : QObject(parent)
     connect(clientSocket, SIGNAL(readyRead()), this, SLOT(read()));
 }
 
-bool ChatClient::connectToServer(QString ip, int portNumber)
+bool ChatClient::connectToServer(const QString & ip, int portNumber)
 {
     clientSocket->connectToHost(ip, quint16(portNumber));
 
@@ -88,17 +88,17 @@ void ChatClient::readNewNickname(QDataStream & in)
     emit nicknameChanged(nickname);
 }
 
-void ChatClient::sendMessage(QString message)
+void ChatClient::sendMessage(const QString & message)
 {
     send(PACKET_ID_NORMAL_MSG, message);
 }
 
-void ChatClient::setNickname(QString nickname)
+void ChatClient::setNickname(const QString & nickname)
 {
     send(PACKET_ID_NICKNAME, nickname);
 }
 
-void ChatClient::send(quint8 packetId, QString message)
+void ChatClient::send(quint8 packetId, const QString  &message)
 {
     QByteArray block;
     QDataStream out(&block, QIODevice::WriteOnly);

@@ -51,7 +51,7 @@ void MainWindow::startServer()
         QMessageBox::critical(this, "Server", "Server failed to start");
 }
 
-void MainWindow::writeReceivedMsg(QString nickname, QString msg)
+void MainWindow::writeReceivedMsg(const QString &nickname, const QString &msg)
 {
     messagesArea->append(nickname + ": " + msg);
 }

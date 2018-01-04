@@ -38,7 +38,7 @@ public:
 
 signals:
     void backClicked();
-    void connectClicked(QString ip, int port);
+    void connectClicked(const QString & ip, int port);
     void disconnectClicked();
 };
 

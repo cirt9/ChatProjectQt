@@ -11,14 +11,31 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent)
     serverWidget = nullptr;
     clientWidget = nullptr;
     chat = nullptr;
-    server = new ChatServer();
-    client = new ChatClient();
-    client->enableKeepAliveOption();
+    server = nullptr;
+    client = nullptr;
 
+    initServer();
+    initClient();
     createUi();
+}
 
-    connect(server, SIGNAL(nameChanged(QString)), this, SLOT(displayInfo(QString)));
-    connect(server, SIGNAL(nameCurrentlyUsed(QString)), this, SLOT(displayInfo(QString)));
+void MainWindow::initServer()
+{
+    if(!server)
+    {
+        server = new ChatServer();
+        connect(server, SIGNAL(nameChanged(QString)), this, SLOT(displayInfo(QString)));
+        connect(server, SIGNAL(nameCurrentlyUsed(QString)), this, SLOT(displayInfo(QString)));
+    }
+}
+
+void MainWindow::initClient()
+{
+    if(!client)
+    {
+        client = new ChatClient();
+        client->enableKeepAliveOption();
+    }
 }
 
 void MainWindow::createUi()
@@ -186,13 +203,13 @@ void MainWindow::closeServer()
     }
 }
 
-void MainWindow::sendMsgFromServer(QString msg)
+void MainWindow::sendMsgFromServer(const QString & msg)
 {
     if(server)
         server->spreadMessage(server->getServerName(), msg);
 }
 
-void MainWindow::connectToServer(QString ip, int port)
+void MainWindow::connectToServer(const QString & ip, int port)
 {
     if(client)
     {
@@ -270,7 +287,7 @@ void MainWindow::cleanUpClient()
         clientWidget->changeState();
 }
 
-void MainWindow::sendMsgFromClient(QString msg)
+void MainWindow::sendMsgFromClient(const QString & msg)
 {
     if(client)
     {
@@ -279,18 +296,18 @@ void MainWindow::sendMsgFromClient(QString msg)
     }
 }
 
-void MainWindow::writeReceivedMsgToChat(QString nickname, QString msg)
+void MainWindow::writeReceivedMsgToChat(const QString & nickname, const QString & msg)
 {
     if(chat)
         chat->addMsg(nickname, msg);
 }
 
-void MainWindow::errorReaction(QString error)
+void MainWindow::errorReaction(const QString & error)
 {
     QMessageBox::critical(this, "Error", error);
 }
 
-void MainWindow::displayInfo(QString info)
+void MainWindow::displayInfo(const QString & info)
 {
     QMessageBox::information(this, "Information", info);
 }
@@ -318,7 +335,7 @@ SideMenu * MainWindow::createSideMenu()
     return sideMenu;
 }
 
-void MainWindow::changeServerName(QString name)
+void MainWindow::changeServerName(const QString & name)
 {
     if(server)
     {
@@ -326,9 +343,7 @@ void MainWindow::changeServerName(QString name)
         chat->setCurrentUserNickname(name);
     }
     else
-    {
-        ;
-    }
+        errorReaction("Server could not change its name.");
 }
 
 QGridLayout * MainWindow::createCenteredLayout(QLayout * layout)

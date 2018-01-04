@@ -92,7 +92,7 @@ void ChatServer::setClientNickname(QSharedPointer<Client> client, QDataStream & 
     }
 }
 
-void ChatServer::sendResponse(QSharedPointer<Client> client, QString response)
+void ChatServer::sendResponse(QSharedPointer<Client> client, const QString & response)
 {
     send(PACKET_ID_SERVER_RESPONSE, client->socket, response);
 }
@@ -102,7 +102,7 @@ void ChatServer::sendNicknameToClient(QSharedPointer<ChatServer::Client> client)
     send(PACKET_ID_NICKNAME, client->socket, client->nickname);
 }
 
-void ChatServer::spreadMessage(QString nickname, QString message, QTcpSocket * except)
+void ChatServer::spreadMessage(const QString & nickname, const QString & message, QTcpSocket * except)
 {
     for(auto client : clients)
     {
@@ -189,7 +189,7 @@ QSharedPointer<ChatServer::Client> ChatServer::findClient(QTcpSocket * socket)
     return nullptr;
 }
 
-bool ChatServer::isNicknameDuplicate(QString & nickname)
+bool ChatServer::isNicknameDuplicate(const QString & nickname)
 {
     for(auto client : clients)
     {

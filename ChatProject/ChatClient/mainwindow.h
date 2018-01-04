@@ -22,14 +22,14 @@ private:
 
 private slots:
     void sendMessage();
-    void writeReceivedMsg(QString nickname, QString msg);
+    void writeReceivedMsg(const QString & nickname, const  QString & msg);
 
 public:
     MainWindow(QWidget * parent = nullptr);
     ~MainWindow() {}
 
 public slots:
-    void errorReaction(QString error);
+    void errorReaction(const QString & error);
 };
 
 #endif // MAINWINDOW_H

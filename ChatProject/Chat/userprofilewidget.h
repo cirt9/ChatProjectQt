@@ -34,7 +34,7 @@ public:
     void disableNicknameWhitespaces();
 
 signals:
-    void profileUpdated(QString nickname);
+    void profileUpdated(const QString & nickname);
 };
 
 #endif // USERPROFILEWIDGET_H

@@ -33,6 +33,9 @@ private:
     ChatServer * server;
     ChatClient * client;
 
+    void initServer();
+    void initClient();
+
     void createUi();
     void createMenu();
     void createServerUi();
@@ -51,19 +54,19 @@ private slots:
     void displayServer();
     void startServer(int port);
     void closeServer();
-    void sendMsgFromServer(QString msg);
+    void sendMsgFromServer(const QString & msg);
 
     void displayClient();
-    void connectToServer(QString ip, int port);
+    void connectToServer(const QString & ip, int port);
     void disconnectFromServer();
     void emergencyDisconnectFromServer();
-    void sendMsgFromClient(QString msg);
+    void sendMsgFromClient(const QString & msg);
 
-    void writeReceivedMsgToChat(QString nickname, QString msg);
+    void writeReceivedMsgToChat(const QString & nickname, const QString & msg);
 
-    void changeServerName(QString name);
-    void displayInfo(QString info);
-    void errorReaction(QString error);
+    void changeServerName(const QString & name);
+    void displayInfo(const QString & info);
+    void errorReaction(const QString & error);
 
 public:
     MainWindow(QWidget * parent = 0);

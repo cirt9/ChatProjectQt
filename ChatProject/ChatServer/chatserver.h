@@ -31,12 +31,12 @@ private:
     void processPacket(QSharedPointer<Client> client, QDataStream & in, quint8 packetId = 0);
     void manageMessage(QSharedPointer<Client> client, QDataStream & in);
     void setClientNickname(QSharedPointer<Client> client, QDataStream & in);
-    void sendResponse(QSharedPointer<Client> client, QString response);
+    void sendResponse(QSharedPointer<Client> client, const QString & response);
     void sendNicknameToClient(QSharedPointer<Client> client);
 
     void flushClientSocket(QTcpSocket * clientSocket);
     QSharedPointer<Client> findClient(QTcpSocket * socket);
-    bool isNicknameDuplicate(QString & nickname);
+    bool isNicknameDuplicate(const QString & nickname);
     void reset();
 
 private slots:
@@ -52,7 +52,7 @@ public:
     ChatServer(QObject * parent = nullptr);
     ~ChatServer() {}
 
-    void spreadMessage(QString nickname, QString message, QTcpSocket * except = nullptr);
+    void spreadMessage(const QString & nickname, const QString & message, QTcpSocket * except = nullptr);
     void closeServer();
 
     void allowDuplicateNicknames(bool allowed);
@@ -61,12 +61,12 @@ public:
     QStringList getClientsNames() const;
 
 signals:
-    void messageReceived(QString nickname, QString message);
+    void messageReceived(const QString & nickname, const QString & message);
     void newClientConnected();
-    void clientDisconnected(QString nickname);
+    void clientDisconnected(const QString & nickname);
 
-    void nameChanged(QString message);
-    void nameCurrentlyUsed(QString message);
+    void nameChanged(const QString & message);
+    void nameCurrentlyUsed(const QString & message);
     void serverReseted();
 
 private:

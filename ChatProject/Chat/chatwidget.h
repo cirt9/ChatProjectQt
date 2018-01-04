@@ -49,7 +49,7 @@ public slots:
     void setCurrentUserNickname(const QString & nickname);
 
 signals:
-    void messageSent(QString msg);
+    void messageSent(const QString & msg);
 };
 
 #endif // CHATWIDGET_H

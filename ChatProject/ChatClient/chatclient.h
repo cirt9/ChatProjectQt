@@ -22,7 +22,7 @@ private:
     void manageMessage(QDataStream & in);
     void manageServerResponse(QDataStream & in);
     void readNewNickname(QDataStream & in);
-    void send(quint8 packetId, QString message);
+    void send(quint8 packetId, const QString & message);
 
     void flushSocket();
 
@@ -39,17 +39,17 @@ public:
     QString getLastError() const;
 
 public slots:
-    bool connectToServer(QString ip, int portNumber);
+    bool connectToServer(const QString & ip, int portNumber);
     void disconnectFromServer();
-    void sendMessage(QString message);
-    void setNickname(QString nickname);
+    void sendMessage(const QString & message);
+    void setNickname(const QString & nickname);
 
 signals:
-    void messageReceived(QString nickname, QString message);
-    void errorOccurred(QString error);
+    void messageReceived(const QString & nickname, const QString & message);
+    void errorOccurred(const QString & error);
     void unscheduledDisconnection();
-    void serverResponded(QString response);
-    void nicknameChanged(QString nickname);
+    void serverResponded(const QString & response);
+    void nicknameChanged(const QString & nickname);
 };
 
 #endif // CHATCLIENT_H

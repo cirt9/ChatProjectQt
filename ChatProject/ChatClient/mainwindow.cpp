@@ -53,12 +53,12 @@ void MainWindow::sendMessage()
     messagesArea->append(message);
 }
 
-void MainWindow::writeReceivedMsg(QString nickname, QString msg)
+void MainWindow::writeReceivedMsg(const QString & nickname, const QString & msg)
 {
     messagesArea->append(nickname + ": " + msg);
 }
 
-void MainWindow::errorReaction(QString error)
+void MainWindow::errorReaction(const QString & error)
 {
     QMessageBox::critical(this, QString("Error"), error);
 }

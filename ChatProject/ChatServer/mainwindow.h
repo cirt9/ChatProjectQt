@@ -23,7 +23,7 @@ private:
 
 private slots:
     void startServer();
-    void writeReceivedMsg(QString nickname, QString msg);
+    void writeReceivedMsg(const QString & nickname, const QString & msg);
     void sendMessage();
 
 public:
