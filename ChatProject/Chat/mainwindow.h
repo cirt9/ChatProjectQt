@@ -49,6 +49,7 @@ private:
 
     QGraphicsDropShadowEffect * createShadow();
     SideMenu * createSideMenu();
+    UserProfileWidget * createUserProfileWidget();
 
 private slots:
     void displayServer();

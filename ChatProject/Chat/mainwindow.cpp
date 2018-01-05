@@ -85,6 +85,13 @@ void MainWindow::createServerUi()
         serverLayout->addWidget(sideMenu);
         serverLayout->setAlignment(sideMenu, Qt::AlignLeft);
 
+        UserProfileWidget * profile = createUserProfileWidget();
+        profile->setNickname(server->getServerName());
+        sideMenu->insertTab(0, profile, QIcon(":/icons/profile.png"));
+        sideMenu->setDisplayedTab(0);
+        connect(profile, SIGNAL(profileUpdated(QString)), this, SLOT(changeServerName(QString)));
+        connect(server, &ChatServer::serverReseted, profile, [=]{profile->setNickname(ChatServer::DEFAULT_SERVER_NAME);});
+
         QWidget * serverWidgetContainer = new QWidget();
         serverWidgetContainer->setLayout(serverLayout);
 
@@ -97,6 +104,7 @@ void MainWindow::createClientUi()
     if(!clientWidget)
     {
         clientWidget = new ClientWidget();
+        clientWidget->setContentsMargins(11, 11, 11, 11);
         connect(clientWidget, SIGNAL(backClicked()), this, SLOT(disconnectFromServer()));
         connect(clientWidget, SIGNAL(backClicked()), this, SLOT(displayMenu()));
         connect(clientWidget, SIGNAL(connectClicked(QString, int)),
@@ -104,14 +112,55 @@ void MainWindow::createClientUi()
         connect(clientWidget, SIGNAL(disconnectClicked()), this, SLOT(disconnectFromServer()));
 
         QVBoxLayout * clientLayout = new QVBoxLayout();
+        clientLayout->setContentsMargins(0, 0, 0, 0);
         clientLayout->addWidget(clientWidget);
         clientLayout->setAlignment(clientWidget, Qt::AlignTop);
+
+        SideMenu * sideMenu = createSideMenu();
+        clientLayout->addWidget(sideMenu);
+        clientLayout->setAlignment(sideMenu, Qt::AlignLeft);
+
+        UserProfileWidget * profile = createUserProfileWidget();
+        sideMenu->insertTab(0, profile, QIcon(":/icons/profile.png"));
+        sideMenu->setDisplayedTab(0);
 
         QWidget * clientWidgetContainer = new QWidget();
         clientWidgetContainer->setLayout(clientLayout);
 
         uiContainer->addWidget(clientWidgetContainer);
     }
+}
+
+SideMenu * MainWindow::createSideMenu()
+{
+    SideMenu * sideMenu = new SideMenu();
+    sideMenu->setContentsMargins(0, 0, 0, 11);
+
+    QLabel * placeHolder = new QLabel("Nothing here");
+    placeHolder->setAlignment(Qt::AlignCenter);
+    placeHolder->setStyleSheet("background: rgb(35, 69, 146); color: rgb(122, 138, 175); font-size: 45px; font-weight: bold;");
+
+    sideMenu->addNewTab(placeHolder);
+    return sideMenu;
+}
+
+void MainWindow::changeServerName(const QString & name)
+{
+    if(server)
+    {
+        server->setServerName(name);
+        chat->setCurrentUserNickname(name);
+    }
+    else
+        errorReaction("Server could not change its name.");
+}
+
+UserProfileWidget * MainWindow::createUserProfileWidget()
+{
+    UserProfileWidget * profile = new UserProfileWidget("Profile");
+    profile->disableNicknameWhitespaces();
+    profile->setObjectName("UserProfileWidget");
+    return profile;
 }
 
 void MainWindow::displayMenu()
@@ -310,40 +359,6 @@ void MainWindow::errorReaction(const QString & error)
 void MainWindow::displayInfo(const QString & info)
 {
     QMessageBox::information(this, "Information", info);
-}
-
-SideMenu * MainWindow::createSideMenu()
-{
-    SideMenu * sideMenu = new SideMenu();
-    sideMenu->setContentsMargins(0, 0, 0, 11);
-
-    UserProfileWidget * profile = new UserProfileWidget("Profile");
-    profile->disableNicknameWhitespaces();
-    profile->setNickname(server->getServerName());
-    profile->setObjectName("UserProfileWidget");
-    connect(profile, SIGNAL(profileUpdated(QString)), this, SLOT(changeServerName(QString)));
-    connect(server, &ChatServer::serverReseted, profile, [=]{profile->setNickname(ChatServer::DEFAULT_SERVER_NAME);});
-
-    QLabel * placeHolder = new QLabel("Nothing here");
-    placeHolder->setAlignment(Qt::AlignCenter);
-    placeHolder->setStyleSheet("background: rgb(35, 69, 146); color: rgb(122, 138, 175); font-size: 45px; font-weight: bold;");
-
-    sideMenu->addNewTab(profile, QIcon(":/icons/profile.png"));
-    sideMenu->addNewTab(placeHolder);
-    sideMenu->setDisplayedTab(0);
-
-    return sideMenu;
-}
-
-void MainWindow::changeServerName(const QString & name)
-{
-    if(server)
-    {
-        server->setServerName(name);
-        chat->setCurrentUserNickname(name);
-    }
-    else
-        errorReaction("Server could not change its name.");
 }
 
 QGridLayout * MainWindow::createCenteredLayout(QLayout * layout)
