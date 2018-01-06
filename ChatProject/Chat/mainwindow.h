@@ -66,6 +66,7 @@ private slots:
     void writeReceivedMsgToChat(const QString & nickname, const QString & msg);
 
     void changeServerName(const QString & name);
+    void changeClientName(const QString & name);
     void displayInfo(const QString & info);
     void errorReaction(const QString & error);
 

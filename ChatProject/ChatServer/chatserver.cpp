@@ -77,7 +77,8 @@ void ChatServer::setClientNickname(QSharedPointer<Client> client, QDataStream & 
     if(duplicateNicknamesAllowed)
     {
         client->nickname = newNickname;
-        sendResponse(client, "Nickname changed");
+        sendNicknameToClient(client);
+        //sendResponse(client, "Nickname changed");
     }
 
     else
@@ -87,7 +88,8 @@ void ChatServer::setClientNickname(QSharedPointer<Client> client, QDataStream & 
         else
         {
             client->nickname = newNickname;
-            sendResponse(client, "Nickname changed");
+            sendNicknameToClient(client);
+            //sendResponse(client, "Nickname changed");
         }
     }
 }
