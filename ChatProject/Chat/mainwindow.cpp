@@ -35,7 +35,7 @@ void MainWindow::initClient()
     {
         client = new ChatClient();
         client->enableKeepAliveOption();
-        connect(client, SIGNAL(nicknameChanged(QString)), this, SLOT(displayInfo(QString)));
+        connect(client, SIGNAL(nicknameChanged(QString)), this, SLOT(clientNameCorrectlyChanged(QString)));
         connect(client, SIGNAL(serverResponded(QString)), this, SLOT(displayInfo(QString)));
     }
 }
@@ -161,12 +161,15 @@ void MainWindow::changeServerName(const QString & name)
 void MainWindow::changeClientName(const QString & name)
 {
     if(client)
-    {
         client->setNickname(name);
-        chat->setCurrentUserNickname(name);
-    }
     else
         errorReaction("Nickname could not be changed.");
+}
+
+void MainWindow::clientNameCorrectlyChanged(const QString & name)
+{
+    chat->setCurrentUserNickname(name);
+    displayInfo("Your nickname was changed to: " + name);
 }
 
 UserProfileWidget * MainWindow::createUserProfileWidget()

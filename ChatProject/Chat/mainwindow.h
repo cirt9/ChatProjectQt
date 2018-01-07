@@ -67,6 +67,7 @@ private slots:
 
     void changeServerName(const QString & name);
     void changeClientName(const QString & name);
+    void clientNameCorrectlyChanged(const QString & name);
     void displayInfo(const QString & info);
     void errorReaction(const QString & error);
 

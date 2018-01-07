@@ -78,7 +78,6 @@ void ChatServer::setClientNickname(QSharedPointer<Client> client, QDataStream & 
     {
         client->nickname = newNickname;
         sendNicknameToClient(client);
-        //sendResponse(client, "Nickname changed");
     }
 
     else
@@ -89,7 +88,6 @@ void ChatServer::setClientNickname(QSharedPointer<Client> client, QDataStream & 
         {
             client->nickname = newNickname;
             sendNicknameToClient(client);
-            //sendResponse(client, "Nickname changed");
         }
     }
 }
@@ -193,6 +191,9 @@ QSharedPointer<ChatServer::Client> ChatServer::findClient(QTcpSocket * socket)
 
 bool ChatServer::isNicknameDuplicate(const QString & nickname)
 {
+    if(nickname == serverName)
+        return true;
+
     for(auto client : clients)
     {
         if(client->nickname == nickname)
