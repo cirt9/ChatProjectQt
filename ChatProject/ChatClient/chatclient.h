@@ -50,6 +50,8 @@ signals:
     void unscheduledDisconnection();
     void serverResponded(const QString & response);
     void nicknameChanged(const QString & nickname);
+    void connected();
+    void disconnected();
 };
 
 #endif // CHATCLIENT_H

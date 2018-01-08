@@ -17,6 +17,7 @@ bool ChatClient::connectToServer(const QString & ip, int portNumber)
     if(clientSocket->waitForConnected())
     {
         nextBlockSize = 0;
+        emit connected();
         return true;
     }
     else
@@ -26,6 +27,7 @@ bool ChatClient::connectToServer(const QString & ip, int portNumber)
 void ChatClient::disconnectFromServer()
 {
     clientSocket->disconnectFromHost();
+    emit disconnected();
 }
 
 void ChatClient::read()

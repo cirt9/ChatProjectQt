@@ -92,7 +92,8 @@ void MainWindow::createServerUi()
         sideMenu->insertTab(0, profile, QIcon(":/icons/profile.png"));
         sideMenu->setDisplayedTab(0);
         connect(profile, SIGNAL(profileUpdated(QString)), this, SLOT(changeServerName(QString)));
-        connect(server, &ChatServer::serverReseted, profile, [=]{profile->setNickname(ChatServer::DEFAULT_SERVER_NAME);});
+        connect(server, &ChatServer::serverReseted, profile,
+                [=]{profile->setNickname(ChatServer::DEFAULT_SERVER_NAME);});
 
         QWidget * serverWidgetContainer = new QWidget();
         serverWidgetContainer->setLayout(serverLayout);
@@ -126,6 +127,8 @@ void MainWindow::createClientUi()
         sideMenu->insertTab(0, profile, QIcon(":/icons/profile.png"));
         sideMenu->setDisplayedTab(0);
         connect(profile, SIGNAL(profileUpdated(QString)), this, SLOT(changeClientName(QString)));
+        connect(client, SIGNAL(nicknameChanged(QString)), profile, SLOT(setNickname(QString)));
+        connect(client, &ChatClient::disconnected, profile, [=]{profile->setNickname("");});
 
         QWidget * clientWidgetContainer = new QWidget();
         clientWidgetContainer->setLayout(clientLayout);
@@ -161,7 +164,12 @@ void MainWindow::changeServerName(const QString & name)
 void MainWindow::changeClientName(const QString & name)
 {
     if(client)
-        client->setNickname(name);
+    {
+        if(client->isConnected())
+            client->setNickname(name);
+        else
+            displayInfo("In order to change the nickname you have to connect to the server first.");
+    }
     else
         errorReaction("Nickname could not be changed.");
 }

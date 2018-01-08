@@ -27,11 +27,13 @@ public:
     UserProfileWidget(QString profileTitle, QWidget * parent = nullptr);
     ~UserProfileWidget(){}
 
-    void setNickname(const QString & nickname);
     QString getNickname() const;
     void setMaxNameLength(int length);
     void disableButton(bool disabled);
     void disableNicknameWhitespaces();
+
+public slots:
+    void setNickname(const QString & nickname);
 
 signals:
     void profileUpdated(const QString & nickname);

@@ -83,7 +83,7 @@ void ChatServer::setClientNickname(QSharedPointer<Client> client, QDataStream & 
     else
     {
         if(isNicknameDuplicate(newNickname))
-            sendResponse(client, "Nickname has not been changed because it belongs to someone else");
+            sendResponse(client, "Nickname has not been changed because it is already reserved.");
         else
         {
             client->nickname = newNickname;
