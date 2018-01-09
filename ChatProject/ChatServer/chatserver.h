@@ -34,6 +34,7 @@ private:
     void sendResponse(QSharedPointer<Client> client, const QString & response);
     void sendNicknameToClient(QSharedPointer<Client> client);
 
+    QString generateClientNickname();
     void flushClientSocket(QTcpSocket * clientSocket);
     QSharedPointer<Client> findClient(QTcpSocket * socket);
     bool isNicknameDuplicate(const QString & nickname);

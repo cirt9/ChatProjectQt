@@ -12,13 +12,38 @@ void ChatServer::incomingConnection(int socketfd)
     client->socket = new QTcpSocket(this);
     client->socket->setSocketDescriptor(socketfd);
     client->nextBlockSize = 0;
-    client->nickname = QString("Client") + QString::number(lastClientIndex++);
+    client->nickname = generateClientNickname();
     clients.insert(client);
     sendNicknameToClient(client);
 
     emit newClientConnected();
     connect(client->socket, SIGNAL(readyRead()), this, SLOT(read()));
     connect(client->socket, SIGNAL(disconnected()), this, SLOT(disconnected()));
+}
+
+QString ChatServer::generateClientNickname()
+{
+    if(duplicateNicknamesAllowed)
+        return QString("Client") + QString::number(lastClientIndex++);
+    else
+    {
+        while(true)
+        {
+            QString generatedNickname = QString("Client") + QString::number(lastClientIndex++);
+            bool alreadyReserved = false;
+
+            for(auto client : clients)
+            {
+               if(client->nickname == generatedNickname)
+               {
+                   alreadyReserved = true;
+                   break;
+               }
+            }
+            if(!alreadyReserved)
+                return generatedNickname;
+        }
+    }
 }
 
 void ChatServer::read()
