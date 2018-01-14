@@ -71,6 +71,8 @@ private slots:
     void displayInfo(const QString & info);
     void errorReaction(const QString & error);
 
+    void connectClientAndNicknameSystem();
+
 public:
     MainWindow(QWidget * parent = 0);
     ~MainWindow() {}

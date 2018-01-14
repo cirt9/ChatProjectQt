@@ -21,7 +21,7 @@ UserProfileWidget::UserProfileWidget(QString profileTitle, QWidget * parent) : Q
 
     nicknameInput = new QLineEdit();
     nicknameInput->setObjectName("UserProfileWidgetInput");
-    nicknameInput->setMaxLength(15);
+    nicknameInput->setMaxLength(20);
     layout->addWidget(nicknameInput);
     layout->setAlignment(nicknameInput, Qt::AlignTop);
 

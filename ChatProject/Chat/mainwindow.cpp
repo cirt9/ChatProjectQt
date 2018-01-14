@@ -35,7 +35,6 @@ void MainWindow::initClient()
     {
         client = new ChatClient();
         client->enableKeepAliveOption();
-        connect(client, SIGNAL(nicknameChanged(QString)), this, SLOT(clientNameCorrectlyChanged(QString)));
         connect(client, SIGNAL(serverResponded(QString)), this, SLOT(displayInfo(QString)));
     }
 }
@@ -301,6 +300,8 @@ void MainWindow::connectToServer(const QString & ip, int port)
                         this, SLOT(emergencyDisconnectFromServer()));
                 connect(client, SIGNAL(nicknameChanged(QString)), chat,
                         SLOT(setCurrentUserNickname(QString)));
+                connect(client, SIGNAL(nicknameChanged(QString)), this,
+                        SLOT(connectClientAndNicknameSystem()));
 
                 chat->setVisible(true);
                 if(!clientWidget->isConnected())
@@ -356,6 +357,8 @@ void MainWindow::cleanUpClient()
                this, SLOT(emergencyDisconnectFromServer()));
     disconnect(client, SIGNAL(nicknameChanged(QString)), chat,
             SLOT(setCurrentUserNickname(QString)));
+    disconnect(client, SIGNAL(nicknameChanged(QString)), this,
+               SLOT(clientNameCorrectlyChanged(QString)));
 
     if(clientWidget->isConnected())
         clientWidget->changeState();
@@ -379,6 +382,14 @@ void MainWindow::writeReceivedMsgToChat(const QString & nickname, const QString 
 void MainWindow::errorReaction(const QString & error)
 {
     QMessageBox::critical(this, "Error", error);
+}
+
+void MainWindow::connectClientAndNicknameSystem()
+{
+    connect(client, SIGNAL(nicknameChanged(QString)), this, SLOT(clientNameCorrectlyChanged(QString)));
+    disconnect(client, SIGNAL(nicknameChanged(QString)), this, SLOT(connectClientAndNicknameSystem()));
+    //this prevents the app from displaying info about nickname changing when the server
+    //assigns nickname to the client for the first time
 }
 
 void MainWindow::displayInfo(const QString & info)
