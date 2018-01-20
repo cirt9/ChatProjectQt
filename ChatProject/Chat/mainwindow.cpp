@@ -88,7 +88,7 @@ void MainWindow::createServerUi()
 
         UserProfileWidget * profile = createUserProfileWidget();
         profile->setNickname(server->getServerName());
-        sideMenu->insertTab(0, profile, QIcon(":/icons/profile.png"));
+        sideMenu->insertTab(0, profile, QIcon(":/icons/icons/profile.png"));
         sideMenu->setDisplayedTab(0);
         connect(profile, SIGNAL(profileUpdated(QString)), this, SLOT(changeServerName(QString)));
         connect(server, &ChatServer::serverReseted, profile,
@@ -123,7 +123,7 @@ void MainWindow::createClientUi()
         clientLayout->setAlignment(sideMenu, Qt::AlignLeft);
 
         UserProfileWidget * profile = createUserProfileWidget();
-        sideMenu->insertTab(0, profile, QIcon(":/icons/profile.png"));
+        sideMenu->insertTab(0, profile, QIcon(":/icons/icons/profile.png"));
         sideMenu->setDisplayedTab(0);
         connect(profile, SIGNAL(profileUpdated(QString)), this, SLOT(changeClientName(QString)));
         connect(client, SIGNAL(nicknameChanged(QString)), profile, SLOT(setNickname(QString)));
@@ -143,7 +143,7 @@ SideMenu * MainWindow::createSideMenu()
 
     QLabel * placeHolder = new QLabel("Nothing here");
     placeHolder->setAlignment(Qt::AlignCenter);
-    placeHolder->setStyleSheet("background: rgb(35, 69, 146); color: rgb(122, 138, 175); font-size: 45px; font-weight: bold;");
+    placeHolder->setObjectName("SideMenuPlaceholder");
 
     sideMenu->addNewTab(placeHolder);
     return sideMenu;

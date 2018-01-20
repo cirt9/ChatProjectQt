@@ -254,6 +254,14 @@ background: qlineargradient(x1:1, y1:1, x2:0, y2:0,
 color: rgb(95, 116, 163);
 }
 
+#SideMenuPlaceholder
+{
+background: rgb(35, 69, 146);
+color: rgb(122, 138, 175);
+font-size: 45px;
+font-weight: bold;
+}
+
 /* ChatWidget */
 
 #ChatWidget

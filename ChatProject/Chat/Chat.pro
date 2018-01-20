@@ -38,4 +38,4 @@ HEADERS  += mainwindow.h \
 DISTFILES +=
 
 RESOURCES += \
-    rsc.qrc
+    qrc.qrc
